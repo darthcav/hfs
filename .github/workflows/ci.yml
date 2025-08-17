@@ -39,10 +39,20 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-cargo-
 
+    - name: Build the FHIR model code generator for all versions (This will download R6 from https://build.fhir.org/
+      run: |
+        echo "Build the FHIR model code generator for all versions..."
+        cargo build -p helios-fhir-gen --all-features
+
+    - name: Generate all FHIR model code 
+      run: |
+        echo "Generate all FHIR model code..."
+        ./target/debug/helios-fhir-gen --all 
+ 
     - name: Run tests with all features
       run: |
         echo "Running tests with all features..."
-        cargo test --all-features --verbose
+        cargo test --all-features 
  
   lint:
     name: Linting
