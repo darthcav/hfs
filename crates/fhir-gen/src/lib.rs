@@ -3,6 +3,7 @@
 //! This crate provides functionality to generate Rust code from FHIR StructureDefinitions.
 //! It transforms official FHIR specification JSON files into idiomatic Rust types with
 //! proper serialization/deserialization support.
+
 //!
 //! ## Overview
 //!
@@ -771,8 +772,8 @@ fn process_elements(
         for choice in choice_fields {
             let base_name = choice
                 .path
-                .split('.')
-                .last()
+                .rsplit('.')
+                .next()
                 .unwrap()
                 .trim_end_matches("[x]");
 
@@ -841,7 +842,7 @@ fn process_elements(
         ));
 
         for element in &group {
-            if let Some(field_name) = element.path.split('.').last() {
+            if let Some(field_name) = element.path.rsplit('.').next() {
                 if !field_name.contains("[x]") {
                     generate_element_definition(element, &type_name, output, cycles, elements);
                 } else {
@@ -883,7 +884,7 @@ fn generate_element_definition(
     cycles: &std::collections::HashSet<(String, String)>,
     elements: &[ElementDefinition],
 ) {
-    if let Some(field_name) = element.path.split('.').last() {
+    if let Some(field_name) = element.path.rsplit('.').next() {
         let rust_field_name = make_rust_safe(field_name);
 
         let mut serde_attrs = Vec::new();
