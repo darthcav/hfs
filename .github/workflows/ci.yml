@@ -28,16 +28,13 @@ jobs:
         toolchain: ${{ matrix.rust }}
         components: rustfmt, clippy
 
-
     - name: Configure Rust to use LLD
       run: |
         mkdir -p ~/.cargo
         if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
-          cat >> ~/.cargo/config.toml << EOF
-          [target.x86_64-unknown-linux-gnu]
-          linker = "clang"
-          rustflags = ["-C", "link-arg=-fuse-ld=lld"]
-          EOF
+          echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+          echo 'linker = "clang"' >> ~/.cargo/config.toml
+          echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
         fi
 
     - name: Cache cargo registry
