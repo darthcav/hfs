@@ -233,3 +233,4 @@ The Helios FHIR Server is licensed under the [MIT License](LICENSE).
 ---
 
 HL7® and FHIR® are registered trademarks of Health Level Seven International.
+
