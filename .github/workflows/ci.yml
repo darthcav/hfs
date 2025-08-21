@@ -154,8 +154,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-      - os: Linux
-        runner: [self-hosted, Linux]
+        include:
+          - os: Linux
+            runner: [self-hosted, Linux]
         #      - os: macOS
           #        runner: [self-hosted, macOS]
         #      - os: Windows 
