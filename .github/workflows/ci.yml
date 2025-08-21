@@ -151,10 +151,15 @@ jobs:
 
   build:
     name: Build Release
-    runs-on: [self-hosted, ${{ matrix.os }}]
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [Linux]
+      - os: Linux
+        runner: [self-hosted, Linux]
+        #      - os: macOS
+          #        runner: [self-hosted, macOS]
+        #      - os: Windows 
+          #        runner: [self-hosted, Windows]
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
