@@ -205,7 +205,7 @@ jobs:
           !target/release/deps/
           !target/release/incremental/
 
-release:
+  release:
     name: Create GitHub Release
     runs-on: [self-hosted, Linux] 
     needs: [test, lint, security, build]
@@ -256,7 +256,7 @@ release:
         prerelease: ${{ contains(github.ref_name, '-') }}
         generate_release_notes: ${{ steps.changelog.outputs.changelog_exists == 'false' }}
 
-publish:
+  publish:
     name: Publish to crates.io
     runs-on: [self-hosted, Linux] 
     needs: [test, lint, security]
