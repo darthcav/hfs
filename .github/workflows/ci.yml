@@ -116,6 +116,7 @@ jobs:
   coverage:
     name: Code Coverage
     runs-on: [self-hosted, Linux] 
+    needs: [test, lint, security]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -148,11 +149,11 @@ jobs:
         with:
           files: lcov.info
           fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   build:
     name: Build Release
     runs-on: ${{ matrix.os }}
+    needs: [test, lint, security]
     strategy:
       matrix:
         include:
