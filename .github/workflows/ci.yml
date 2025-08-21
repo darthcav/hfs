@@ -142,8 +142,8 @@ jobs:
       run: |
           export CARGO_TARGET_DIR=/dev/shm/cargo-target
           mkdir -p /dev/shm/cargo-target
-          export TMPDIR=~/tmp
-          mkdir -p ~/tmp
+          export TMPDIR=/dev/shm/temp
+          mkdir -p /dev/shm/temp
           cargo llvm-cov --workspace --lcov --output-path lcov.info
 
     # Upload to Codecov
