@@ -1,6 +1,6 @@
 [package]
 name = "helios-fhir"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 description = "The helios-fhir crate is the comprehensive FHIR (Fast Healthcare Interoperability Resources) specification model implementation that contains strongly-typed Rust representations of all FHIR data types, and resourcess for each supported version of the FHIR specification."
 license = "MIT"
