@@ -6,6 +6,7 @@ description = "The helios-fhir-gen crate is module that serves as the cornerston
 license = "MIT"
 homepage = "https://github.com/HeliosSoftware/hfs/tree/main/crates/fhir-gen"
 readme = "README.md"
+exclude = ["resources/**"]
 
 [features]
 default = ["R4"]
