@@ -27,7 +27,7 @@ clap = { version = "4.0", features = ["derive", "env"] }
 tokio = { version = "1.0", features = ["full"] }
 helios-fhir = { path = "../fhir", version = "0.1.0" }
 helios-fhirpath = { path = "../fhirpath", version = "0.1.0" }
-helios-fhirpath-support = { path = "../fhirpath-support", version = "0.1.0" }
+helios-fhirpath-support = { path = "../fhirpath-support", version = "0.1.1" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 csv = "1.3"
