@@ -1,13 +1,15 @@
 - Make repo public
   - Add a CONTRIBUTING.md file
 
+- R6 build recently is not building - it worked on Sat the 16th
+
 - FHIRPath
   - Implement fhirpath-server - Done
   - Test fhirpath-server and fhirpath-cli - Done
   - Are there unit tests for these two binaries - Done
   - Add performance tests - Done
   - Unify the SofParameters and FhirPathParameters into something else - VersionIndependentParameters? - Done
-  - Setup build process for fhirpath-server
+  - Setup build process for fhirpath-server - Done
   - Setup hosting for fhirpath-server
   - Integrate into https://fhirpath-lab.com/FhirPath
   - Get listed here:  https://confluence.hl7.org/spaces/FHIRI/pages/161060129/FHIRPath+Implementations
