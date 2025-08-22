@@ -6,6 +6,7 @@ description = "The helios-fhir crate is the comprehensive FHIR (Fast Healthcare 
 license = "MIT"
 homepage = "https://github.com/HeliosSoftware/hfs/tree/main/crates/fhir"
 readme = "README.md"
+exclude = ["tests/data/**"]
 
 [features]
 default = ["R4"]
