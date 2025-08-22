@@ -2,6 +2,10 @@
 name = "helios-fhirpath"
 version = "0.1.0"
 edition = "2024"
+description = "This is an implementation of HL7's FHIRPath Specification."
+license = "MIT"
+homepage = "https://github.com/HeliosSoftware/hfs/tree/main/crates/fhirpath"
+readme = "README.md"
 
 [features]
 default = ["R4"]

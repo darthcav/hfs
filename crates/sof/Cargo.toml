@@ -2,6 +2,10 @@
 name = "helios-sof"
 version = "0.1.0"
 edition = "2024"
+description = "This crate provides a complete implementation of the SQL-on-FHIR specification for Rust, enabling the transformation of FHIR resources into tabular data using declarative ViewDefinitions. It supports all major FHIR versions (R4, R4B, R5, R6) through a version-agnostic abstraction layer."
+license = "MIT"
+homepage = "https://github.com/HeliosSoftware/hfs/tree/main/crates/sof"
+readme = "README.md"
 
 [[bin]]
 name = "sof-server"

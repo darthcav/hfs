@@ -2,6 +2,10 @@
 name = "helios-hfs"
 version = "0.1.0"
 edition = "2024"
+description = "The hfs crate is the main server executable for the Helios FHIR Server."
+license = "MIT"
+homepage = "https://github.com/HeliosSoftware/hfs/tree/main/crates/hfs"
+readme = "README.md"
 
 [features]
 default = ["R4"]
