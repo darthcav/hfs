@@ -24,7 +24,7 @@ HFS is a multi-crate Rust workspace where all crates share the same version numb
 
 ### 1. Prepare for Release
 
-- Ensure that your build in GitHub Actions has succeeded fully.
+- Ensure that your build in GitHub Actions has succeeded fully.  These are found in [ci.yml](.github/workflows/ci.yml).
 
 
 ### 2. Create a Release
@@ -58,5 +58,5 @@ This will:
 
 After the tag is pushed, GitHub Actions will automatically:
 - Build release artifacts
-- Create a GitHub release with the artifacts
+- Create a [GitHub Release](https://github.com/HeliosSoftware/hfs/releases) with the artifacts
 
