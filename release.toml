@@ -30,5 +30,3 @@ publish = true
 # Dependencies should be upgraded to match the new version
 dependent-version = "upgrade"
 
-# Only push the version tag, and not the main branch commit, thereby preventing a double build.
-push-options = ["--tags"]
