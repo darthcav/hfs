@@ -9,7 +9,7 @@ tag-prefix = "v"
 tag-name = "{{prefix}}{{version}}"
 
 # Commit message for version bumps
-pre-release-commit-message = "Release version {{version}} [skip ci]"
+pre-release-commit-message = "Release version {{version}}"
 
 # Tag message
 tag-message = "Release version {{version}}"
@@ -29,3 +29,6 @@ publish = true
 
 # Dependencies should be upgraded to match the new version
 dependent-version = "upgrade"
+
+# Only push the version tag, and not the main branch commit, thereby preventing a double build.
+push-options = ["--tags"]
