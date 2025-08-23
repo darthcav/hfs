@@ -229,12 +229,12 @@ jobs:
         mkdir -p releases
         cd artifacts
         for dir in */; do
-          if [[ "$dir" == *"ubuntu"* ]]; then
-            tar -czf ../releases/${dir%/}-linux.tar.gz -C "$dir" .
-          elif [[ "$dir" == *"windows"* ]]; then
-            cd "$dir" && zip -r ../../releases/${dir%/}-windows.zip . && cd ..
-          elif [[ "$dir" == *"macos"* ]]; then
-            tar -czf ../releases/${dir%/}-macos.tar.gz -C "$dir" .
+          if [[ "$dir" == *"Linux"* ]] || [[ "$dir" == *"ubuntu"* ]]; then
+            tar -czf ../releases/${dir%/}.tar.gz -C "$dir" .
+          elif [[ "$dir" == *"Windows"* ]] || [[ "$dir" == *"windows"* ]]; then
+            cd "$dir" && zip -r ../../releases/${dir%/}.zip . && cd ..
+          elif [[ "$dir" == *"macOS"* ]] || [[ "$dir" == *"macos"* ]]; then
+            tar -czf ../releases/${dir%/}.tar.gz -C "$dir" .
           fi
         done
 
