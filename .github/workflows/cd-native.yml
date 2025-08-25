@@ -19,10 +19,15 @@ jobs:
       with:
         script: |
           const fs = require('fs');
+          // Use the input tag for manual dispatch
+          const tag = '${{ inputs.tag }}';
+          
+          console.log(`Fetching release for tag: ${tag}`);
+          
           const { data: release } = await github.rest.repos.getReleaseByTag({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            tag: context.ref.replace('refs/tags/', '')
+            tag: tag
           });
           
           // Find the Linux binary (adjust the pattern as needed)
@@ -50,7 +55,7 @@ jobs:
     - name: Extract binary
       run: |
         tar -xzf release-binary.tar.gz
-        chmod +x ${{ github.event.repository.name }}
+        chmod +x fhirpath-server
         
     - name: Deploy binary and create service
       env:
@@ -68,56 +73,57 @@ jobs:
         SCP_CMD="scp -i deploy_key -o StrictHostKeyChecking=no -P $DEPLOY_PORT"
         
         # Create deployment directory on remote
-        $SSH_CMD "sudo mkdir -p /opt/${{ github.event.repository.name }}"
+        $SSH_CMD "sudo mkdir -p /opt/fhirpath-server"
         
         # Stop existing service (if running)
-        $SSH_CMD "sudo systemctl stop ${{ github.event.repository.name }} || true"
+        $SSH_CMD "sudo systemctl stop fhirpath-server || true"
         
         # Backup current version
-        $SSH_CMD "sudo cp /opt/${{ github.event.repository.name }}/${{ github.event.repository.name }} \
-           /opt/${{ github.event.repository.name }}/${{ github.event.repository.name }}.backup || true"
+        $SSH_CMD "sudo cp /opt/fhirpath-server/fhirpath-server \
+           /opt/fhirpath-server/fhirpath-server.backup || true"
         
         # Copy new binary to remote
-        $SCP_CMD ${{ github.event.repository.name }} $DEPLOY_USER@$DEPLOY_HOST:/tmp/
+        $SCP_CMD fhirpath-server $DEPLOY_USER@$DEPLOY_HOST:/tmp/
         
         # Move binary to final location and set permissions
-        $SSH_CMD "sudo mv /tmp/${{ github.event.repository.name }} /opt/${{ github.event.repository.name }}/ && \
-                  sudo chown root:root /opt/${{ github.event.repository.name }}/${{ github.event.repository.name }} && \
-                  sudo chmod +x /opt/${{ github.event.repository.name }}/${{ github.event.repository.name }}"
+        $SSH_CMD "sudo mv /tmp/fhirpath-server /opt/fhirpath-server/ && \
+                  sudo chown root:root /opt/fhirpath-server/fhirpath-server && \
+                  sudo chmod +x /opt/fhirpath-server/fhirpath-server"
         
         # Create systemd service file if it doesn't exist
-        $SSH_CMD "if [ ! -f /etc/systemd/system/${{ github.event.repository.name }}.service ]; then
-          sudo tee /etc/systemd/system/${{ github.event.repository.name }}.service > /dev/null <<'EOF'
+        $SSH_CMD "if [ ! -f /etc/systemd/system/fhirpath-server.service ]; then
+          sudo tee /etc/systemd/system/fhirpath-server.service > /dev/null <<'EOF'
         [Unit]
-        Description=${{ github.event.repository.name }} service
+        Description=FHIRPath Server
         After=network.target
         
         [Service]
         Type=simple
         User=nobody
         Group=nogroup
-        ExecStart=/opt/${{ github.event.repository.name }}/${{ github.event.repository.name }}
+        ExecStart=/opt/fhirpath-server/fhirpath-server
         Restart=always
         RestartSec=5
+        Environment="RUST_MIN_STACK=8388608"
         
         [Install]
         WantedBy=multi-user.target
         EOF
           sudo systemctl daemon-reload
-          sudo systemctl enable ${{ github.event.repository.name }}
+          sudo systemctl enable fhirpath-server
         fi"
         
         # Start the service
-        $SSH_CMD "sudo systemctl start ${{ github.event.repository.name }}"
+        $SSH_CMD "sudo systemctl start fhirpath-server"
         
         # Verify deployment
         sleep 5
-        if $SSH_CMD "sudo systemctl is-active --quiet ${{ github.event.repository.name }}"; then
+        if $SSH_CMD "sudo systemctl is-active --quiet fhirpath-server"; then
           echo "✅ Deployment successful - service is running"
-          $SSH_CMD "sudo systemctl status ${{ github.event.repository.name }}"
+          $SSH_CMD "sudo systemctl status fhirpath-server"
         else
           echo "❌ Deployment failed - service is not running"
-          $SSH_CMD "sudo journalctl -u ${{ github.event.repository.name }} --lines=20"
+          $SSH_CMD "sudo journalctl -u fhirpath-server --lines=20"
           exit 1
         fi
         
