@@ -1,0 +1,121 @@
+name: HFS Continuous Delivery (Native)
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    name: Deploy to server
+    runs-on: [self-hosted, Linux] 
+    
+    steps:
+    - name: Download release binary
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const { data: release } = await github.rest.repos.getReleaseByTag({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            tag: context.ref.replace('refs/tags/', '')
+          });
+          
+          // Find the Linux binary (adjust the pattern as needed)
+          const asset = release.assets.find(asset => 
+            asset.name.includes('x86_64-unknown-linux-gnu') && 
+            asset.name.endsWith('.tar.gz')
+          );
+          
+          if (!asset) {
+            throw new Error('Linux binary not found in release assets');
+          }
+          
+          const { data } = await github.rest.repos.getReleaseAsset({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            asset_id: asset.id,
+            headers: {
+              Accept: 'application/octet-stream'
+            }
+          });
+          
+          fs.writeFileSync('release-binary.tar.gz', Buffer.from(data));
+          console.log(`Downloaded: ${asset.name}`);
+
+    - name: Extract binary
+      run: |
+        tar -xzf release-binary.tar.gz
+        chmod +x ${{ github.event.repository.name }}
+        
+    - name: Deploy binary and create service
+      env:
+        DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        DEPLOY_PORT: ${{ secrets.DEPLOY_PORT || 22 }}
+      run: |
+        # Create temporary SSH key file
+        echo "$DEPLOY_SSH_KEY" > deploy_key
+        chmod 600 deploy_key
+        
+        # Define SSH command with proper options
+        SSH_CMD="ssh -i deploy_key -o StrictHostKeyChecking=no -p $DEPLOY_PORT $DEPLOY_USER@$DEPLOY_HOST"
+        SCP_CMD="scp -i deploy_key -o StrictHostKeyChecking=no -P $DEPLOY_PORT"
+        
+        # Create deployment directory on remote
+        $SSH_CMD "sudo mkdir -p /opt/${{ github.event.repository.name }}"
+        
+        # Stop existing service (if running)
+        $SSH_CMD "sudo systemctl stop ${{ github.event.repository.name }} || true"
+        
+        # Backup current version
+        $SSH_CMD "sudo cp /opt/${{ github.event.repository.name }}/${{ github.event.repository.name }} \
+           /opt/${{ github.event.repository.name }}/${{ github.event.repository.name }}.backup || true"
+        
+        # Copy new binary to remote
+        $SCP_CMD ${{ github.event.repository.name }} $DEPLOY_USER@$DEPLOY_HOST:/tmp/
+        
+        # Move binary to final location and set permissions
+        $SSH_CMD "sudo mv /tmp/${{ github.event.repository.name }} /opt/${{ github.event.repository.name }}/ && \
+                  sudo chown root:root /opt/${{ github.event.repository.name }}/${{ github.event.repository.name }} && \
+                  sudo chmod +x /opt/${{ github.event.repository.name }}/${{ github.event.repository.name }}"
+        
+        # Create systemd service file if it doesn't exist
+        $SSH_CMD "if [ ! -f /etc/systemd/system/${{ github.event.repository.name }}.service ]; then
+          sudo tee /etc/systemd/system/${{ github.event.repository.name }}.service > /dev/null <<'EOF'
+        [Unit]
+        Description=${{ github.event.repository.name }} service
+        After=network.target
+        
+        [Service]
+        Type=simple
+        User=nobody
+        Group=nogroup
+        ExecStart=/opt/${{ github.event.repository.name }}/${{ github.event.repository.name }}
+        Restart=always
+        RestartSec=5
+        
+        [Install]
+        WantedBy=multi-user.target
+        EOF
+          sudo systemctl daemon-reload
+          sudo systemctl enable ${{ github.event.repository.name }}
+        fi"
+        
+        # Start the service
+        $SSH_CMD "sudo systemctl start ${{ github.event.repository.name }}"
+        
+        # Verify deployment
+        sleep 5
+        if $SSH_CMD "sudo systemctl is-active --quiet ${{ github.event.repository.name }}"; then
+          echo "✅ Deployment successful - service is running"
+          $SSH_CMD "sudo systemctl status ${{ github.event.repository.name }}"
+        else
+          echo "❌ Deployment failed - service is not running"
+          $SSH_CMD "sudo journalctl -u ${{ github.event.repository.name }} --lines=20"
+          exit 1
+        fi
+        
+        # Clean up SSH key
+        rm -f deploy_key
