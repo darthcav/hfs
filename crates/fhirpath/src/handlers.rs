@@ -199,7 +199,10 @@ async fn evaluate_fhirpath_with_version(
     params: FhirPathParameters,
     version: FhirVersion,
 ) -> Result<Response, FhirPathError> {
-    info!("Handling FHIRPath evaluation request for version {:?}", version);
+    info!(
+        "Handling FHIRPath evaluation request for version {:?}",
+        version
+    );
 
     // Extract parameters
     let extracted = extract_parameters(params)?;
@@ -440,14 +443,19 @@ fn detect_fhir_version(resource: &Value) -> FhirVersion {
     // For now, default to R4 if available, otherwise first available version
     #[cfg(feature = "R4")]
     return FhirVersion::R4;
-    
+
     #[cfg(all(not(feature = "R4"), feature = "R4B"))]
     return FhirVersion::R4B;
-    
+
     #[cfg(all(not(feature = "R4"), not(feature = "R4B"), feature = "R5"))]
     return FhirVersion::R5;
-    
-    #[cfg(all(not(feature = "R4"), not(feature = "R4B"), not(feature = "R5"), feature = "R6"))]
+
+    #[cfg(all(
+        not(feature = "R4"),
+        not(feature = "R4B"),
+        not(feature = "R5"),
+        feature = "R6"
+    ))]
     return FhirVersion::R6;
 }
 
