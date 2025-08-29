@@ -87,7 +87,10 @@ pub fn setup_patient_extension_context(context: &mut EvaluationContext, test_nam
             }
 
             // Add _birthDate with extension
-            patient_obj.insert("_birthDate".to_string(), EvaluationResult::object(underscore_obj));
+            patient_obj.insert(
+                "_birthDate".to_string(),
+                EvaluationResult::object(underscore_obj),
+            );
 
             // Update the context
             context.set_variable_result("Patient", EvaluationResult::object(patient_obj.clone()));
@@ -110,7 +113,9 @@ pub fn setup_resource_context(context: &mut EvaluationContext, json_filename: &s
 fn setup_patient_context(context: &mut EvaluationContext) {
     let patient_data = if let Some(this) = &context.this {
         if let EvaluationResult::Object { map: obj, .. } = this {
-            if obj.get("resourceType") == Some(&EvaluationResult::String("Patient".to_string(), None)) {
+            if obj.get("resourceType")
+                == Some(&EvaluationResult::String("Patient".to_string(), None))
+            {
                 Some((this.clone(), obj.clone()))
             } else {
                 None
@@ -127,20 +132,22 @@ fn setup_patient_context(context: &mut EvaluationContext) {
         context.set_variable_result("Patient", this_val.clone());
 
         // Handle birthDate extensions if present
-        if let (Some(birthdate), Some(birthdate_ext)) = (obj.get("birthDate"), obj.get("_birthDate")) {
+        if let (Some(birthdate), Some(birthdate_ext)) =
+            (obj.get("birthDate"), obj.get("_birthDate"))
+        {
             let mut patient_map = HashMap::new();
             patient_map.insert(
                 "resourceType".to_string(),
                 EvaluationResult::String("Patient".to_string(), None),
             );
-            
+
             if let Some(active) = obj.get("active") {
                 patient_map.insert("active".to_string(), active.clone());
             }
-            
+
             patient_map.insert("birthDate".to_string(), birthdate.clone());
             patient_map.insert("_birthDate".to_string(), birthdate_ext.clone());
-            
+
             context.set_variable_result("Patient", EvaluationResult::object(patient_map));
         }
     }
@@ -149,7 +156,9 @@ fn setup_patient_context(context: &mut EvaluationContext) {
 fn setup_observation_context(context: &mut EvaluationContext) {
     let observation_data = if let Some(this) = &context.this {
         if let EvaluationResult::Object { map: obj, .. } = this {
-            if obj.get("resourceType") == Some(&EvaluationResult::String("Observation".to_string(), None)) {
+            if obj.get("resourceType")
+                == Some(&EvaluationResult::String("Observation".to_string(), None))
+            {
                 Some((this.clone(), obj.clone()))
             } else {
                 None
@@ -184,7 +193,9 @@ fn setup_observation_context(context: &mut EvaluationContext) {
 fn setup_valueset_context(context: &mut EvaluationContext) {
     let valueset_data = if let Some(this) = &context.this {
         if let EvaluationResult::Object { map: obj, .. } = this {
-            if obj.get("resourceType") == Some(&EvaluationResult::String("ValueSet".to_string(), None)) {
+            if obj.get("resourceType")
+                == Some(&EvaluationResult::String("ValueSet".to_string(), None))
+            {
                 Some(this.clone())
             } else {
                 None
@@ -204,7 +215,9 @@ fn setup_valueset_context(context: &mut EvaluationContext) {
 fn setup_questionnaire_context(context: &mut EvaluationContext) {
     let questionnaire_data = if let Some(this) = &context.this {
         if let EvaluationResult::Object { map: obj, .. } = this {
-            if obj.get("resourceType") == Some(&EvaluationResult::String("Questionnaire".to_string(), None)) {
+            if obj.get("resourceType")
+                == Some(&EvaluationResult::String("Questionnaire".to_string(), None))
+            {
                 Some(this.clone())
             } else {
                 None

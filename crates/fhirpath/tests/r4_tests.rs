@@ -619,4 +619,3 @@ fn test_r4_test_suite() {
     // Make sure we found some tests
     assert!(total_tests > 0, "No tests found");
 }
-

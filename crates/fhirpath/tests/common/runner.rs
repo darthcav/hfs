@@ -77,7 +77,10 @@ pub fn run_fhir_test(
     compare_results(&result_vec, expected)
 }
 
-fn compare_results(actual: &[EvaluationResult], expected: &[EvaluationResult]) -> Result<(), String> {
+fn compare_results(
+    actual: &[EvaluationResult],
+    expected: &[EvaluationResult],
+) -> Result<(), String> {
     for (i, (actual, expected)) in actual.iter().zip(expected.iter()).enumerate() {
         match (actual, expected) {
             (EvaluationResult::Boolean(a, _), EvaluationResult::Boolean(b, _)) => {
@@ -197,7 +200,11 @@ fn compare_results(actual: &[EvaluationResult], expected: &[EvaluationResult]) -
 }
 
 // Function to parse expected output value with version-specific date handling
-pub fn parse_output_value(output_type: &str, output_value: &str, fhir_version: &str) -> Result<EvaluationResult, String> {
+pub fn parse_output_value(
+    output_type: &str,
+    output_value: &str,
+    fhir_version: &str,
+) -> Result<EvaluationResult, String> {
     match output_type {
         "boolean" => match output_value {
             "true" => Ok(EvaluationResult::Boolean(true, None)),
@@ -217,7 +224,7 @@ pub fn parse_output_value(output_type: &str, output_value: &str, fhir_version: &
                 output_value
             };
             Ok(EvaluationResult::Date(date_str.to_string(), None))
-        },
+        }
         "dateTime" => Ok(EvaluationResult::DateTime(output_value.to_string(), None)),
         "time" => Ok(EvaluationResult::Time(output_value.to_string(), None)),
         "code" => Ok(EvaluationResult::String(output_value.to_string(), None)),
@@ -242,19 +249,26 @@ fn parse_quantity(output_value: &str) -> Result<EvaluationResult, String> {
         {
             let unit_str = &unit_str_quoted[1..unit_str_quoted.len() - 1];
             match value_str.parse::<Decimal>() {
-                Ok(decimal_val) => {
-                    Ok(EvaluationResult::Quantity(
-                        decimal_val,
-                        unit_str.to_string(),
-                        None,
-                    ))
-                }
-                Err(_) => Err(format!("Invalid decimal value for Quantity: {}", output_value)),
+                Ok(decimal_val) => Ok(EvaluationResult::Quantity(
+                    decimal_val,
+                    unit_str.to_string(),
+                    None,
+                )),
+                Err(_) => Err(format!(
+                    "Invalid decimal value for Quantity: {}",
+                    output_value
+                )),
             }
         } else {
-            Err(format!("Invalid unit format for Quantity (expected 'unit'): {}", output_value))
+            Err(format!(
+                "Invalid unit format for Quantity (expected 'unit'): {}",
+                output_value
+            ))
         }
     } else {
-        Err(format!("Invalid Quantity format (expected \"value 'unit'\"): {}", output_value))
+        Err(format!(
+            "Invalid Quantity format (expected \"value 'unit'\"): {}",
+            output_value
+        ))
     }
 }

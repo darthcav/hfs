@@ -922,9 +922,9 @@ fn build_evaluation_response(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::models::ExtractedParameters;
     use helios_fhirpath_support::{EvaluationResult, TypeInfoResult};
     use serde_json::json;
-    use crate::models::ExtractedParameters;
 
     #[test]
     fn test_uri_uses_value_uri() {
@@ -999,7 +999,7 @@ mod tests {
             validate: false,
             terminology_server: None,
         };
-        
+
         let response = build_evaluation_response(
             "Patient.name",
             &params,
@@ -1009,7 +1009,7 @@ mod tests {
             json!({"resourceType": "Patient"}),
             FhirVersion::R4,
         );
-        
+
         // Extract the evaluator value
         let evaluator_value = response["parameter"]
             .as_array()
@@ -1024,7 +1024,7 @@ mod tests {
             .unwrap()["valueString"]
             .as_str()
             .unwrap();
-        
+
         assert!(evaluator_value.starts_with("Helios Software-"));
         assert!(evaluator_value.ends_with(" (R4)"));
     }
@@ -1040,7 +1040,7 @@ mod tests {
             validate: false,
             terminology_server: None,
         };
-        
+
         let response = build_evaluation_response(
             "Patient.name",
             &params,
@@ -1050,7 +1050,7 @@ mod tests {
             json!({"resourceType": "Patient"}),
             FhirVersion::R5,
         );
-        
+
         // Extract the evaluator value
         let evaluator_value = response["parameter"]
             .as_array()
@@ -1065,7 +1065,7 @@ mod tests {
             .unwrap()["valueString"]
             .as_str()
             .unwrap();
-        
+
         assert!(evaluator_value.starts_with("Helios Software-"));
         assert!(evaluator_value.ends_with(" (R5)"));
     }
