@@ -287,7 +287,7 @@ The SQL on FHIR specification leverages FHIRPath to define flattened tabular vie
     *   [lower()](https://hl7.org/fhirpath/2025Jan/#lower--string): ✅
     *   [replace()](https://hl7.org/fhirpath/2025Jan/#replacepattern--string-substitution--string--string): ✅
     *   [matches()](https://hl7.org/fhirpath/2025Jan/#matchesregex--string--boolean): ✅
-    *   [matchesFull()](https://hl7.org/fhirpath/2025Jan/#matchesfullregex--string--boolean) (STU): ❌
+    *   [matchesFull()](https://hl7.org/fhirpath/2025Jan/#matchesfullregex--string--boolean) (STU): ✅
     *   [replaceMatches()](https://hl7.org/fhirpath/2025Jan/#replacematchesregex--string-substitution-string--string): ✅
     *   [length()](https://hl7.org/fhirpath/2025Jan/#length--integer): ✅
     *   [toChars()](https://hl7.org/fhirpath/2025Jan/#tochars--collection): ✅
@@ -296,8 +296,8 @@ The SQL on FHIR specification leverages FHIRPath to define flattened tabular vie
 *   [Additional String Functions](https://hl7.org/fhirpath/2025Jan/#additional-string-functions) (STU): 🟡 (Partially implemented)
     *   [escape()](https://hl7.org/fhirpath/2025Jan/#escapetarget--string--string): ✅ (html, json targets)
     *   [unescape()](https://hl7.org/fhirpath/2025Jan/#unescapetarget--string--string): ✅ (html, json targets)
-    *   [split()](https://hl7.org/fhirpath/2025Jan/#splitseparator--string--collection): ❌
-    *   [trim()](https://hl7.org/fhirpath/2025Jan/#trim--string): ❌
+    *   [split()](https://hl7.org/fhirpath/2025Jan/#splitseparator--string--collection): ✅
+    *   [trim()](https://hl7.org/fhirpath/2025Jan/#trim--string): ✅
     *   [matchInfo()](https://hl7.org/fhirpath/2025Jan/#matchinforegex--string--collection): ❌
 *   [Math](https://hl7.org/fhirpath/2025Jan/#math) (STU): ✅
     *   [round()](https://hl7.org/fhirpath/2025Jan/#round-precision--integer--decimal): ✅

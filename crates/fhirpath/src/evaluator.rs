@@ -3883,6 +3883,39 @@ fn call_function(
                 }
             })
         }
+        "matchesFull" => {
+            if args.len() != 1 {
+                return Err(EvaluationError::InvalidArity(
+                    "Function 'matchesFull' expects 1 argument".to_string(),
+                ));
+            }
+            // Check for singleton base and arg
+            if invocation_base.count() > 1 || args[0].count() > 1 {
+                return Err(EvaluationError::SingletonEvaluationError(
+                    "matchesFull requires singleton input and argument".to_string(),
+                ));
+            }
+            Ok(match (invocation_base, &args[0]) {
+                (EvaluationResult::String(s, _), EvaluationResult::String(regex_pattern, _)) => {
+                    // matchesFull implicitly adds ^ and $ to the pattern
+                    let full_pattern = format!("^{}$", regex_pattern);
+                    match Regex::new(&full_pattern) {
+                        Ok(re) => EvaluationResult::boolean(re.is_match(s)),
+                        Err(e) => return Err(EvaluationError::InvalidRegex(e.to_string())),
+                    }
+                }
+                // Handle empty cases
+                (EvaluationResult::String(_, _), EvaluationResult::Empty) => {
+                    EvaluationResult::Empty
+                } // S.matchesFull({}) -> {}
+                (EvaluationResult::Empty, _) => EvaluationResult::Empty, // {}.matchesFull(R) -> {}
+                _ => {
+                    return Err(EvaluationError::TypeError(
+                        "matchesFull requires String input and argument".to_string(),
+                    ));
+                }
+            })
+        }
         "replaceMatches" => {
             if args.len() != 2 {
                 return Err(EvaluationError::InvalidArity(
@@ -4093,6 +4126,83 @@ fn call_function(
                 _ => {
                     return Err(EvaluationError::TypeError(
                         "unescape requires String input and target".to_string(),
+                    ));
+                }
+            })
+        }
+        "split" => {
+            // Implements split(separator : String) : Collection
+            // Splits a string into a collection of strings using the separator
+            if args.len() != 1 {
+                return Err(EvaluationError::InvalidArity(
+                    "Function 'split' expects 1 argument (separator)".to_string(),
+                ));
+            }
+            
+            // Check for singleton base and arg
+            if invocation_base.count() > 1 || args[0].count() > 1 {
+                return Err(EvaluationError::SingletonEvaluationError(
+                    "split requires singleton input and argument".to_string(),
+                ));
+            }
+            
+            Ok(match (invocation_base, &args[0]) {
+                (EvaluationResult::String(s, _), EvaluationResult::String(separator, _)) => {
+                    // Split the string by the separator
+                    let parts: Vec<String> = if separator.is_empty() {
+                        // If separator is empty, split into individual characters
+                        s.chars().map(|c| c.to_string()).collect()
+                    } else {
+                        // Normal split by separator
+                        s.split(separator).map(|part| part.to_string()).collect()
+                    };
+                    
+                    // Convert to collection of EvaluationResult::String
+                    let items: Vec<EvaluationResult> = parts
+                        .into_iter()
+                        .map(|part| EvaluationResult::string(part))
+                        .collect();
+                    
+                    EvaluationResult::Collection {
+                        items,
+                        has_undefined_order: false, // split preserves order
+                        type_info: None,
+                    }
+                }
+                (EvaluationResult::Empty, _) => EvaluationResult::Empty,
+                (_, EvaluationResult::Empty) => EvaluationResult::Empty,
+                _ => {
+                    return Err(EvaluationError::TypeError(
+                        "split requires String input and separator".to_string(),
+                    ));
+                }
+            })
+        }
+        "trim" => {
+            // Implements trim() : String
+            // Removes whitespace from the beginning and end of a string
+            if !args.is_empty() {
+                return Err(EvaluationError::InvalidArity(
+                    "Function 'trim' expects no arguments".to_string(),
+                ));
+            }
+            
+            // Check for singleton base
+            if invocation_base.count() > 1 {
+                return Err(EvaluationError::SingletonEvaluationError(
+                    "trim requires singleton input".to_string(),
+                ));
+            }
+            
+            Ok(match invocation_base {
+                EvaluationResult::String(s, _) => {
+                    // Trim whitespace from both ends
+                    EvaluationResult::string(s.trim().to_string())
+                }
+                EvaluationResult::Empty => EvaluationResult::Empty,
+                _ => {
+                    return Err(EvaluationError::TypeError(
+                        "trim requires String input".to_string(),
                     ));
                 }
             })
@@ -5640,10 +5750,13 @@ fn call_function(
                 "lower",
                 "replace",
                 "matches",
+                "matchesFull",
                 "replaceMatches",
                 "join",
                 "escape",
                 "unescape",
+                "split",
+                "trim",
                 "round",
                 "sqrt",
                 "precision",
