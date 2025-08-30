@@ -3637,6 +3637,50 @@ fn call_function(
                 }
             })
         }
+        "lastIndexOf" => {
+            // Returns the 0-based index of the last occurrence of the substring
+            if args.len() != 1 {
+                return Err(EvaluationError::InvalidArity(
+                    "Function 'lastIndexOf' expects 1 argument".to_string(),
+                ));
+            }
+            // Check for singleton base
+            if invocation_base.count() > 1 {
+                return Err(EvaluationError::SingletonEvaluationError(
+                    "lastIndexOf requires a singleton input".to_string(),
+                ));
+            }
+            // Check for singleton argument
+            if args[0].count() > 1 {
+                return Err(EvaluationError::SingletonEvaluationError(
+                    "lastIndexOf requires a singleton argument".to_string(),
+                ));
+            }
+            Ok(match (invocation_base, &args[0]) {
+                (EvaluationResult::String(s, _), EvaluationResult::String(substring, _)) => {
+                    if substring.is_empty() {
+                        // Per spec: returns 0 if substring is empty
+                        EvaluationResult::integer(0)
+                    } else {
+                        match s.rfind(substring) {
+                            Some(index) => EvaluationResult::integer(index as i64),
+                            None => EvaluationResult::integer(-1),
+                        }
+                    }
+                }
+                // Handle empty cases according to spec
+                (EvaluationResult::String(_, _), EvaluationResult::Empty) => {
+                    EvaluationResult::Empty
+                } // X.lastIndexOf({}) -> {}
+                (EvaluationResult::Empty, _) => EvaluationResult::Empty, // {}.lastIndexOf(X) -> {}
+                // Invalid types
+                _ => {
+                    return Err(EvaluationError::TypeError(
+                        "lastIndexOf requires String input and argument".to_string(),
+                    ));
+                }
+            })
+        }
         "substring" => {
             // Returns a part of the string
             if args.is_empty() || args.len() > 2 {
@@ -5743,6 +5787,7 @@ fn call_function(
                 "combine",
                 "length",
                 "indexOf",
+                "lastIndexOf",
                 "substring",
                 "startsWith",
                 "endsWith",

@@ -278,7 +278,7 @@ The SQL on FHIR specification leverages FHIRPath to define flattened tabular vie
     *   [convertsToTime()](https://hl7.org/fhirpath/2025Jan/#convertstotime--boolean): ✅
 *   [String Manipulation](https://hl7.org/fhirpath/2025Jan/#string-manipulation)
     *   [indexOf()](https://hl7.org/fhirpath/2025Jan/#indexofsubstring--string--integer): ✅
-    *   [lastIndexOf()](https://hl7.org/fhirpath/2025Jan/#lastindexofsubstring--string--integer) (STU): ❌
+    *   [lastIndexOf()](https://hl7.org/fhirpath/2025Jan/#lastindexofsubstring--string--integer) (STU): ✅
     *   [substring()](https://hl7.org/fhirpath/2025Jan/#substringstart--integer--length--integer--string): ✅
     *   [startsWith()](https://hl7.org/fhirpath/2025Jan/#startswithprefix--string--boolean): ✅
     *   [endsWith()](https://hl7.org/fhirpath/2025Jan/#endswithsuffix--string--boolean): ✅
@@ -293,12 +293,11 @@ The SQL on FHIR specification leverages FHIRPath to define flattened tabular vie
     *   [toChars()](https://hl7.org/fhirpath/2025Jan/#tochars--collection): ✅
     *   [encode()](https://hl7.org/fhirpath/2025Jan/#encodeformat--string--string): ✅
     *   [decode()](https://hl7.org/fhirpath/2025Jan/#decodeformat--string--string): ✅
-*   [Additional String Functions](https://hl7.org/fhirpath/2025Jan/#additional-string-functions) (STU): 🟡 (Partially implemented)
+*   [Additional String Functions](https://hl7.org/fhirpath/2025Jan/#additional-string-functions) (STU): ✅
     *   [escape()](https://hl7.org/fhirpath/2025Jan/#escapetarget--string--string): ✅ (html, json targets)
     *   [unescape()](https://hl7.org/fhirpath/2025Jan/#unescapetarget--string--string): ✅ (html, json targets)
     *   [split()](https://hl7.org/fhirpath/2025Jan/#splitseparator--string--collection): ✅
     *   [trim()](https://hl7.org/fhirpath/2025Jan/#trim--string): ✅
-    *   [matchInfo()](https://hl7.org/fhirpath/2025Jan/#matchinforegex--string--collection): ❌
 *   [Math](https://hl7.org/fhirpath/2025Jan/#math) (STU): ✅
     *   [round()](https://hl7.org/fhirpath/2025Jan/#round-precision--integer--decimal): ✅
     *   [sqrt()](https://hl7.org/fhirpath/2025Jan/#sqrt--decimal): ✅
