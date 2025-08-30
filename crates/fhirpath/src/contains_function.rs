@@ -24,17 +24,22 @@ pub fn contains_function(
     arg: &EvaluationResult,
     _context: &EvaluationContext,
 ) -> Result<EvaluationResult, EvaluationError> {
-    // Check if we're dealing with a collection of strings, which is not allowed by the spec
+    // Check if we're dealing with a collection and a string argument
     if let EvaluationResult::Collection { items, .. } = invocation_base {
-        // Check if any of the items in the collection are strings
-        if items
-            .iter()
-            .any(|item| matches!(item, EvaluationResult::String(_, _)))
-        {
-            return Err(EvaluationError::SingletonEvaluationError(
-                "contains function requires singleton string input, not a collection of strings"
-                    .to_string(),
-            ));
+        if matches!(arg, EvaluationResult::String(_, _)) {
+            // Check if the collection contains only strings
+            let all_strings = items
+                .iter()
+                .all(|item| matches!(item, EvaluationResult::String(_, _)));
+            
+            if !all_strings && !items.is_empty() {
+                // Collection contains non-string items, and we have a string argument
+                // This is a semantic error
+                return Err(EvaluationError::SemanticError(
+                    "contains() with string argument requires string collection or single string"
+                        .to_string(),
+                ));
+            }
         }
     }
 
@@ -43,8 +48,13 @@ pub fn contains_function(
         return Ok(EvaluationResult::Empty);
     }
 
-    // Spec: {} contains X -> false (where X is not empty)
+    // Spec: {} contains X -> Empty for string argument, false for others
     if invocation_base == &EvaluationResult::Empty {
+        // If the argument is a string, return Empty (string mode)
+        if matches!(arg, EvaluationResult::String(_, _)) {
+            return Ok(EvaluationResult::Empty);
+        }
+        // Otherwise return false (collection mode)
         return Ok(EvaluationResult::boolean(false));
     }
 
@@ -236,6 +246,16 @@ mod tests {
     }
 
     #[test]
+    fn test_contains_empty_source_string_arg() {
+        // Test contains on empty with string argument - should return Empty
+        let base = EvaluationResult::Empty;
+        let arg = EvaluationResult::string("test".to_string());
+        let context = create_test_context();
+        let result = contains_function(&base, &arg, &context).unwrap();
+        assert_eq!(result, EvaluationResult::Empty);
+    }
+
+    #[test]
     fn test_contains_empty_argument() {
         // Test contains with an empty argument
         let base = create_test_collection(vec![
@@ -302,5 +322,23 @@ mod tests {
             &EvaluationResult::integer(42),
             &EvaluationResult::string("42".to_string())
         ));
+    }
+
+    #[test]
+    fn test_contains_non_string_collection_semantic_error() {
+        // Test contains on a non-string collection with string argument
+        let base = create_test_collection(vec![
+            EvaluationResult::integer(1),
+            EvaluationResult::integer(2),
+        ]);
+        let arg = EvaluationResult::string("test".to_string());
+        let context = create_test_context();
+        let result = contains_function(&base, &arg, &context);
+        assert!(result.is_err());
+        if let Err(EvaluationError::SemanticError(msg)) = result {
+            assert!(msg.contains("string collection"));
+        } else {
+            panic!("Expected SemanticError");
+        }
     }
 }
