@@ -27,7 +27,7 @@ fn test_boundary_zero_case() {
             &value_str_no_sign[dot_pos + 1..],
         )
     } else {
-        (value_str_no_sign.as_ref(), "")
+        (value_str_no_sign, "")
     };
 
     println!("Integer part: '{}'", integer_part);
@@ -65,11 +65,8 @@ fn test_boundary_zero_case() {
             println!("\nSpecial case: value rounds to 0 but is not 0");
             // The low boundary for values that round to 0 should be -0.05 for precision 1
             let half_unit = Decimal::from(5) / Decimal::from(10_i64.pow(precision + 1));
-            let expected_low_boundary = if value < Decimal::ZERO {
-                -half_unit
-            } else {
-                -half_unit // For positive values that round to 0, low boundary is still -0.05
-            };
+            // For values that round to 0, low boundary is always -0.05 (for precision 1)
+            let expected_low_boundary = -half_unit;
             println!("Expected low boundary: {}", expected_low_boundary);
         }
     }

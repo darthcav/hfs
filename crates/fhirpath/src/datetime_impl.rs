@@ -230,7 +230,7 @@ pub fn compare_date_time_values(
 
                 // For comparisons, use the start of day
                 // This is consistent with FHIR's approach for < and > operators
-                return compare_datetimes(&d_start, dt_val);
+                compare_datetimes(&d_start, dt_val)
             } else {
                 // Attempt to parse s_val as a datetime and compare with dt_val
                 compare_datetimes(s_val, dt_val)
@@ -245,7 +245,7 @@ pub fn compare_date_time_values(
                 let d_start = format!("{}T00:00:00", d_normalized);
 
                 // For comparisons, use the start of day
-                return compare_datetimes(dt_val, &d_start);
+                compare_datetimes(dt_val, &d_start)
             } else {
                 // Attempt to parse s_val as a datetime and compare with dt_val
                 compare_datetimes(dt_val, s_val)

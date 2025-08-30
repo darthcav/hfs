@@ -298,7 +298,7 @@ fn calculate_decimal_low_boundary(value: Decimal, precision: u32) -> Decimal {
     let (_integer_part, decimal_part) = if let Some(dot_pos) = value_str.find('.') {
         (&value_str[..dot_pos], &value_str[dot_pos + 1..])
     } else {
-        (value_str.as_ref(), "")
+        (value_str, "")
     };
 
     // Determine how many decimal places we actually have
@@ -316,7 +316,7 @@ fn calculate_decimal_low_boundary(value: Decimal, precision: u32) -> Decimal {
             if let Some(unit) = 10_i64.checked_pow(actual_decimals + 1) {
                 let decimal_unit = Decimal::from(unit);
                 let five_at_position = Decimal::from(5) / decimal_unit;
-                result = result - five_at_position; // Subtract because we're negative, this moves away from zero
+                result -= five_at_position; // Subtract because we're negative, this moves away from zero
             }
             result
         } else {
@@ -328,7 +328,7 @@ fn calculate_decimal_low_boundary(value: Decimal, precision: u32) -> Decimal {
             if let Some(unit) = 10_i64.checked_pow(actual_decimals + 1) {
                 let decimal_unit = Decimal::from(unit);
                 let five_at_position = Decimal::from(5) / decimal_unit;
-                result = result - five_at_position;
+                result -= five_at_position;
             }
             result
         }
@@ -345,8 +345,7 @@ fn calculate_decimal_low_boundary(value: Decimal, precision: u32) -> Decimal {
         // Floor always moves towards negative infinity
         if let Some(scale) = 10_i64.checked_pow(precision) {
             let scale_dec = Decimal::from(scale);
-            let truncated = (value * scale_dec).floor() / scale_dec;
-            truncated
+            (value * scale_dec).floor() / scale_dec
         } else {
             value.round_dp(precision)
         }
@@ -384,7 +383,7 @@ fn calculate_decimal_high_boundary(value: Decimal, precision: u32) -> Decimal {
             &value_str_no_sign[dot_pos + 1..],
         )
     } else {
-        (value_str_no_sign.as_ref(), "")
+        (value_str_no_sign, "")
     };
 
     let actual_decimals = decimal_part.len() as u32;

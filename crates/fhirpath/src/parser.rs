@@ -257,7 +257,6 @@ impl fmt::Display for Literal {
 ///
 /// The parser returns detailed error information when it encounters syntax errors
 /// in the input, including the location and nature of the error.
-
 /// Parser that matches a custom whitespace including comments  
 fn custom_padded<T, P>(parser: P) -> impl Parser<char, T, Error = Simple<char>> + Clone
 where

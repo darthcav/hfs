@@ -1488,8 +1488,8 @@ fn evaluate_term_with_context(
             // Special handling for defineVariable as a Term
 
             // When defineVariable appears as a term without a base, use context resources
-            let base_result = if current_item.is_some() {
-                current_item.unwrap().clone()
+            let base_result = if let Some(item) = current_item {
+                item.clone()
             } else if !context.resources.is_empty() {
                 // Use resources from current context
                 if context.resources.len() == 1 {
@@ -1584,7 +1584,7 @@ fn evaluate_invocation_with_context(
                     };
 
                     // Check if trying to override system variables
-                    let system_vars = vec!["%context", "%ucum", "%sct", "%loinc", "%vs"];
+                    let system_vars = ["%context", "%ucum", "%sct", "%loinc", "%vs"];
                     if system_vars.contains(&var_name.as_str()) {
                         return Err(EvaluationError::SemanticError(format!(
                             "Cannot override system variable '{}'",
@@ -2238,7 +2238,7 @@ fn evaluate_invocation(
                     };
 
                     // Check if trying to override system variables
-                    let system_vars = vec!["%context", "%ucum", "%sct", "%loinc", "%vs"];
+                    let system_vars = ["%context", "%ucum", "%sct", "%loinc", "%vs"];
                     if system_vars.contains(&var_name.as_str()) {
                         return Err(EvaluationError::SemanticError(format!(
                             "Cannot override system variable '{}'",
@@ -4258,7 +4258,7 @@ fn call_function(
                     // Convert to collection of EvaluationResult::String
                     let items: Vec<EvaluationResult> = parts
                         .into_iter()
-                        .map(|part| EvaluationResult::string(part))
+                        .map(EvaluationResult::string)
                         .collect();
 
                     EvaluationResult::Collection {
@@ -5368,8 +5368,8 @@ fn call_function(
                         } else {
                             datetime_str
                         }
-                    } else if datetime_str.ends_with('Z') {
-                        &datetime_str[..datetime_str.len() - 1]
+                    } else if let Some(stripped) = datetime_str.strip_suffix('Z') {
+                        stripped
                     } else {
                         datetime_str
                     };
