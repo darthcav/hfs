@@ -150,52 +150,90 @@ pub fn compare_date_time_values(
 
         // Handle string-based date/time formats
         (EvaluationResult::String(s1, _), EvaluationResult::String(s2, _)) => {
-            if s1.starts_with('@') && s2.starts_with('@') {
-                // Both are date literals
-                let value1 = s1.trim_start_matches('@');
-                let value2 = s2.trim_start_matches('@');
+            // Handle @ prefix for date literals
+            let s1_clean = s1.strip_prefix('@').unwrap_or(s1);
+            let s2_clean = s2.strip_prefix('@').unwrap_or(s2);
 
-                // Determine type and compare
-                if value1.starts_with('T') && value2.starts_with('T') {
-                    // Both are times
+            // Check if these are date/time strings
+            let s1_is_time = s1_clean.starts_with('T');
+            let s2_is_time = s2_clean.starts_with('T');
+            let s1_has_t = s1_clean.contains('T');
+            let s2_has_t = s2_clean.contains('T');
+            
+            // Try to parse as dates/times
+            let s1_is_date = !s1_is_time && !s1_has_t && parse_date(s1_clean).is_some();
+            let s2_is_date = !s2_is_time && !s2_has_t && parse_date(s2_clean).is_some();
+            let s1_is_datetime = !s1_is_time && s1_has_t && parse_datetime(s1_clean).is_some();
+            let s2_is_datetime = !s2_is_time && s2_has_t && parse_datetime(s2_clean).is_some();
+
+            match (s1_is_time, s2_is_time, s1_is_date, s2_is_date, s1_is_datetime, s2_is_datetime) {
+                // Both are times
+                (true, true, _, _, _, _) => {
                     compare_times(
-                        value1.trim_start_matches('T'),
-                        value2.trim_start_matches('T'),
+                        s1_clean.trim_start_matches('T'),
+                        s2_clean.trim_start_matches('T'),
                     )
-                } else if value1.contains('T') && value2.contains('T') {
-                    // Both are datetimes
-                    compare_datetimes(value1, value2)
-                } else if !value1.contains('T') && !value2.contains('T') {
-                    // Both are dates
-                    compare_dates(value1, value2)
-                } else {
-                    // Mixed types
+                }
+                // Both are dates
+                (false, false, true, true, false, false) => {
+                    compare_dates(s1_clean, s2_clean)
+                }
+                // Both are datetimes
+                (false, false, false, false, true, true) => {
+                    compare_datetimes(s1_clean, s2_clean)
+                }
+                // Mixed date and datetime - return None for indeterminate comparison
+                (false, false, true, false, false, true) |
+                (false, false, false, true, true, false) => {
                     None
                 }
-            } else {
-                // Not date literals
-                None
+                // Otherwise, not comparable as date/time types
+                _ => None
             }
         }
 
         // Handle other conversions
         // String vs Date
         (EvaluationResult::String(s_val, _), EvaluationResult::Date(d_val, _)) => {
-            // Attempt to parse s_val as a date and compare with d_val
-            compare_dates(s_val, d_val)
+            // Check if string is a datetime
+            if s_val.contains('T') && parse_datetime(s_val).is_some() {
+                // String is datetime, Date is date - indeterminate
+                None
+            } else {
+                // Attempt to parse s_val as a date and compare with d_val
+                compare_dates(s_val, d_val)
+            }
         }
         (EvaluationResult::Date(d_val, _), EvaluationResult::String(s_val, _)) => {
-            // Attempt to parse s_val as a date and compare with d_val
-            compare_dates(d_val, s_val)
+            // Check if string is a datetime
+            if s_val.contains('T') && parse_datetime(s_val).is_some() {
+                // Date is date, String is datetime - indeterminate
+                None
+            } else {
+                // Attempt to parse s_val as a date and compare with d_val
+                compare_dates(d_val, s_val)
+            }
         }
         // String vs DateTime
         (EvaluationResult::String(s_val, _), EvaluationResult::DateTime(dt_val, _)) => {
-            // Attempt to parse s_val as a datetime and compare with dt_val
-            compare_datetimes(s_val, dt_val)
+            // Check if string is a date (not datetime)
+            if !s_val.contains('T') && parse_date(s_val).is_some() {
+                // String is date, DateTime is datetime - indeterminate
+                None
+            } else {
+                // Attempt to parse s_val as a datetime and compare with dt_val
+                compare_datetimes(s_val, dt_val)
+            }
         }
         (EvaluationResult::DateTime(dt_val, _), EvaluationResult::String(s_val, _)) => {
-            // Attempt to parse s_val as a datetime and compare with dt_val
-            compare_datetimes(dt_val, s_val)
+            // Check if string is a date (not datetime)
+            if !s_val.contains('T') && parse_date(s_val).is_some() {
+                // DateTime is datetime, String is date - indeterminate
+                None
+            } else {
+                // Attempt to parse s_val as a datetime and compare with dt_val
+                compare_datetimes(dt_val, s_val)
+            }
         }
         // String vs Time
         (EvaluationResult::String(s_val, _), EvaluationResult::Time(t_val, _)) => {

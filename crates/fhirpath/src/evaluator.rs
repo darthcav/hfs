@@ -5299,6 +5299,11 @@ fn call_function(
             // Delegate to the reference key functions module
             crate::reference_key_functions::get_reference_key_function(invocation_base, args)
         }
+        "hasValue" => {
+            // hasValue() returns true if the collection has any non-empty values
+            // It's the opposite of empty()
+            Ok(EvaluationResult::boolean(!matches!(invocation_base, EvaluationResult::Empty)))
+        }
         // where, select, ofType are handled in evaluate_invocation
         // Add other standard functions here
         _ => {
@@ -5312,6 +5317,7 @@ fn call_function(
                 "iif",
                 "repeat",
                 "aggregate",
+                "hasValue",
                 "trace",
                 "ofType",
                 "is",
@@ -6226,16 +6232,52 @@ fn compare_inequality(
         )));
     }
 
-    // First, check if both values are date/time types that can be compared
-    if let Some(ordering) = crate::datetime_impl::compare_date_time_values(left, right) {
-        let result = match op {
-            "<" => ordering.is_lt(),
-            "<=" => ordering.is_le(),
-            ">" => ordering.is_gt(),
-            ">=" => ordering.is_ge(),
-            _ => false, // Should not happen
-        };
-        return Ok(EvaluationResult::boolean(result));
+    // First, check if both values are date/time types
+    match crate::datetime_impl::compare_date_time_values(left, right) {
+        Some(ordering) => {
+            let result = match op {
+                "<" => ordering.is_lt(),
+                "<=" => ordering.is_le(),
+                ">" => ordering.is_gt(),
+                ">=" => ordering.is_ge(),
+                _ => false, // Should not happen
+            };
+            return Ok(EvaluationResult::boolean(result));
+        }
+        None => {
+            // Check if these are date/time types that cannot be compared
+            let is_date_time_left = matches!(
+                left,
+                EvaluationResult::Date(_, _)
+                    | EvaluationResult::DateTime(_, _)
+                    | EvaluationResult::Time(_, _)
+            );
+            let is_date_time_right = matches!(
+                right,
+                EvaluationResult::Date(_, _)
+                    | EvaluationResult::DateTime(_, _)
+                    | EvaluationResult::Time(_, _)
+            );
+            if is_date_time_left && is_date_time_right {
+                // Both are date/time types but comparison returned None
+                // This means the comparison is indeterminate (e.g., date vs datetime)
+                return Ok(EvaluationResult::Empty);
+            }
+            // Also check if these are string representations of date/time values
+            if let (EvaluationResult::String(s1, _), EvaluationResult::String(s2, _)) = (left, right) {
+                // Check if one is a date and the other is a datetime
+                let s1_is_date = !s1.contains('T') && crate::datetime_impl::parse_date(s1).is_some();
+                let s2_is_date = !s2.contains('T') && crate::datetime_impl::parse_date(s2).is_some();
+                let s1_is_datetime = s1.contains('T') && crate::datetime_impl::parse_datetime(s1).is_some();
+                let s2_is_datetime = s2.contains('T') && crate::datetime_impl::parse_datetime(s2).is_some();
+                
+                if (s1_is_date && s2_is_datetime) || (s1_is_datetime && s2_is_date) {
+                    // Mixed date and datetime comparison - indeterminate
+                    return Ok(EvaluationResult::Empty);
+                }
+            }
+            // Otherwise, continue with other type comparisons
+        }
     }
 
     // If not date/time types, handle other types
