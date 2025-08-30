@@ -799,72 +799,147 @@ pub fn evaluate(
             check_membership(&left_result, op, &right_result, context)
         }
         Expression::And(left, right) => {
-            // Evaluate operands first
+            // Evaluate left operand first
             let left_eval = evaluate(left, context, current_item)?;
-            let right_eval = evaluate(right, context, current_item)?;
-
-            // Check types *before* logical conversion
-            if !matches!(
-                left_eval,
-                EvaluationResult::Boolean(_, _) | EvaluationResult::Empty
-            ) || !matches!(
-                right_eval,
-                EvaluationResult::Boolean(_, _) | EvaluationResult::Empty
-            ) {
-                // Allow Empty for 3-valued logic, but reject other types
-                if !matches!(left_eval, EvaluationResult::Empty)
-                    && !matches!(right_eval, EvaluationResult::Empty)
-                {
-                    return Err(EvaluationError::TypeError(format!(
-                        "Operator 'and' requires Boolean operands, found {} and {}",
-                        left_eval.type_name(),
-                        right_eval.type_name()
-                    )));
+            
+            // Convert left to boolean using singleton evaluation rules
+            let left_bool = match &left_eval {
+                // Direct boolean values
+                EvaluationResult::Boolean(_, _) => left_eval.to_boolean_for_logic()?,
+                // Empty evaluates to empty in logical context
+                EvaluationResult::Empty => EvaluationResult::Empty,
+                // For non-boolean singletons, apply singleton evaluation:
+                // A single value is considered true
+                EvaluationResult::String(_, _) |
+                EvaluationResult::Integer(_, _) |
+                EvaluationResult::Integer64(_, _) |
+                EvaluationResult::Decimal(_, _) |
+                EvaluationResult::Date(_, _) |
+                EvaluationResult::DateTime(_, _) |
+                EvaluationResult::Time(_, _) |
+                EvaluationResult::Quantity(_, _, _) |
+                EvaluationResult::Object { .. } => EvaluationResult::boolean(true),
+                // Collections follow singleton evaluation rules
+                EvaluationResult::Collection { items, .. } => {
+                    match items.len() {
+                        0 => EvaluationResult::Empty,
+                        1 => {
+                            // For single-item collections, apply singleton evaluation recursively
+                            match &items[0] {
+                                EvaluationResult::Boolean(_, _) => items[0].to_boolean_for_logic()?,
+                                EvaluationResult::Empty => EvaluationResult::Empty,
+                                _ => EvaluationResult::boolean(true), // Non-boolean singleton is true
+                            }
+                        }
+                        _ => {
+                            return Err(EvaluationError::SingletonEvaluationError(format!(
+                                "Operator 'and' requires singleton values, left operand has {} items",
+                                items.len()
+                            )));
+                        }
+                    }
                 }
-            }
-
-            // Convert to boolean for logic AFTER type check
-            let left_bool = left_eval.to_boolean_for_logic()?;
-            let right_bool = right_eval.to_boolean_for_logic()?;
+            };
 
             match left_bool {
                 EvaluationResult::Boolean(false, _) => Ok(EvaluationResult::boolean(false)), // false and X -> false
                 EvaluationResult::Boolean(true, _) => {
-                    // Evaluate right, handle potential error
+                    // Evaluate right operand
                     let right_eval = evaluate(right, context, current_item)?;
-                    let right_bool_result = right_eval.to_boolean_for_logic()?; // Propagate error
-                    // Check if right_bool_result is actually Boolean or Empty
-                    if matches!(
-                        right_bool_result,
-                        EvaluationResult::Boolean(_, _) | EvaluationResult::Empty
-                    ) {
-                        Ok(right_bool_result) // true and X -> X (where X is Boolean or Empty)
-                    } else {
-                        Err(EvaluationError::TypeError(format!(
-                            // Should be unreachable if type check is correct
-                            "Invalid type for 'and' right operand: {}",
-                            right_bool.type_name()
-                        )))
-                    }
+                    
+                    // Apply singleton evaluation to right operand
+                    let right_bool = match &right_eval {
+                        // Direct boolean values
+                        EvaluationResult::Boolean(_, _) => right_eval.to_boolean_for_logic()?,
+                        // Empty evaluates to empty in logical context
+                        EvaluationResult::Empty => EvaluationResult::Empty,
+                        // For non-boolean singletons, apply singleton evaluation:
+                        // A single value is considered true
+                        EvaluationResult::String(_, _) |
+                        EvaluationResult::Integer(_, _) |
+                        EvaluationResult::Integer64(_, _) |
+                        EvaluationResult::Decimal(_, _) |
+                        EvaluationResult::Date(_, _) |
+                        EvaluationResult::DateTime(_, _) |
+                        EvaluationResult::Time(_, _) |
+                        EvaluationResult::Quantity(_, _, _) |
+                        EvaluationResult::Object { .. } => EvaluationResult::boolean(true),
+                        // Collections follow singleton evaluation rules
+                        EvaluationResult::Collection { items, .. } => {
+                            match items.len() {
+                                0 => EvaluationResult::Empty,
+                                1 => {
+                                    // For single-item collections, apply singleton evaluation recursively
+                                    match &items[0] {
+                                        EvaluationResult::Boolean(_, _) => items[0].to_boolean_for_logic()?,
+                                        EvaluationResult::Empty => EvaluationResult::Empty,
+                                        _ => EvaluationResult::boolean(true), // Non-boolean singleton is true
+                                    }
+                                }
+                                _ => {
+                                    return Err(EvaluationError::SingletonEvaluationError(format!(
+                                        "Operator 'and' requires singleton values, right operand has {} items",
+                                        items.len()
+                                    )));
+                                }
+                            }
+                        }
+                    };
+                    
+                    Ok(right_bool) // true and X -> X
                 }
                 EvaluationResult::Empty => {
-                    // Evaluate right, handle potential error
+                    // Evaluate right operand
                     let right_eval = evaluate(right, context, current_item)?;
-                    let _right_bool = right_eval.to_boolean_for_logic()?; // Propagate error
-                    // The actual value of right_bool doesn't matter here per 3-valued logic table:
-                    // {} and false -> false
-                    // {} and true -> {}
-                    // {} and {} -> {}
-                    // So we only need to check if right_eval converted to false
-                    match right_eval.to_boolean_for_logic()? {
-                        // Re-evaluate for the match
+                    
+                    // Apply singleton evaluation to right operand
+                    let right_bool = match &right_eval {
+                        // Direct boolean values
+                        EvaluationResult::Boolean(_, _) => right_eval.to_boolean_for_logic()?,
+                        // Empty evaluates to empty in logical context
+                        EvaluationResult::Empty => EvaluationResult::Empty,
+                        // For non-boolean singletons, apply singleton evaluation:
+                        // A single value is considered true
+                        EvaluationResult::String(_, _) |
+                        EvaluationResult::Integer(_, _) |
+                        EvaluationResult::Integer64(_, _) |
+                        EvaluationResult::Decimal(_, _) |
+                        EvaluationResult::Date(_, _) |
+                        EvaluationResult::DateTime(_, _) |
+                        EvaluationResult::Time(_, _) |
+                        EvaluationResult::Quantity(_, _, _) |
+                        EvaluationResult::Object { .. } => EvaluationResult::boolean(true),
+                        // Collections follow singleton evaluation rules
+                        EvaluationResult::Collection { items, .. } => {
+                            match items.len() {
+                                0 => EvaluationResult::Empty,
+                                1 => {
+                                    // For single-item collections, apply singleton evaluation recursively
+                                    match &items[0] {
+                                        EvaluationResult::Boolean(_, _) => items[0].to_boolean_for_logic()?,
+                                        EvaluationResult::Empty => EvaluationResult::Empty,
+                                        _ => EvaluationResult::boolean(true), // Non-boolean singleton is true
+                                    }
+                                }
+                                _ => {
+                                    return Err(EvaluationError::SingletonEvaluationError(format!(
+                                        "Operator 'and' requires singleton values, right operand has {} items",
+                                        items.len()
+                                    )));
+                                }
+                            }
+                        }
+                    };
+                    
+                    // Apply 3-valued logic for Empty and X
+                    match right_bool {
                         EvaluationResult::Boolean(false, _) => Ok(EvaluationResult::boolean(false)), // {} and false -> false
                         _ => Ok(EvaluationResult::Empty), // {} and (true | {}) -> {}
                     }
                 }
-                // This case should be unreachable if to_boolean_for_logic works correctly
+                // This case should be unreachable with proper singleton evaluation
                 _ => Err(EvaluationError::TypeError(format!(
-                    "Invalid type for 'and' left operand: {}",
+                    "Invalid type for 'and' left operand after singleton evaluation: {}",
                     left_bool.type_name()
                 ))),
             }
