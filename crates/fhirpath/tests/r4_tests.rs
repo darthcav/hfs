@@ -591,7 +591,7 @@ fn test_r4_test_suite() {
                         passed_tests += 1;
                     }
                     Err(e) => {
-                        // If it failed with an error and there are no outputs, 
+                        // If it failed with an error and there are no outputs,
                         // this is likely an expected error (like negative precision)
                         println!(
                             "  PASS (no output expected): {} - '{}' - Got error: {}",

@@ -31,7 +31,7 @@ pub fn contains_function(
             let all_strings = items
                 .iter()
                 .all(|item| matches!(item, EvaluationResult::String(_, _)));
-            
+
             if !all_strings && !items.is_empty() {
                 // Collection contains non-string items, and we have a string argument
                 // This is a semantic error

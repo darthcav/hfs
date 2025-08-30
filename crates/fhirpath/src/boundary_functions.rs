@@ -32,7 +32,7 @@ pub fn low_boundary_function(
             "lowBoundary requires a singleton input".to_string(),
         ));
     }
-    
+
     // Get precision parameter if provided
     let precision_param = if args.is_empty() {
         None
@@ -164,7 +164,7 @@ pub fn high_boundary_function(
             "highBoundary requires a singleton input".to_string(),
         ));
     }
-    
+
     // Get precision parameter if provided
     let precision_param = if args.is_empty() {
         None
@@ -268,7 +268,6 @@ pub fn high_boundary_function(
     })
 }
 
-
 /// Calculates the low boundary for a decimal value based on its precision
 fn calculate_decimal_low_boundary(value: Decimal, precision: u32) -> Decimal {
     if precision == 0 {
@@ -289,11 +288,11 @@ fn calculate_decimal_low_boundary(value: Decimal, precision: u32) -> Decimal {
             return truncated - Decimal::ONE;
         }
     }
-    
+
     // Convert to string to examine the actual digits
     let value_str = value.to_string();
     let is_negative = value < Decimal::ZERO;
-    
+
     // Remove negative sign for processing
     let value_str = value_str.trim_start_matches('-');
     let (_integer_part, decimal_part) = if let Some(dot_pos) = value_str.find('.') {
@@ -301,10 +300,10 @@ fn calculate_decimal_low_boundary(value: Decimal, precision: u32) -> Decimal {
     } else {
         (value_str.as_ref(), "")
     };
-    
+
     // Determine how many decimal places we actually have
     let actual_decimals = decimal_part.len() as u32;
-    
+
     if actual_decimals < precision {
         // We have fewer decimal places than the precision
         if is_negative {
@@ -312,7 +311,7 @@ fn calculate_decimal_low_boundary(value: Decimal, precision: u32) -> Decimal {
             // We need to add 5 at the next position (which moves away from zero)
             let mut result = value;
             result.rescale(precision);
-            
+
             // Subtract 5 * 10^(-(actual_decimals + 1))
             if let Some(unit) = 10_i64.checked_pow(actual_decimals + 1) {
                 let decimal_unit = Decimal::from(unit);
@@ -324,7 +323,7 @@ fn calculate_decimal_low_boundary(value: Decimal, precision: u32) -> Decimal {
             // For positive numbers, subtract 5 at the next position
             let mut result = value;
             result.rescale(precision);
-            
+
             // Subtract 5 * 10^(-(actual_decimals + 1))
             if let Some(unit) = 10_i64.checked_pow(actual_decimals + 1) {
                 let decimal_unit = Decimal::from(unit);
@@ -341,7 +340,7 @@ fn calculate_decimal_low_boundary(value: Decimal, precision: u32) -> Decimal {
             // Special case: if rounds to 0, return 0
             return Decimal::ZERO;
         }
-        
+
         // For both positive and negative, use floor for low boundary
         // Floor always moves towards negative infinity
         if let Some(scale) = 10_i64.checked_pow(precision) {
@@ -361,7 +360,7 @@ fn calculate_decimal_high_boundary(value: Decimal, precision: u32) -> Decimal {
     if rounded == Decimal::ZERO {
         return Decimal::ZERO;
     }
-    
+
     if precision == 0 {
         // For integer precision
         if value >= Decimal::ZERO {
@@ -372,21 +371,24 @@ fn calculate_decimal_high_boundary(value: Decimal, precision: u32) -> Decimal {
             return value.trunc();
         }
     }
-    
+
     // Get the string representation to check actual decimals
     let value_str = value.to_string();
     let is_negative = value < Decimal::ZERO;
-    
+
     // Remove negative sign for processing
     let value_str_no_sign = value_str.trim_start_matches('-');
     let (_integer_part, decimal_part) = if let Some(dot_pos) = value_str_no_sign.find('.') {
-        (&value_str_no_sign[..dot_pos], &value_str_no_sign[dot_pos + 1..])
+        (
+            &value_str_no_sign[..dot_pos],
+            &value_str_no_sign[dot_pos + 1..],
+        )
     } else {
         (value_str_no_sign.as_ref(), "")
     };
-    
+
     let actual_decimals = decimal_part.len() as u32;
-    
+
     if actual_decimals < precision {
         // Need to pad with 5 then 0s
         if is_negative {
@@ -394,7 +396,7 @@ fn calculate_decimal_high_boundary(value: Decimal, precision: u32) -> Decimal {
             // This moves the value towards zero (less negative)
             // We need to subtract 0.00050000 from the absolute value
             let padding_value = Decimal::from(5) / Decimal::from(10_i64.pow(actual_decimals + 1));
-            value + padding_value  // Adding to negative makes it less negative (towards zero)
+            value + padding_value // Adding to negative makes it less negative (towards zero)
         } else {
             // For positive numbers, pad normally
             let mut result = value_str.clone();
@@ -433,7 +435,7 @@ fn calculate_decimal_high_boundary(value: Decimal, precision: u32) -> Decimal {
 fn calculate_date_low_boundary(date_str: &str, precision_param: Option<u32>) -> EvaluationResult {
     // Strip @ prefix if present
     let date_str = date_str.strip_prefix('@').unwrap_or(date_str);
-    
+
     // For dates, precision parameter limits the number of components
     // If not specified, infer from the input format
     let default_precision = match date_str.len() {
@@ -443,11 +445,11 @@ fn calculate_date_low_boundary(date_str: &str, precision_param: Option<u32>) -> 
         _ => 4,   // Default to year
     };
     let precision = precision_param.unwrap_or(default_precision).min(10);
-    
+
     if precision < 4 {
         return EvaluationResult::Empty;
     }
-    
+
     match (date_str.len(), precision) {
         (4, 4) => {
             // YYYY format with year precision - return January 1st
@@ -489,7 +491,7 @@ fn calculate_date_low_boundary(date_str: &str, precision_param: Option<u32>) -> 
 fn calculate_date_high_boundary(date_str: &str, precision_param: Option<u32>) -> EvaluationResult {
     // Strip @ prefix if present
     let date_str = date_str.strip_prefix('@').unwrap_or(date_str);
-    
+
     // For dates, precision parameter limits the number of components
     // If not specified, infer from the input format
     let default_precision = match date_str.len() {
@@ -499,11 +501,11 @@ fn calculate_date_high_boundary(date_str: &str, precision_param: Option<u32>) ->
         _ => 4,   // Default to year
     };
     let precision = precision_param.unwrap_or(default_precision).min(10);
-    
+
     if precision < 4 {
         return EvaluationResult::Empty;
     }
-    
+
     match (date_str.len(), precision) {
         (4, 4) => {
             // YYYY format with year precision - return December 31st
@@ -545,7 +547,10 @@ fn calculate_date_high_boundary(date_str: &str, precision_param: Option<u32>) ->
             if let Ok(year) = date_str[0..4].parse::<i32>() {
                 if let Ok(month) = date_str[5..7].parse::<u32>() {
                     if let Some(last_day) = last_day_of_month(year, month) {
-                        return EvaluationResult::datetime(format!("{}-{:02}-{:02}T23:59:59.999-12:00", year, month, last_day));
+                        return EvaluationResult::datetime(format!(
+                            "{}-{:02}-{:02}T23:59:59.999-12:00",
+                            year, month, last_day
+                        ));
                     }
                 }
             }
@@ -574,24 +579,27 @@ fn last_day_of_month(year: i32, month: u32) -> Option<u32> {
 }
 
 /// Calculates the low boundary for a datetime value based on its precision
-fn calculate_datetime_low_boundary(datetime_str: &str, precision_param: Option<u32>) -> EvaluationResult {
+fn calculate_datetime_low_boundary(
+    datetime_str: &str,
+    precision_param: Option<u32>,
+) -> EvaluationResult {
     // Default precision for datetime is 17
     let precision = precision_param.unwrap_or(17);
-    
+
     // Parse the datetime to understand its components
     if let Some(t_pos) = datetime_str.find('T') {
         let date_part = &datetime_str[..t_pos];
-        
+
         // If precision is 8 or less, return just the date part
         if precision <= 8 {
             return EvaluationResult::datetime(format!("@{}", date_part));
         }
-        
+
         let time_part = &datetime_str[t_pos + 1..];
 
         // Get timezone info if present
         let (time_only, timezone) = extract_timezone(time_part);
-        
+
         // Normalize time_only if it's just HH format (e.g., "08" -> "08:00")
         let normalized_time = if time_only.len() == 2 {
             format!("{}:00", time_only)
@@ -603,9 +611,9 @@ fn calculate_datetime_low_boundary(datetime_str: &str, precision_param: Option<u
         let low_time = if precision >= 17 {
             // Full precision - add milliseconds
             match normalized_time.len() {
-                5 => format!("{}:00.000", normalized_time),    // HH:MM -> HH:MM:00.000
-                8 => format!("{}.000", normalized_time),       // HH:MM:SS -> HH:MM:SS.000
-                _ => normalized_time.to_string(),              // Already has milliseconds
+                5 => format!("{}:00.000", normalized_time), // HH:MM -> HH:MM:00.000
+                8 => format!("{}.000", normalized_time),    // HH:MM:SS -> HH:MM:SS.000
+                _ => normalized_time.to_string(),           // Already has milliseconds
             }
         } else {
             // Limited precision handling
@@ -618,7 +626,7 @@ fn calculate_datetime_low_boundary(datetime_str: &str, precision_param: Option<u
         } else {
             "+14:00"
         };
-        
+
         let result_str = format!("@{}T{}{}", date_part, low_time, final_timezone);
         EvaluationResult::datetime(result_str)
     } else {
@@ -632,10 +640,13 @@ fn calculate_datetime_low_boundary(datetime_str: &str, precision_param: Option<u
 }
 
 /// Calculates the high boundary for a datetime value based on its precision
-fn calculate_datetime_high_boundary(datetime_str: &str, precision_param: Option<u32>) -> EvaluationResult {
+fn calculate_datetime_high_boundary(
+    datetime_str: &str,
+    precision_param: Option<u32>,
+) -> EvaluationResult {
     // Default precision for datetime is 17
     let precision = precision_param.unwrap_or(17);
-    
+
     // Parse the datetime to understand its components
     if let Some(t_pos) = datetime_str.find('T') {
         let date_part = &datetime_str[..t_pos];
@@ -643,7 +654,7 @@ fn calculate_datetime_high_boundary(datetime_str: &str, precision_param: Option<
 
         // Get timezone info if present
         let (time_only, timezone) = extract_timezone(time_part);
-        
+
         // Normalize time_only if it's just HH format (e.g., "08" -> "08:00")
         let normalized_time = if time_only.len() == 2 {
             format!("{}:00", time_only)
@@ -655,9 +666,9 @@ fn calculate_datetime_high_boundary(datetime_str: &str, precision_param: Option<
         let high_time = if precision >= 17 {
             // Full precision - add milliseconds
             match normalized_time.len() {
-                5 => format!("{}:59.999", normalized_time),    // HH:MM -> HH:MM:59.999
-                8 => format!("{}.999", normalized_time),       // HH:MM:SS -> HH:MM:SS.999
-                _ => normalized_time.to_string(),              // Already has milliseconds
+                5 => format!("{}:59.999", normalized_time), // HH:MM -> HH:MM:59.999
+                8 => format!("{}.999", normalized_time),    // HH:MM:SS -> HH:MM:SS.999
+                _ => normalized_time.to_string(),           // Already has milliseconds
             }
         } else {
             // Limited precision handling
@@ -670,7 +681,7 @@ fn calculate_datetime_high_boundary(datetime_str: &str, precision_param: Option<
         } else {
             "-12:00"
         };
-        
+
         let result_str = format!("@{}T{}{}", date_part, high_time, final_timezone);
         EvaluationResult::datetime(result_str)
     } else {
@@ -707,10 +718,14 @@ fn extract_timezone(time_str: &str) -> (&str, &str) {
 fn calculate_time_low_boundary(time_str: &str, precision_param: Option<u32>) -> EvaluationResult {
     // Default precision for time is 9
     let _precision = precision_param.unwrap_or(9);
-    
+
     // Strip @ prefix if present
-    let time_str = time_str.strip_prefix('@').unwrap_or(time_str).strip_prefix('T').unwrap_or(time_str);
-    
+    let time_str = time_str
+        .strip_prefix('@')
+        .unwrap_or(time_str)
+        .strip_prefix('T')
+        .unwrap_or(time_str);
+
     match time_str.len() {
         2 => {
             // HH format - return start of hour (00:00.000)
@@ -735,10 +750,14 @@ fn calculate_time_low_boundary(time_str: &str, precision_param: Option<u32>) -> 
 fn calculate_time_high_boundary(time_str: &str, precision_param: Option<u32>) -> EvaluationResult {
     // Default precision for time is 9
     let _precision = precision_param.unwrap_or(9);
-    
+
     // Strip @ prefix if present
-    let time_str = time_str.strip_prefix('@').unwrap_or(time_str).strip_prefix('T').unwrap_or(time_str);
-    
+    let time_str = time_str
+        .strip_prefix('@')
+        .unwrap_or(time_str)
+        .strip_prefix('T')
+        .unwrap_or(time_str);
+
     match time_str.len() {
         2 => {
             // HH format - return end of hour (59:59.999)
@@ -888,7 +907,6 @@ mod tests {
             EvaluationResult::Empty
         );
     }
-
 
     #[test]
     fn test_last_day_of_month() {

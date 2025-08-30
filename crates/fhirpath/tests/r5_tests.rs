@@ -174,7 +174,10 @@ fn test_r5_test_suite() {
 
             // Skip PrecisionDecimal test due to known limitation with decimal trailing zeros
             if test.name == "PrecisionDecimal" {
-                println!("  SKIP: {} - Known limitation: decimal trailing zeros not preserved (see PRECISION_LIMITATION.md)", test.name);
+                println!(
+                    "  SKIP: {} - Known limitation: decimal trailing zeros not preserved (see PRECISION_LIMITATION.md)",
+                    test.name
+                );
                 skipped_tests += 1;
                 continue;
             }
@@ -257,7 +260,7 @@ fn test_r5_test_suite() {
                         passed_tests += 1;
                     }
                     Err(e) => {
-                        // If it failed with an error and there are no outputs, 
+                        // If it failed with an error and there are no outputs,
                         // this is likely an expected error (like negative precision)
                         println!(
                             "  PASS (no output expected): {} - '{}' - Got error: {}",

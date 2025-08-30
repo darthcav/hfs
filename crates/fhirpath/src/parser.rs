@@ -259,7 +259,7 @@ impl fmt::Display for Literal {
 /// in the input, including the location and nature of the error.
 
 /// Parser that matches a custom whitespace including comments  
-fn custom_padded<T, P>(parser: P) -> impl Parser<char, T, Error = Simple<char>> + Clone 
+fn custom_padded<T, P>(parser: P) -> impl Parser<char, T, Error = Simple<char>> + Clone
 where
     P: Parser<char, T, Error = Simple<char>> + Clone,
     T: Clone,
@@ -269,12 +269,17 @@ where
         // Regular whitespace
         text::whitespace().at_least(1).ignored(),
         // Single-line comment: // ... newline or EOF
-        just("//").then(take_until(text::newline().or(end()))).ignored(),
+        just("//")
+            .then(take_until(text::newline().or(end())))
+            .ignored(),
         // Multi-line comment: /* ... */
         just("/*").then(take_until(just("*/"))).ignored(),
-    )).repeated().ignored();
-    
-    ws_or_comment.clone()
+    ))
+    .repeated()
+    .ignored();
+
+    ws_or_comment
+        .clone()
         .then(parser)
         .map(|(_, result)| result)
         .then_ignore(ws_or_comment)
@@ -798,8 +803,7 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
         });
 
         // Try explicit namespace.type first, then fallback to standalone identifier
-        choice((explicit_namespace_type.boxed(), standalone_type.boxed()))
-            .boxed()
+        choice((explicit_namespace_type.boxed(), standalone_type.boxed())).boxed()
     };
     let qualified_identifier = padded!(qualified_identifier);
 

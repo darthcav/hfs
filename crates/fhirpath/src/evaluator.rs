@@ -409,7 +409,7 @@ impl EvaluationContext {
         // This is a limitation of the current architecture but doesn't affect
         // functionality since resources are typically only accessed from the
         // active context, not parent contexts
-        
+
         EvaluationContext {
             resources: Vec::new(), // Child starts with empty resources
             fhir_version: self.fhir_version,
@@ -440,7 +440,7 @@ impl EvaluationContext {
         if let Some(value) = self.variables.get(name) {
             return Some(value);
         }
-        
+
         // Then check parent chain
         if let Some(parent) = &self.parent_context {
             parent.lookup_variable(name)
@@ -462,14 +462,19 @@ impl EvaluationContext {
     /// # Returns
     ///
     /// Ok(()) if successful, Err if variable already exists in current scope
-    pub fn define_variable(&mut self, name: String, value: EvaluationResult) -> Result<(), EvaluationError> {
+    pub fn define_variable(
+        &mut self,
+        name: String,
+        value: EvaluationResult,
+    ) -> Result<(), EvaluationError> {
         // Check if variable already exists in current scope (not parent)
         if self.variables.contains_key(&name) {
-            return Err(EvaluationError::SemanticError(
-                format!("Variable '{}' is already defined in the current scope", name)
-            ));
+            return Err(EvaluationError::SemanticError(format!(
+                "Variable '{}' is already defined in the current scope",
+                name
+            )));
         }
-        
+
         self.variables.insert(name, value);
         Ok(())
     }
@@ -625,10 +630,10 @@ pub fn evaluate(
         Expression::Invocation(left_expr, invocation) => {
             // Check if this expression chain involves defineVariable or other context-modifying functions
             // These need special handling to thread context through the expression
-            
+
             // Recursively check if the expression contains defineVariable anywhere
             let needs_context_threading = expression_contains_define_variable(expr);
-            
+
             if needs_context_threading {
                 // Use evaluate_with_context to properly thread context through the expression
                 // If no current_item and we have resources, pass the resource as current_item
@@ -637,15 +642,21 @@ pub fn evaluate(
                         convert_resource_to_result(&context.resources[0])
                     } else {
                         EvaluationResult::Collection {
-                            items: context.resources.iter().map(convert_resource_to_result).collect(),
+                            items: context
+                                .resources
+                                .iter()
+                                .map(convert_resource_to_result)
+                                .collect(),
                             has_undefined_order: false,
                             type_info: None,
                         }
                     };
-                    let (result, _updated_context) = evaluate_with_context(expr, context.clone(), Some(&resource))?;
+                    let (result, _updated_context) =
+                        evaluate_with_context(expr, context.clone(), Some(&resource))?;
                     return Ok(result);
                 } else {
-                    let (result, _updated_context) = evaluate_with_context(expr, context.clone(), current_item)?;
+                    let (result, _updated_context) =
+                        evaluate_with_context(expr, context.clone(), current_item)?;
                     return Ok(result);
                 }
             }
@@ -801,7 +812,7 @@ pub fn evaluate(
         Expression::And(left, right) => {
             // Evaluate left operand first
             let left_eval = evaluate(left, context, current_item)?;
-            
+
             // Convert left to boolean using singleton evaluation rules
             let left_bool = match &left_eval {
                 // Direct boolean values
@@ -810,15 +821,15 @@ pub fn evaluate(
                 EvaluationResult::Empty => EvaluationResult::Empty,
                 // For non-boolean singletons, apply singleton evaluation:
                 // A single value is considered true
-                EvaluationResult::String(_, _) |
-                EvaluationResult::Integer(_, _) |
-                EvaluationResult::Integer64(_, _) |
-                EvaluationResult::Decimal(_, _) |
-                EvaluationResult::Date(_, _) |
-                EvaluationResult::DateTime(_, _) |
-                EvaluationResult::Time(_, _) |
-                EvaluationResult::Quantity(_, _, _) |
-                EvaluationResult::Object { .. } => EvaluationResult::boolean(true),
+                EvaluationResult::String(_, _)
+                | EvaluationResult::Integer(_, _)
+                | EvaluationResult::Integer64(_, _)
+                | EvaluationResult::Decimal(_, _)
+                | EvaluationResult::Date(_, _)
+                | EvaluationResult::DateTime(_, _)
+                | EvaluationResult::Time(_, _)
+                | EvaluationResult::Quantity(_, _, _)
+                | EvaluationResult::Object { .. } => EvaluationResult::boolean(true),
                 // Collections follow singleton evaluation rules
                 EvaluationResult::Collection { items, .. } => {
                     match items.len() {
@@ -826,7 +837,9 @@ pub fn evaluate(
                         1 => {
                             // For single-item collections, apply singleton evaluation recursively
                             match &items[0] {
-                                EvaluationResult::Boolean(_, _) => items[0].to_boolean_for_logic()?,
+                                EvaluationResult::Boolean(_, _) => {
+                                    items[0].to_boolean_for_logic()?
+                                }
                                 EvaluationResult::Empty => EvaluationResult::Empty,
                                 _ => EvaluationResult::boolean(true), // Non-boolean singleton is true
                             }
@@ -846,7 +859,7 @@ pub fn evaluate(
                 EvaluationResult::Boolean(true, _) => {
                     // Evaluate right operand
                     let right_eval = evaluate(right, context, current_item)?;
-                    
+
                     // Apply singleton evaluation to right operand
                     let right_bool = match &right_eval {
                         // Direct boolean values
@@ -855,15 +868,15 @@ pub fn evaluate(
                         EvaluationResult::Empty => EvaluationResult::Empty,
                         // For non-boolean singletons, apply singleton evaluation:
                         // A single value is considered true
-                        EvaluationResult::String(_, _) |
-                        EvaluationResult::Integer(_, _) |
-                        EvaluationResult::Integer64(_, _) |
-                        EvaluationResult::Decimal(_, _) |
-                        EvaluationResult::Date(_, _) |
-                        EvaluationResult::DateTime(_, _) |
-                        EvaluationResult::Time(_, _) |
-                        EvaluationResult::Quantity(_, _, _) |
-                        EvaluationResult::Object { .. } => EvaluationResult::boolean(true),
+                        EvaluationResult::String(_, _)
+                        | EvaluationResult::Integer(_, _)
+                        | EvaluationResult::Integer64(_, _)
+                        | EvaluationResult::Decimal(_, _)
+                        | EvaluationResult::Date(_, _)
+                        | EvaluationResult::DateTime(_, _)
+                        | EvaluationResult::Time(_, _)
+                        | EvaluationResult::Quantity(_, _, _)
+                        | EvaluationResult::Object { .. } => EvaluationResult::boolean(true),
                         // Collections follow singleton evaluation rules
                         EvaluationResult::Collection { items, .. } => {
                             match items.len() {
@@ -871,27 +884,31 @@ pub fn evaluate(
                                 1 => {
                                     // For single-item collections, apply singleton evaluation recursively
                                     match &items[0] {
-                                        EvaluationResult::Boolean(_, _) => items[0].to_boolean_for_logic()?,
+                                        EvaluationResult::Boolean(_, _) => {
+                                            items[0].to_boolean_for_logic()?
+                                        }
                                         EvaluationResult::Empty => EvaluationResult::Empty,
                                         _ => EvaluationResult::boolean(true), // Non-boolean singleton is true
                                     }
                                 }
                                 _ => {
-                                    return Err(EvaluationError::SingletonEvaluationError(format!(
-                                        "Operator 'and' requires singleton values, right operand has {} items",
-                                        items.len()
-                                    )));
+                                    return Err(EvaluationError::SingletonEvaluationError(
+                                        format!(
+                                            "Operator 'and' requires singleton values, right operand has {} items",
+                                            items.len()
+                                        ),
+                                    ));
                                 }
                             }
                         }
                     };
-                    
+
                     Ok(right_bool) // true and X -> X
                 }
                 EvaluationResult::Empty => {
                     // Evaluate right operand
                     let right_eval = evaluate(right, context, current_item)?;
-                    
+
                     // Apply singleton evaluation to right operand
                     let right_bool = match &right_eval {
                         // Direct boolean values
@@ -900,15 +917,15 @@ pub fn evaluate(
                         EvaluationResult::Empty => EvaluationResult::Empty,
                         // For non-boolean singletons, apply singleton evaluation:
                         // A single value is considered true
-                        EvaluationResult::String(_, _) |
-                        EvaluationResult::Integer(_, _) |
-                        EvaluationResult::Integer64(_, _) |
-                        EvaluationResult::Decimal(_, _) |
-                        EvaluationResult::Date(_, _) |
-                        EvaluationResult::DateTime(_, _) |
-                        EvaluationResult::Time(_, _) |
-                        EvaluationResult::Quantity(_, _, _) |
-                        EvaluationResult::Object { .. } => EvaluationResult::boolean(true),
+                        EvaluationResult::String(_, _)
+                        | EvaluationResult::Integer(_, _)
+                        | EvaluationResult::Integer64(_, _)
+                        | EvaluationResult::Decimal(_, _)
+                        | EvaluationResult::Date(_, _)
+                        | EvaluationResult::DateTime(_, _)
+                        | EvaluationResult::Time(_, _)
+                        | EvaluationResult::Quantity(_, _, _)
+                        | EvaluationResult::Object { .. } => EvaluationResult::boolean(true),
                         // Collections follow singleton evaluation rules
                         EvaluationResult::Collection { items, .. } => {
                             match items.len() {
@@ -916,21 +933,25 @@ pub fn evaluate(
                                 1 => {
                                     // For single-item collections, apply singleton evaluation recursively
                                     match &items[0] {
-                                        EvaluationResult::Boolean(_, _) => items[0].to_boolean_for_logic()?,
+                                        EvaluationResult::Boolean(_, _) => {
+                                            items[0].to_boolean_for_logic()?
+                                        }
                                         EvaluationResult::Empty => EvaluationResult::Empty,
                                         _ => EvaluationResult::boolean(true), // Non-boolean singleton is true
                                     }
                                 }
                                 _ => {
-                                    return Err(EvaluationError::SingletonEvaluationError(format!(
-                                        "Operator 'and' requires singleton values, right operand has {} items",
-                                        items.len()
-                                    )));
+                                    return Err(EvaluationError::SingletonEvaluationError(
+                                        format!(
+                                            "Operator 'and' requires singleton values, right operand has {} items",
+                                            items.len()
+                                        ),
+                                    ));
                                 }
                             }
                         }
                     };
-                    
+
                     // Apply 3-valued logic for Empty and X
                     match right_bool {
                         EvaluationResult::Boolean(false, _) => Ok(EvaluationResult::boolean(false)), // {} and false -> false
@@ -1114,7 +1135,7 @@ pub fn evaluate(
 /// pass modified contexts through expression chains.
 ///
 /// # Arguments
-/// 
+///
 /// * `expr` - The FHIRPath expression to evaluate
 /// * `context` - The evaluation context (takes ownership)
 /// * `current_item` - The current item in scope (for iteration contexts)
@@ -1156,16 +1177,19 @@ fn evaluate_with_context(
     }
 
     match expr {
-        Expression::Term(term) => {
-            evaluate_term_with_context(term, context, current_item)
-        }
+        Expression::Term(term) => evaluate_term_with_context(term, context, current_item),
         Expression::Invocation(left_expr, invocation) => {
             // Evaluate left expression with context threading
-            let (left_result, updated_context) = evaluate_with_context(left_expr, context, current_item)?;
-            
-            
+            let (left_result, updated_context) =
+                evaluate_with_context(left_expr, context, current_item)?;
+
             // Now evaluate the invocation with the updated context
-            let (result, final_context) = evaluate_invocation_with_context(&left_result, invocation, updated_context, current_item)?;
+            let (result, final_context) = evaluate_invocation_with_context(
+                &left_result,
+                invocation,
+                updated_context,
+                current_item,
+            )?;
             Ok((result, final_context))
         }
         _ => {
@@ -1462,7 +1486,7 @@ fn evaluate_term_with_context(
     match term {
         Term::Invocation(Invocation::Function(name, args)) if name == "defineVariable" => {
             // Special handling for defineVariable as a Term
-            
+
             // When defineVariable appears as a term without a base, use context resources
             let base_result = if current_item.is_some() {
                 current_item.unwrap().clone()
@@ -1472,7 +1496,11 @@ fn evaluate_term_with_context(
                     convert_resource_to_result(&context.resources[0])
                 } else {
                     EvaluationResult::Collection {
-                        items: context.resources.iter().map(convert_resource_to_result).collect(),
+                        items: context
+                            .resources
+                            .iter()
+                            .map(convert_resource_to_result)
+                            .collect(),
                         has_undefined_order: false,
                         type_info: None,
                     }
@@ -1481,7 +1509,7 @@ fn evaluate_term_with_context(
                 // No resources available
                 EvaluationResult::Empty
             };
-            
+
             // Use evaluate_invocation_with_context to handle defineVariable
             let invocation = Invocation::Function(name.clone(), args.clone());
             evaluate_invocation_with_context(&base_result, &invocation, context, current_item)
@@ -1520,10 +1548,11 @@ fn evaluate_invocation_with_context(
     match invocation {
         // Member access doesn't modify context
         Invocation::Member(_) => {
-            let result = evaluate_invocation(invocation_base, invocation, &context, current_item_for_args)?;
+            let result =
+                evaluate_invocation(invocation_base, invocation, &context, current_item_for_args)?;
             Ok((result, context))
         }
-        
+
         // Function calls may modify context (e.g., defineVariable)
         Invocation::Function(name, args_exprs) => {
             match name.as_str() {
@@ -1535,7 +1564,7 @@ fn evaluate_invocation_with_context(
                             "defineVariable() function requires 1 or 2 arguments".to_string(),
                         ));
                     }
-                    
+
                     // Get the variable name (first argument must be a string)
                     let var_name = match evaluate(&args_exprs[0], &context, None)? {
                         EvaluationResult::String(name_str, _) => {
@@ -1545,23 +1574,24 @@ fn evaluate_invocation_with_context(
                             } else {
                                 name_str
                             }
-                        },
+                        }
                         _ => {
                             return Err(EvaluationError::TypeError(
-                                "defineVariable() requires a string name as first argument".to_string(),
+                                "defineVariable() requires a string name as first argument"
+                                    .to_string(),
                             ));
                         }
                     };
-                    
-                    
+
                     // Check if trying to override system variables
                     let system_vars = vec!["%context", "%ucum", "%sct", "%loinc", "%vs"];
                     if system_vars.contains(&var_name.as_str()) {
-                        return Err(EvaluationError::SemanticError(
-                            format!("Cannot override system variable '{}'", var_name),
-                        ));
+                        return Err(EvaluationError::SemanticError(format!(
+                            "Cannot override system variable '{}'",
+                            var_name
+                        )));
                     }
-                    
+
                     // Get the value to assign to the variable
                     let var_value = if args_exprs.len() == 2 {
                         // If expression provided, evaluate it with the current context
@@ -1570,40 +1600,46 @@ fn evaluate_invocation_with_context(
                         // If no expression, use the input collection
                         invocation_base.clone()
                     };
-                    
-                    
+
                     // Define the variable in the context
                     context.define_variable(var_name.clone(), var_value)?;
-                    
-                    
+
                     // Return the input collection unchanged and the modified context
                     Ok((invocation_base.clone(), context))
                 }
-                
+
                 // Functions that take lambdas and may need context threading
                 "select" if !args_exprs.is_empty() => {
                     let projection_expr = &args_exprs[0];
-                    let (result, new_context) = evaluate_select_with_context(invocation_base, projection_expr, context)?;
+                    let (result, new_context) =
+                        evaluate_select_with_context(invocation_base, projection_expr, context)?;
                     Ok((result, new_context))
                 }
-                
+
                 "where" if !args_exprs.is_empty() => {
                     let criteria_expr = &args_exprs[0];
-                    let (result, new_context) = evaluate_where_with_context(invocation_base, criteria_expr, context)?;
+                    let (result, new_context) =
+                        evaluate_where_with_context(invocation_base, criteria_expr, context)?;
                     Ok((result, new_context))
                 }
-                
+
                 // Other functions don't modify context
                 _ => {
-                    let result = evaluate_invocation(invocation_base, invocation, &context, current_item_for_args)?;
+                    let result = evaluate_invocation(
+                        invocation_base,
+                        invocation,
+                        &context,
+                        current_item_for_args,
+                    )?;
                     Ok((result, context))
                 }
             }
         }
-        
+
         // Other invocation types don't modify context
         _ => {
-            let result = evaluate_invocation(invocation_base, invocation, &context, current_item_for_args)?;
+            let result =
+                evaluate_invocation(invocation_base, invocation, &context, current_item_for_args)?;
             Ok((result, context))
         }
     }
@@ -2043,7 +2079,7 @@ fn evaluate_invocation(
                             "iif() can only be called on a singleton collection".to_string(),
                         ));
                     }
-                    
+
                     let condition_expr = &args_exprs[0];
                     let true_result_expr = &args_exprs[1];
                     let otherwise_result_expr = args_exprs.get(2); // Optional third argument
@@ -2058,14 +2094,14 @@ fn evaluate_invocation(
                         };
                     let condition_result =
                         evaluate(condition_expr, context, condition_invocation_base)?;
-                    
+
                     // Check if condition is a singleton
                     if condition_result.count() > 1 {
                         return Err(EvaluationError::SingletonEvaluationError(
                             "iif() requires a singleton condition".to_string(),
                         ));
                     }
-                    
+
                     let condition_bool = condition_result.to_boolean_for_logic()?; // Use logic conversion
 
                     if matches!(condition_bool, EvaluationResult::Boolean(true, _)) {
@@ -2175,14 +2211,14 @@ fn evaluate_invocation(
                 "defineVariable" => {
                     // defineVariable(name: String [, expr: expression])
                     // This implementation requires proper context handling through expression chains
-                    
+
                     // Check argument count (1 or 2 arguments)
                     if args_exprs.is_empty() || args_exprs.len() > 2 {
                         return Err(EvaluationError::InvalidArity(
                             "defineVariable() function requires 1 or 2 arguments".to_string(),
                         ));
                     }
-                    
+
                     // Get the variable name (first argument must be a string)
                     let var_name = match evaluate(&args_exprs[0], context, None)? {
                         EvaluationResult::String(name_str, _) => {
@@ -2192,22 +2228,24 @@ fn evaluate_invocation(
                             } else {
                                 name_str
                             }
-                        },
+                        }
                         _ => {
                             return Err(EvaluationError::TypeError(
-                                "defineVariable() requires a string name as first argument".to_string(),
+                                "defineVariable() requires a string name as first argument"
+                                    .to_string(),
                             ));
                         }
                     };
-                    
+
                     // Check if trying to override system variables
                     let system_vars = vec!["%context", "%ucum", "%sct", "%loinc", "%vs"];
                     if system_vars.contains(&var_name.as_str()) {
-                        return Err(EvaluationError::SemanticError(
-                            format!("Cannot override system variable '{}'", var_name),
-                        ));
+                        return Err(EvaluationError::SemanticError(format!(
+                            "Cannot override system variable '{}'",
+                            var_name
+                        )));
                     }
-                    
+
                     // Get the value to assign to the variable
                     let _var_value = if args_exprs.len() == 2 {
                         // If expression provided, evaluate it with the current context
@@ -2216,15 +2254,15 @@ fn evaluate_invocation(
                         // If no expression, use the input collection
                         invocation_base.clone()
                     };
-                    
+
                     // Note: Direct defineVariable calls (not chained) cannot modify context
                     // The variable definition works when defineVariable is part of a chain:
                     // e.g., defineVariable('x', 5).select(%x) - handled in Expression::Invocation
                     // But standalone defineVariable('x', 5) cannot persist the variable
-                    
+
                     // For chained operations, the Expression::Invocation handler detects
                     // defineVariable and creates a new context with the variable
-                    
+
                     // Return the input collection unchanged
                     Ok(invocation_base.clone())
                 }
@@ -2359,10 +2397,10 @@ fn evaluate_where(
     };
 
     let mut filtered_items = Vec::new();
-    
+
     // Create a child context for the where scope
     let child_context = context.create_child_context();
-    
+
     for item in items_to_filter {
         // Evaluate criteria with child context
         // Variables defined inside the criteria are scoped to this where
@@ -2439,16 +2477,17 @@ fn evaluate_where_with_context(
     };
 
     let mut filtered_items = Vec::new();
-    
+
     // Create a child context for the where scope
     let child_context = context.create_child_context();
-    
+
     for item in items_to_filter {
         // Evaluate criteria with child context
-        let (criteria_result, _updated_child) = evaluate_with_context(criteria_expr, child_context.clone(), Some(&item))?;
+        let (criteria_result, _updated_child) =
+            evaluate_with_context(criteria_expr, child_context.clone(), Some(&item))?;
         // Note: For now we don't merge contexts from each iteration
         // This is a limitation but matches the current where() behavior
-        
+
         // Check if criteria is boolean, otherwise error per spec
         match criteria_result {
             EvaluationResult::Boolean(true, _) => filtered_items.push(item.clone()),
@@ -2504,10 +2543,10 @@ fn evaluate_select(
 
     let mut projected_items = Vec::new();
     let mut result_is_unordered = input_was_unordered; // Start with input's order status
-    
+
     // Create a child context for the select scope
     let child_context = context.create_child_context();
-    
+
     // Special handling for empty collections with variable references
     // This is needed for defineVariable to work properly
     if items_to_project.is_empty() && expression_contains_variables(projection_expr) {
@@ -2577,21 +2616,23 @@ fn evaluate_select_with_context(
 
     let mut projected_items = Vec::new();
     let mut result_is_unordered = input_was_unordered;
-    
+
     // Create a child context for the select scope
     let child_context = context.create_child_context();
-    
+
     // Special handling for empty collections with variable references
     if items_to_project.is_empty() && expression_contains_variables(projection_expr) {
         // Evaluate the projection with no current item to allow variable access
-        let (projection_result, _updated_child) = evaluate_with_context(projection_expr, child_context, None)?;
+        let (projection_result, _updated_child) =
+            evaluate_with_context(projection_expr, child_context, None)?;
         if projection_result != EvaluationResult::Empty {
             projected_items.push(projection_result);
         }
     } else {
         for item in items_to_project {
             // Evaluate projection with child context
-            let (projection_result, _updated_child) = evaluate_with_context(projection_expr, child_context.clone(), Some(&item))?;
+            let (projection_result, _updated_child) =
+                evaluate_with_context(projection_expr, child_context.clone(), Some(&item))?;
             // Note: For now we don't merge contexts from each iteration
             // This is a limitation but matches the current select() behavior
             if let EvaluationResult::Collection {
@@ -2609,7 +2650,7 @@ fn evaluate_select_with_context(
     // Merge any variables defined in child context back to parent if they should persist
     // For now, select() creates a new scope so variables don't persist
     // This matches the current behavior
-    
+
     let collection_result = EvaluationResult::Collection {
         items: projected_items,
         has_undefined_order: result_is_unordered,
@@ -2617,7 +2658,7 @@ fn evaluate_select_with_context(
     };
     let (flattened_items, final_is_unordered) = flatten_collections_recursive(collection_result);
     let result = normalize_collection_result(flattened_items, final_is_unordered);
-    
+
     Ok((result, context))
 }
 
@@ -2632,15 +2673,15 @@ fn expression_contains_define_variable(expr: &Expression) -> bool {
             expression_contains_define_variable(left) || expression_contains_define_variable(index)
         }
         Expression::Polarity(_, expr) => expression_contains_define_variable(expr),
-        Expression::Multiplicative(left, _, right) |
-        Expression::Additive(left, _, right) |
-        Expression::Union(left, right) |
-        Expression::Inequality(left, _, right) |
-        Expression::Equality(left, _, right) |
-        Expression::Membership(left, _, right) |
-        Expression::And(left, right) |
-        Expression::Or(left, _, right) |
-        Expression::Implies(left, right) => {
+        Expression::Multiplicative(left, _, right)
+        | Expression::Additive(left, _, right)
+        | Expression::Union(left, right)
+        | Expression::Inequality(left, _, right)
+        | Expression::Equality(left, _, right)
+        | Expression::Membership(left, _, right)
+        | Expression::And(left, right)
+        | Expression::Or(left, _, right)
+        | Expression::Implies(left, right) => {
             expression_contains_define_variable(left) || expression_contains_define_variable(right)
         }
         Expression::Type(left, _, _) => expression_contains_define_variable(left),
@@ -2682,15 +2723,15 @@ fn expression_contains_variables(expr: &Expression) -> bool {
             expression_contains_variables(left) || expression_contains_variables(index)
         }
         Expression::Polarity(_, expr) => expression_contains_variables(expr),
-        Expression::Multiplicative(left, _, right) |
-        Expression::Additive(left, _, right) |
-        Expression::Union(left, right) |
-        Expression::Inequality(left, _, right) |
-        Expression::Equality(left, _, right) |
-        Expression::Membership(left, _, right) |
-        Expression::And(left, right) |
-        Expression::Or(left, _, right) |
-        Expression::Implies(left, right) => {
+        Expression::Multiplicative(left, _, right)
+        | Expression::Additive(left, _, right)
+        | Expression::Union(left, right)
+        | Expression::Inequality(left, _, right)
+        | Expression::Equality(left, _, right)
+        | Expression::Membership(left, _, right)
+        | Expression::And(left, right)
+        | Expression::Or(left, _, right)
+        | Expression::Implies(left, right) => {
             expression_contains_variables(left) || expression_contains_variables(right)
         }
         Expression::Type(left, _, _) => expression_contains_variables(left),
@@ -2712,9 +2753,7 @@ fn term_contains_variables(term: &Term) -> bool {
 fn invocation_contains_variables(inv: &Invocation) -> bool {
     match inv {
         Invocation::Member(name) => name.starts_with('%'),
-        Invocation::Function(_, args) => {
-            args.iter().any(expression_contains_variables)
-        }
+        Invocation::Function(_, args) => args.iter().any(expression_contains_variables),
         _ => false,
     }
 }
@@ -4076,14 +4115,14 @@ fn call_function(
                     "Function 'escape' expects 1 argument (target)".to_string(),
                 ));
             }
-            
+
             // Check for singleton base and arg
             if invocation_base.count() > 1 || args[0].count() > 1 {
                 return Err(EvaluationError::SingletonEvaluationError(
                     "escape requires singleton input and argument".to_string(),
                 ));
             }
-            
+
             Ok(match (invocation_base, &args[0]) {
                 (EvaluationResult::String(s, _), EvaluationResult::String(target, _)) => {
                     match target.as_str() {
@@ -4109,7 +4148,7 @@ fn call_function(
                                 .replace('\u{000C}', "\\f");
                             EvaluationResult::string(escaped)
                         }
-                        _ => EvaluationResult::Empty // Unknown target
+                        _ => EvaluationResult::Empty, // Unknown target
                     }
                 }
                 (EvaluationResult::Empty, _) => EvaluationResult::Empty,
@@ -4129,14 +4168,14 @@ fn call_function(
                     "Function 'unescape' expects 1 argument (target)".to_string(),
                 ));
             }
-            
+
             // Check for singleton base and arg
             if invocation_base.count() > 1 || args[0].count() > 1 {
                 return Err(EvaluationError::SingletonEvaluationError(
                     "unescape requires singleton input and argument".to_string(),
                 ));
             }
-            
+
             Ok(match (invocation_base, &args[0]) {
                 (EvaluationResult::String(s, _), EvaluationResult::String(target, _)) => {
                     match target.as_str() {
@@ -4177,7 +4216,7 @@ fn call_function(
                             }
                             EvaluationResult::string(result)
                         }
-                        _ => EvaluationResult::Empty // Unknown target
+                        _ => EvaluationResult::Empty, // Unknown target
                     }
                 }
                 (EvaluationResult::Empty, _) => EvaluationResult::Empty,
@@ -4197,14 +4236,14 @@ fn call_function(
                     "Function 'split' expects 1 argument (separator)".to_string(),
                 ));
             }
-            
+
             // Check for singleton base and arg
             if invocation_base.count() > 1 || args[0].count() > 1 {
                 return Err(EvaluationError::SingletonEvaluationError(
                     "split requires singleton input and argument".to_string(),
                 ));
             }
-            
+
             Ok(match (invocation_base, &args[0]) {
                 (EvaluationResult::String(s, _), EvaluationResult::String(separator, _)) => {
                     // Split the string by the separator
@@ -4215,13 +4254,13 @@ fn call_function(
                         // Normal split by separator
                         s.split(separator).map(|part| part.to_string()).collect()
                     };
-                    
+
                     // Convert to collection of EvaluationResult::String
                     let items: Vec<EvaluationResult> = parts
                         .into_iter()
                         .map(|part| EvaluationResult::string(part))
                         .collect();
-                    
+
                     EvaluationResult::Collection {
                         items,
                         has_undefined_order: false, // split preserves order
@@ -4245,14 +4284,14 @@ fn call_function(
                     "Function 'trim' expects no arguments".to_string(),
                 ));
             }
-            
+
             // Check for singleton base
             if invocation_base.count() > 1 {
                 return Err(EvaluationError::SingletonEvaluationError(
                     "trim requires singleton input".to_string(),
                 ));
             }
-            
+
             Ok(match invocation_base {
                 EvaluationResult::String(s, _) => {
                     // Trim whitespace from both ends
@@ -5284,21 +5323,21 @@ fn call_function(
                     // For decimals, we need to count significant digits
                     // The FHIRPath spec expects trailing zeros to be counted,
                     // but the Decimal type may normalize or reformat the value
-                    
+
                     // Convert to string to count digits
                     let s = d.to_string();
-                    
+
                     // Remove leading minus sign if present
                     let s = s.trim_start_matches('-');
-                    
+
                     // Handle special case of zero
                     if d.is_zero() {
                         return Ok(EvaluationResult::integer(1));
                     }
-                    
+
                     // Count all digits (excluding decimal point)
                     let digit_count = s.chars().filter(|&ch| ch.is_ascii_digit()).count();
-                    
+
                     Ok(EvaluationResult::integer(digit_count as i64))
                 }
                 EvaluationResult::Date(date_str, _) => {
@@ -5314,26 +5353,27 @@ fn call_function(
                     // YYYY-MM-DDThh:mm = 12
                     // YYYY-MM-DDThh:mm:ss = 14
                     // YYYY-MM-DDThh:mm:ss.sss = 17 (14 + 3 millisecond digits)
-                    
+
                     // Strip @ prefix if present
                     let datetime_str = datetime_str.strip_prefix('@').unwrap_or(datetime_str);
-                    
+
                     // Find the actual datetime part (before timezone)
                     let datetime_part = if let Some(plus_pos) = datetime_str.find('+') {
                         &datetime_str[..plus_pos]
                     } else if let Some(minus_pos) = datetime_str.rfind('-') {
                         // Need to check if this is timezone minus or date separator
-                        if minus_pos > 10 { // After the date part
+                        if minus_pos > 10 {
+                            // After the date part
                             &datetime_str[..minus_pos]
                         } else {
                             datetime_str
                         }
                     } else if datetime_str.ends_with('Z') {
-                        &datetime_str[..datetime_str.len()-1]
+                        &datetime_str[..datetime_str.len() - 1]
                     } else {
                         datetime_str
                     };
-                    
+
                     // Count precision based on components, not string length
                     let precision = if datetime_part.len() == 4 {
                         4 // Just year: YYYY
@@ -5345,7 +5385,7 @@ fn call_function(
                         // Has time component
                         let time_part = &datetime_part[t_pos + 1..];
                         let base_precision = 8; // Date part
-                        
+
                         if time_part.len() >= 2 {
                             // At least hour
                             let mut time_precision = 2; // HH
@@ -5367,7 +5407,7 @@ fn call_function(
                     } else {
                         datetime_part.len() as i64 // Fallback
                     };
-                    
+
                     Ok(EvaluationResult::integer(precision))
                 }
                 EvaluationResult::Time(time_str, _) => {
@@ -5376,10 +5416,10 @@ fn call_function(
                     // HH:MM = 4 (not 5 - don't count separator)
                     // HH:MM:SS = 6 (not 8 - don't count separators)
                     // HH:MM:SS.sss = 9 (6 + 3 millisecond digits)
-                    
+
                     // Remove the @T prefix if present
                     let time_str = time_str.trim_start_matches("@T");
-                    
+
                     // Count precision based on components
                     let precision = if time_str.len() == 2 {
                         2 // Just hour: HH
@@ -5395,11 +5435,12 @@ fn call_function(
                         // Fallback - count only digits
                         time_str.chars().filter(|&ch| ch.is_ascii_digit()).count()
                     };
-                    
+
                     Ok(EvaluationResult::integer(precision as i64))
                 }
                 _ => Err(EvaluationError::TypeError(
-                    "precision can only be invoked on numeric, date, datetime, or time values".to_string(),
+                    "precision can only be invoked on numeric, date, datetime, or time values"
+                        .to_string(),
                 )),
             }
         }
@@ -5592,7 +5633,10 @@ fn call_function(
         "hasValue" => {
             // hasValue() returns true if the collection has any non-empty values
             // It's the opposite of empty()
-            Ok(EvaluationResult::boolean(!matches!(invocation_base, EvaluationResult::Empty)))
+            Ok(EvaluationResult::boolean(!matches!(
+                invocation_base,
+                EvaluationResult::Empty
+            )))
         }
         "encode" => {
             // encode(encoding) : String
@@ -5602,13 +5646,13 @@ fn call_function(
                     "encode requires a singleton input".to_string(),
                 ));
             }
-            
+
             if args.len() != 1 {
                 return Err(EvaluationError::InvalidArity(
                     "Function 'encode' expects 1 argument".to_string(),
                 ));
             }
-            
+
             // Get the string to encode
             let input_str = match invocation_base {
                 EvaluationResult::String(s, _) => s,
@@ -5616,20 +5660,20 @@ fn call_function(
                 _ => {
                     return Err(EvaluationError::TypeError(
                         "encode can only be applied to String values".to_string(),
-                    ))
+                    ));
                 }
             };
-            
+
             // Get the encoding type
             let encoding = match &args[0] {
                 EvaluationResult::String(s, _) => s.as_str(),
                 _ => {
                     return Err(EvaluationError::TypeError(
                         "encode encoding argument must be a string".to_string(),
-                    ))
+                    ));
                 }
             };
-            
+
             // Perform the encoding
             match encoding {
                 "base64" => {
@@ -5660,13 +5704,13 @@ fn call_function(
                     "decode requires a singleton input".to_string(),
                 ));
             }
-            
+
             if args.len() != 1 {
                 return Err(EvaluationError::InvalidArity(
                     "Function 'decode' expects 1 argument".to_string(),
                 ));
             }
-            
+
             // Get the string to decode
             let input_str = match invocation_base {
                 EvaluationResult::String(s, _) => s,
@@ -5674,64 +5718,56 @@ fn call_function(
                 _ => {
                     return Err(EvaluationError::TypeError(
                         "decode can only be applied to String values".to_string(),
-                    ))
+                    ));
                 }
             };
-            
+
             // Get the encoding type
             let encoding = match &args[0] {
                 EvaluationResult::String(s, _) => s.as_str(),
                 _ => {
                     return Err(EvaluationError::TypeError(
                         "decode encoding argument must be a string".to_string(),
-                    ))
+                    ));
                 }
             };
-            
+
             // Perform the decoding
             match encoding {
                 "base64" => {
                     use base64::{Engine as _, engine::general_purpose};
                     match general_purpose::STANDARD.decode(input_str) {
-                        Ok(decoded_bytes) => {
-                            match String::from_utf8(decoded_bytes) {
-                                Ok(decoded_str) => Ok(EvaluationResult::string(decoded_str)),
-                                Err(_) => Err(EvaluationError::InvalidArgument(
-                                    "Decoded base64 is not valid UTF-8".to_string(),
-                                )),
-                            }
-                        }
+                        Ok(decoded_bytes) => match String::from_utf8(decoded_bytes) {
+                            Ok(decoded_str) => Ok(EvaluationResult::string(decoded_str)),
+                            Err(_) => Err(EvaluationError::InvalidArgument(
+                                "Decoded base64 is not valid UTF-8".to_string(),
+                            )),
+                        },
                         Err(_) => Err(EvaluationError::InvalidArgument(
                             "Invalid base64 string".to_string(),
                         )),
                     }
                 }
-                "hex" => {
-                    match hex::decode(input_str) {
-                        Ok(decoded_bytes) => {
-                            match String::from_utf8(decoded_bytes) {
-                                Ok(decoded_str) => Ok(EvaluationResult::string(decoded_str)),
-                                Err(_) => Err(EvaluationError::InvalidArgument(
-                                    "Decoded hex is not valid UTF-8".to_string(),
-                                )),
-                            }
-                        }
+                "hex" => match hex::decode(input_str) {
+                    Ok(decoded_bytes) => match String::from_utf8(decoded_bytes) {
+                        Ok(decoded_str) => Ok(EvaluationResult::string(decoded_str)),
                         Err(_) => Err(EvaluationError::InvalidArgument(
-                            "Invalid hex string".to_string(),
+                            "Decoded hex is not valid UTF-8".to_string(),
                         )),
-                    }
-                }
+                    },
+                    Err(_) => Err(EvaluationError::InvalidArgument(
+                        "Invalid hex string".to_string(),
+                    )),
+                },
                 "urlbase64" => {
                     use base64::{Engine as _, engine::general_purpose};
                     match general_purpose::URL_SAFE.decode(input_str) {
-                        Ok(decoded_bytes) => {
-                            match String::from_utf8(decoded_bytes) {
-                                Ok(decoded_str) => Ok(EvaluationResult::string(decoded_str)),
-                                Err(_) => Err(EvaluationError::InvalidArgument(
-                                    "Decoded urlbase64 is not valid UTF-8".to_string(),
-                                )),
-                            }
-                        }
+                        Ok(decoded_bytes) => match String::from_utf8(decoded_bytes) {
+                            Ok(decoded_str) => Ok(EvaluationResult::string(decoded_str)),
+                            Err(_) => Err(EvaluationError::InvalidArgument(
+                                "Decoded urlbase64 is not valid UTF-8".to_string(),
+                            )),
+                        },
                         Err(_) => Err(EvaluationError::InvalidArgument(
                             "Invalid urlbase64 string".to_string(),
                         )),
@@ -6161,7 +6197,7 @@ fn apply_multiplicative(
                 EvaluationResult::Empty => return Ok(EvaluationResult::Empty),
                 _ => None,
             };
-            
+
             match (left_val, right_val) {
                 (Some((l_val, l_is_dec)), Some((r_val, r_is_dec))) => {
                     // If either operand is decimal, use decimal arithmetic
@@ -6173,7 +6209,7 @@ fn apply_multiplicative(
                             (EvaluationResult::Integer(l, _), EvaluationResult::Integer(r, _)) => {
                                 apply_integer_multiplicative(*l, op, *r)
                             }
-                            _ => unreachable!() // We know they're both integers
+                            _ => unreachable!(), // We know they're both integers
                         }
                     }
                 }
@@ -6327,16 +6363,23 @@ fn apply_additive(
                         })?
                 }
                 // Handle collection concatenation
-                (EvaluationResult::Collection { items: left_items, .. }, 
-                 EvaluationResult::Collection { items: right_items, .. }) => {
+                (
+                    EvaluationResult::Collection {
+                        items: left_items, ..
+                    },
+                    EvaluationResult::Collection {
+                        items: right_items, ..
+                    },
+                ) => {
                     // Special case: if both collections contain single strings, concatenate the strings
                     if left_items.len() == 1 && right_items.len() == 1 {
-                        if let (EvaluationResult::String(l, _), EvaluationResult::String(r, _)) = 
-                            (&left_items[0], &right_items[0]) {
+                        if let (EvaluationResult::String(l, _), EvaluationResult::String(r, _)) =
+                            (&left_items[0], &right_items[0])
+                        {
                             return Ok(EvaluationResult::string(format!("{}{}", l, r)));
                         }
                     }
-                    
+
                     // Otherwise, concatenate the collections
                     let mut combined = left_items.clone();
                     combined.extend(right_items.clone());
@@ -6729,22 +6772,26 @@ fn compare_inequality(
             }
             // Also check if we have String vs DateTime/Date/Time combinations
             match (left, right) {
-                (EvaluationResult::String(_s, _), EvaluationResult::DateTime(_, _)) |
-                (EvaluationResult::DateTime(_, _), EvaluationResult::String(_s, _)) |
-                (EvaluationResult::String(_s, _), EvaluationResult::Date(_, _)) |
-                (EvaluationResult::Date(_, _), EvaluationResult::String(_s, _)) |
-                (EvaluationResult::String(_s, _), EvaluationResult::Time(_, _)) |
-                (EvaluationResult::Time(_, _), EvaluationResult::String(_s, _)) => {
+                (EvaluationResult::String(_s, _), EvaluationResult::DateTime(_, _))
+                | (EvaluationResult::DateTime(_, _), EvaluationResult::String(_s, _))
+                | (EvaluationResult::String(_s, _), EvaluationResult::Date(_, _))
+                | (EvaluationResult::Date(_, _), EvaluationResult::String(_s, _))
+                | (EvaluationResult::String(_s, _), EvaluationResult::Time(_, _))
+                | (EvaluationResult::Time(_, _), EvaluationResult::String(_s, _)) => {
                     // String might be a date/time value, compare_date_time_values will handle it
                     // Don't return Empty here - let it continue to try the comparison
                 }
                 (EvaluationResult::String(s1, _), EvaluationResult::String(s2, _)) => {
                     // Check if one is a date and the other is a datetime
-                    let s1_is_date = !s1.contains('T') && crate::datetime_impl::parse_date(s1).is_some();
-                    let s2_is_date = !s2.contains('T') && crate::datetime_impl::parse_date(s2).is_some();
-                    let s1_is_datetime = s1.contains('T') && crate::datetime_impl::parse_datetime(s1).is_some();
-                    let s2_is_datetime = s2.contains('T') && crate::datetime_impl::parse_datetime(s2).is_some();
-                    
+                    let s1_is_date =
+                        !s1.contains('T') && crate::datetime_impl::parse_date(s1).is_some();
+                    let s2_is_date =
+                        !s2.contains('T') && crate::datetime_impl::parse_date(s2).is_some();
+                    let s1_is_datetime =
+                        s1.contains('T') && crate::datetime_impl::parse_datetime(s1).is_some();
+                    let s2_is_datetime =
+                        s2.contains('T') && crate::datetime_impl::parse_datetime(s2).is_some();
+
                     if (s1_is_date && s2_is_datetime) || (s1_is_datetime && s2_is_date) {
                         // Mixed date and datetime comparison
                         // For <= and >= operators, this is indeterminate

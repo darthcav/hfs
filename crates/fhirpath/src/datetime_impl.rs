@@ -89,7 +89,7 @@ pub fn compare_dates(date1: &str, date2: &str) -> Option<Ordering> {
     // Strip @ prefix if present (used in FHIRPath date literals)
     let date1 = date1.strip_prefix('@').unwrap_or(date1);
     let date2 = date2.strip_prefix('@').unwrap_or(date2);
-    
+
     let d1 = parse_date(date1)?;
     let d2 = parse_date(date2)?;
     Some(d1.cmp(&d2))
@@ -98,11 +98,17 @@ pub fn compare_dates(date1: &str, date2: &str) -> Option<Ordering> {
 /// Compares two time values
 pub fn compare_times(time1: &str, time2: &str) -> Option<Ordering> {
     // Strip @ prefix and T prefix if present (used in FHIRPath time literals)
-    let time1 = time1.strip_prefix('@').unwrap_or(time1)
-                     .strip_prefix('T').unwrap_or(time1);
-    let time2 = time2.strip_prefix('@').unwrap_or(time2)
-                     .strip_prefix('T').unwrap_or(time2);
-    
+    let time1 = time1
+        .strip_prefix('@')
+        .unwrap_or(time1)
+        .strip_prefix('T')
+        .unwrap_or(time1);
+    let time2 = time2
+        .strip_prefix('@')
+        .unwrap_or(time2)
+        .strip_prefix('T')
+        .unwrap_or(time2);
+
     let t1 = parse_time(time1)?;
     let t2 = parse_time(time2)?;
     Some(t1.cmp(&t2))
@@ -113,7 +119,7 @@ pub fn compare_datetimes(dt1: &str, dt2: &str) -> Option<Ordering> {
     // Strip @ prefix if present (used in FHIRPath date literals)
     let dt1 = dt1.strip_prefix('@').unwrap_or(dt1);
     let dt2 = dt2.strip_prefix('@').unwrap_or(dt2);
-    
+
     let d1 = parse_datetime(dt1)?;
     let d2 = parse_datetime(dt2)?;
     Some(d1.cmp(&d2))
@@ -159,36 +165,35 @@ pub fn compare_date_time_values(
             let s2_is_time = s2_clean.starts_with('T');
             let s1_has_t = s1_clean.contains('T');
             let s2_has_t = s2_clean.contains('T');
-            
+
             // Try to parse as dates/times
             let s1_is_date = !s1_is_time && !s1_has_t && parse_date(s1_clean).is_some();
             let s2_is_date = !s2_is_time && !s2_has_t && parse_date(s2_clean).is_some();
             let s1_is_datetime = !s1_is_time && s1_has_t && parse_datetime(s1_clean).is_some();
             let s2_is_datetime = !s2_is_time && s2_has_t && parse_datetime(s2_clean).is_some();
 
-            match (s1_is_time, s2_is_time, s1_is_date, s2_is_date, s1_is_datetime, s2_is_datetime) {
+            match (
+                s1_is_time,
+                s2_is_time,
+                s1_is_date,
+                s2_is_date,
+                s1_is_datetime,
+                s2_is_datetime,
+            ) {
                 // Both are times
-                (true, true, _, _, _, _) => {
-                    compare_times(
-                        s1_clean.trim_start_matches('T'),
-                        s2_clean.trim_start_matches('T'),
-                    )
-                }
+                (true, true, _, _, _, _) => compare_times(
+                    s1_clean.trim_start_matches('T'),
+                    s2_clean.trim_start_matches('T'),
+                ),
                 // Both are dates
-                (false, false, true, true, false, false) => {
-                    compare_dates(s1_clean, s2_clean)
-                }
+                (false, false, true, true, false, false) => compare_dates(s1_clean, s2_clean),
                 // Both are datetimes
-                (false, false, false, false, true, true) => {
-                    compare_datetimes(s1_clean, s2_clean)
-                }
+                (false, false, false, false, true, true) => compare_datetimes(s1_clean, s2_clean),
                 // Mixed date and datetime - return None for indeterminate comparison
-                (false, false, true, false, false, true) |
-                (false, false, false, true, true, false) => {
-                    None
-                }
+                (false, false, true, false, false, true)
+                | (false, false, false, true, true, false) => None,
                 // Otherwise, not comparable as date/time types
-                _ => None
+                _ => None,
             }
         }
 
@@ -222,7 +227,7 @@ pub fn compare_date_time_values(
                 // Convert date to datetime range for comparison
                 let d_normalized = normalize_date(s_val);
                 let d_start = format!("{}T00:00:00", d_normalized);
-                
+
                 // For comparisons, use the start of day
                 // This is consistent with FHIR's approach for < and > operators
                 return compare_datetimes(&d_start, dt_val);
@@ -238,7 +243,7 @@ pub fn compare_date_time_values(
                 // Convert date to datetime range for comparison
                 let d_normalized = normalize_date(s_val);
                 let d_start = format!("{}T00:00:00", d_normalized);
-                
+
                 // For comparisons, use the start of day
                 return compare_datetimes(dt_val, &d_start);
             } else {
@@ -444,7 +449,10 @@ mod tests {
         );
         // Test actual comparison with different timezones
         assert_eq!(
-            compare_datetimes("@2001-05-06T00:00:00.000+14:00", "@2001-05-06T10:10:10.999Z"),
+            compare_datetimes(
+                "@2001-05-06T00:00:00.000+14:00",
+                "@2001-05-06T10:10:10.999Z"
+            ),
             Some(Ordering::Less)
         );
     }
