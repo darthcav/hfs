@@ -3976,6 +3976,127 @@ fn call_function(
                 )),
             }
         }
+        "escape" => {
+            // Implements escape(target : String) : String
+            // Escapes a string for specific target format (html or json)
+            if args.len() != 1 {
+                return Err(EvaluationError::InvalidArity(
+                    "Function 'escape' expects 1 argument (target)".to_string(),
+                ));
+            }
+            
+            // Check for singleton base and arg
+            if invocation_base.count() > 1 || args[0].count() > 1 {
+                return Err(EvaluationError::SingletonEvaluationError(
+                    "escape requires singleton input and argument".to_string(),
+                ));
+            }
+            
+            Ok(match (invocation_base, &args[0]) {
+                (EvaluationResult::String(s, _), EvaluationResult::String(target, _)) => {
+                    match target.as_str() {
+                        "html" => {
+                            // Escape HTML special characters
+                            let escaped = s
+                                .replace('&', "&amp;")
+                                .replace('<', "&lt;")
+                                .replace('>', "&gt;")
+                                .replace('"', "&quot;")
+                                .replace('\'', "&#39;");
+                            EvaluationResult::string(escaped)
+                        }
+                        "json" => {
+                            // Escape JSON special characters
+                            let escaped = s
+                                .replace('\\', "\\\\")
+                                .replace('"', "\\\"")
+                                .replace('\n', "\\n")
+                                .replace('\r', "\\r")
+                                .replace('\t', "\\t")
+                                .replace('\u{0008}', "\\b")
+                                .replace('\u{000C}', "\\f");
+                            EvaluationResult::string(escaped)
+                        }
+                        _ => EvaluationResult::Empty // Unknown target
+                    }
+                }
+                (EvaluationResult::Empty, _) => EvaluationResult::Empty,
+                (_, EvaluationResult::Empty) => EvaluationResult::Empty,
+                _ => {
+                    return Err(EvaluationError::TypeError(
+                        "escape requires String input and target".to_string(),
+                    ));
+                }
+            })
+        }
+        "unescape" => {
+            // Implements unescape(target : String) : String
+            // Unescapes a string from specific target format (html or json)
+            if args.len() != 1 {
+                return Err(EvaluationError::InvalidArity(
+                    "Function 'unescape' expects 1 argument (target)".to_string(),
+                ));
+            }
+            
+            // Check for singleton base and arg
+            if invocation_base.count() > 1 || args[0].count() > 1 {
+                return Err(EvaluationError::SingletonEvaluationError(
+                    "unescape requires singleton input and argument".to_string(),
+                ));
+            }
+            
+            Ok(match (invocation_base, &args[0]) {
+                (EvaluationResult::String(s, _), EvaluationResult::String(target, _)) => {
+                    match target.as_str() {
+                        "html" => {
+                            // Unescape HTML entities
+                            let unescaped = s
+                                .replace("&quot;", "\"")
+                                .replace("&#39;", "'")
+                                .replace("&lt;", "<")
+                                .replace("&gt;", ">")
+                                .replace("&amp;", "&"); // Must be last
+                            EvaluationResult::string(unescaped)
+                        }
+                        "json" => {
+                            // Unescape JSON escape sequences
+                            let mut result = String::new();
+                            let mut chars = s.chars();
+                            while let Some(ch) = chars.next() {
+                                if ch == '\\' {
+                                    match chars.next() {
+                                        Some('"') => result.push('"'),
+                                        Some('\\') => result.push('\\'),
+                                        Some('n') => result.push('\n'),
+                                        Some('r') => result.push('\r'),
+                                        Some('t') => result.push('\t'),
+                                        Some('b') => result.push('\u{0008}'),
+                                        Some('f') => result.push('\u{000C}'),
+                                        Some(c) => {
+                                            // Unknown escape, keep both characters
+                                            result.push('\\');
+                                            result.push(c);
+                                        }
+                                        None => result.push('\\'), // Trailing backslash
+                                    }
+                                } else {
+                                    result.push(ch);
+                                }
+                            }
+                            EvaluationResult::string(result)
+                        }
+                        _ => EvaluationResult::Empty // Unknown target
+                    }
+                }
+                (EvaluationResult::Empty, _) => EvaluationResult::Empty,
+                (_, EvaluationResult::Empty) => EvaluationResult::Empty,
+                _ => {
+                    return Err(EvaluationError::TypeError(
+                        "unescape requires String input and target".to_string(),
+                    ));
+                }
+            })
+        }
         "round" => {
             // Implements round([precision : Integer]) : Decimal
             // Round a decimal to the nearest whole number or to a specified precision
@@ -5521,6 +5642,8 @@ fn call_function(
                 "matches",
                 "replaceMatches",
                 "join",
+                "escape",
+                "unescape",
                 "round",
                 "sqrt",
                 "precision",

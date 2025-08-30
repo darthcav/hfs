@@ -293,7 +293,12 @@ The SQL on FHIR specification leverages FHIRPath to define flattened tabular vie
     *   [toChars()](https://hl7.org/fhirpath/2025Jan/#tochars--collection): ✅
     *   [encode()](https://hl7.org/fhirpath/2025Jan/#encodeformat--string--string): ✅
     *   [decode()](https://hl7.org/fhirpath/2025Jan/#decodeformat--string--string): ✅
-*   [Additional String Functions](https://hl7.org/fhirpath/2025Jan/#additional-string-functions) (STU): ❌ (All)
+*   [Additional String Functions](https://hl7.org/fhirpath/2025Jan/#additional-string-functions) (STU): 🟡 (Partially implemented)
+    *   [escape()](https://hl7.org/fhirpath/2025Jan/#escapetarget--string--string): ✅ (html, json targets)
+    *   [unescape()](https://hl7.org/fhirpath/2025Jan/#unescapetarget--string--string): ✅ (html, json targets)
+    *   [split()](https://hl7.org/fhirpath/2025Jan/#splitseparator--string--collection): ❌
+    *   [trim()](https://hl7.org/fhirpath/2025Jan/#trim--string): ❌
+    *   [matchInfo()](https://hl7.org/fhirpath/2025Jan/#matchinforegex--string--collection): ❌
 *   [Math](https://hl7.org/fhirpath/2025Jan/#math) (STU): ✅
     *   [round()](https://hl7.org/fhirpath/2025Jan/#round-precision--integer--decimal): ✅
     *   [sqrt()](https://hl7.org/fhirpath/2025Jan/#sqrt--decimal): ✅
