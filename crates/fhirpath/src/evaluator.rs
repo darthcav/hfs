@@ -2037,6 +2037,13 @@ fn evaluate_invocation(
                 }
                 "iif" if args_exprs.len() >= 2 => {
                     // iif(condition, trueResult, [otherwiseResult])
+                    // Check if the invocation base is a singleton
+                    if invocation_base.count() > 1 {
+                        return Err(EvaluationError::SingletonEvaluationError(
+                            "iif() can only be called on a singleton collection".to_string(),
+                        ));
+                    }
+                    
                     let condition_expr = &args_exprs[0];
                     let true_result_expr = &args_exprs[1];
                     let otherwise_result_expr = args_exprs.get(2); // Optional third argument
@@ -2051,6 +2058,14 @@ fn evaluate_invocation(
                         };
                     let condition_result =
                         evaluate(condition_expr, context, condition_invocation_base)?;
+                    
+                    // Check if condition is a singleton
+                    if condition_result.count() > 1 {
+                        return Err(EvaluationError::SingletonEvaluationError(
+                            "iif() requires a singleton condition".to_string(),
+                        ));
+                    }
+                    
                     let condition_bool = condition_result.to_boolean_for_logic()?; // Use logic conversion
 
                     if matches!(condition_bool, EvaluationResult::Boolean(true, _)) {
