@@ -814,6 +814,14 @@ fn check_type_match(
                     return Ok(true);
                 }
             }
+            
+            // FHIR Quantity subtypes/profiles that should match FHIR.Quantity
+            if target_type.eq_ignore_ascii_case("quantity") {
+                let fhir_quantity_subtypes = ["quantity", "age", "distance", "duration", "count"];
+                if fhir_quantity_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
+                    return Ok(true);
+                }
+            }
         }
     }
     
@@ -841,6 +849,14 @@ fn check_type_match(
                     }
                 }
                 
+                // FHIR Quantity subtypes that should match unqualified "quantity"
+                if target_type.eq_ignore_ascii_case("quantity") {
+                    let fhir_quantity_subtypes = ["quantity", "age", "distance", "duration", "count"];
+                    if fhir_quantity_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
+                        return Ok(true);
+                    }
+                }
+                
                 // Other FHIR primitive types should match their unqualified equivalents
                 let direct_matches = [
                     ("boolean", "boolean"),
@@ -860,12 +876,17 @@ fn check_type_match(
         }
     }
     
+    // For Quantity types and their subtypes, we need to allow cross-namespace matching
+    // because FHIR.Age should match System.Quantity
+    let allow_cross_namespace = target_type.eq_ignore_ascii_case("quantity") &&
+        matches!(value_type.to_lowercase().as_str(), "age" | "distance" | "duration" | "count");
+    
     check_type_match_with_cross_namespace(
         value_namespace,
         value_type,
         target_namespace,
         target_type,
-        false,
+        allow_cross_namespace,
     )
 }
 
@@ -880,14 +901,14 @@ fn check_type_match_with_cross_namespace(
     // Case-insensitive type name comparison
     let type_matches = value_type.eq_ignore_ascii_case(target_type);
     
-    // Check FHIR type hierarchy - uuid is a subtype of uri
-    let type_hierarchy_matches = if value_namespace.as_deref() == Some("FHIR") && target_namespace.as_deref() == Some("FHIR") {
-        match (value_type.to_lowercase().as_str(), target_type.to_lowercase().as_str()) {
-            ("uuid", "uri") => true,  // uuid is a subtype of uri
-            _ => false,
-        }
-    } else {
-        false
+    // Check FHIR type hierarchy
+    let type_hierarchy_matches = match (value_type.to_lowercase().as_str(), target_type.to_lowercase().as_str()) {
+        // uuid is a subtype of uri (only when both are FHIR namespace)
+        ("uuid", "uri") if value_namespace.as_deref() == Some("FHIR") && target_namespace.as_deref() == Some("FHIR") => true,
+        // Quantity subtypes match Quantity (cross-namespace allowed with allow_cross_namespace flag)
+        ("age" | "distance" | "duration" | "count", "quantity") if allow_cross_namespace || 
+            (value_namespace.as_deref() == target_namespace.as_deref()) => true,
+        _ => false,
     };
     
     let type_or_hierarchy_matches = type_matches || type_hierarchy_matches;
@@ -908,10 +929,18 @@ fn check_type_match_with_cross_namespace(
                 // 1. Complex types like Quantity, Date, DateTime, Time (always allowed)
                 // 2. Primitive types like boolean, string, integer, decimal (only for ofType operations when allow_cross_namespace is true)
                 // 3. Resource types (checked dynamically)
+                // Check if it's a complex type or a Quantity subtype
+                let value_type_lower = value_type.to_lowercase();
                 let is_complex_type = matches!(
-                    value_type.to_lowercase().as_str(),
+                    value_type_lower.as_str(),
                     "quantity" | "date" | "datetime" | "time"
                 );
+                
+                // Also check if it's a Quantity subtype (Age, Distance, Duration, Count)
+                let is_quantity_subtype = matches!(
+                    value_type_lower.as_str(),
+                    "age" | "distance" | "duration" | "count"
+                ) && target_type.eq_ignore_ascii_case("quantity");
 
                 // Only allow cross-namespace matching for primitive types when explicitly enabled (for ofType operations)
                 // FHIR.boolean should match the type specifier "boolean" only in ofType, not in is operations
@@ -939,7 +968,7 @@ fn check_type_match_with_cross_namespace(
                             | "unsignedint"
                     );
 
-                let is_cross_matchable_type = is_complex_type || is_primitive_type;
+                let is_cross_matchable_type = is_complex_type || is_primitive_type || is_quantity_subtype;
 
                 let cross_namespace_match = is_cross_matchable_type
                     && ((value_ns.eq_ignore_ascii_case("FHIR")
