@@ -767,6 +767,74 @@ fn check_type_match(
     target_namespace: &Option<String>,
     target_type: &str,
 ) -> Result<bool, EvaluationError> {
+    // Special handling for FHIR types in is() operations
+    // When target is FHIR.string, FHIR string subtypes should match
+    if let (Some(value_ns), Some(target_ns)) = (value_namespace, target_namespace) {
+        if value_ns.eq_ignore_ascii_case("FHIR") && target_ns.eq_ignore_ascii_case("FHIR") {
+            // FHIR string subtypes that should match FHIR.string
+            if target_type.eq_ignore_ascii_case("string") {
+                let fhir_string_subtypes = [
+                    "string", "code", "id", "uri", "url", "canonical", 
+                    "markdown", "uuid", "oid", "base64binary"
+                ];
+                if fhir_string_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
+                    return Ok(true);
+                }
+            }
+            
+            // FHIR integer subtypes that should match FHIR.integer
+            if target_type.eq_ignore_ascii_case("integer") {
+                let fhir_integer_subtypes = ["integer", "positiveint", "unsignedint"];
+                if fhir_integer_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
+                    return Ok(true);
+                }
+            }
+        }
+    }
+    
+    // Special handling for FHIR primitive types matching unqualified System types in is() operations
+    if target_namespace.is_none() {
+        if let Some(ns) = value_namespace {
+            if ns.eq_ignore_ascii_case("FHIR") {
+                // FHIR string subtypes that should match unqualified "string"
+                if target_type.eq_ignore_ascii_case("string") {
+                    let fhir_string_subtypes = [
+                        "string", "code", "id", "uri", "url", "canonical", 
+                        "markdown", "uuid", "oid", "base64binary"
+                    ];
+                    if fhir_string_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
+                        eprintln!("Matched FHIR string subtype: {} -> string", value_type);
+                        return Ok(true);
+                    }
+                }
+                
+                // FHIR integer subtypes that should match unqualified "integer"
+                if target_type.eq_ignore_ascii_case("integer") {
+                    let fhir_integer_subtypes = ["integer", "positiveint", "unsignedint"];
+                    if fhir_integer_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
+                        return Ok(true);
+                    }
+                }
+                
+                // Other FHIR primitive types should match their unqualified equivalents
+                let direct_matches = [
+                    ("boolean", "boolean"),
+                    ("decimal", "decimal"),
+                    ("date", "date"),
+                    ("datetime", "datetime"),
+                    ("time", "time"),
+                    ("instant", "datetime"), // instant is a special datetime
+                ];
+                
+                for (fhir_type, system_type) in &direct_matches {
+                    if value_type.eq_ignore_ascii_case(fhir_type) && target_type.eq_ignore_ascii_case(system_type) {
+                        return Ok(true);
+                    }
+                }
+            }
+        }
+    }
+    
     check_type_match_with_cross_namespace(
         value_namespace,
         value_type,

@@ -1833,7 +1833,7 @@ fn evaluate_invocation(
                         let exists_directly = obj.contains_key(name.as_str());
                         
                         // Check if it would be found through polymorphic access
-                        let found_polymorphically = if !exists_directly {
+                        let _found_polymorphically = if !exists_directly {
                             crate::polymorphic_access::access_polymorphic_element(obj, name.as_str()).is_some()
                         } else {
                             false
