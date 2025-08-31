@@ -820,6 +820,22 @@ pub trait FhirResourceTypeProvider {
     }
 }
 
+/// Trait for providing FHIR complex type information
+///
+/// This trait allows querying which complex data types are available in a specific
+/// FHIR version without hardcoding complex type lists in multiple places.
+pub trait FhirComplexTypeProvider {
+    /// Returns a vector of all complex type names supported in this FHIR version
+    fn get_complex_type_names() -> Vec<&'static str>;
+
+    /// Checks if a given type name is a complex type in this FHIR version
+    fn is_complex_type(type_name: &str) -> bool {
+        Self::get_complex_type_names()
+            .iter()
+            .any(|&complex_type| complex_type.eq_ignore_ascii_case(type_name))
+    }
+}
+
 // --- Internal Visitor for Element Object Deserialization ---
 
 /// Internal visitor struct for deserializing Element objects from JSON maps.

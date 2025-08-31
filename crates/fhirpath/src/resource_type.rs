@@ -1,7 +1,7 @@
 use crate::evaluator::EvaluationContext;
-use crate::fhir_type_hierarchy::capitalize_first_letter;
+use crate::fhir_type_hierarchy::{capitalize_first_letter, is_fhir_primitive_type};
 use crate::parser::TypeSpecifier;
-use helios_fhir::{FhirResourceTypeProvider, FhirVersion};
+use helios_fhir::{FhirComplexTypeProvider, FhirResourceTypeProvider, FhirVersion};
 use helios_fhirpath_support::{EvaluationError, EvaluationResult};
 
 /// Handles type operations for FHIR resources, supporting is/as operators.
@@ -29,6 +29,31 @@ pub fn is_resource_type_for_version(type_name: &str, fhir_version: &FhirVersion)
         FhirVersion::R5 => helios_fhir::r5::Resource::is_resource_type(type_name),
         #[cfg(feature = "R6")]
         FhirVersion::R6 => helios_fhir::r6::Resource::is_resource_type(type_name),
+        #[allow(unreachable_patterns)]
+        _ => false, // For versions not enabled by feature flags
+    }
+}
+
+/// Checks if a type name is a complex type for the given FHIR version
+///
+/// # Arguments
+///
+/// * `type_name` - The type name to check (e.g., "Quantity", "HumanName")
+/// * `fhir_version` - The FHIR version to check against
+///
+/// # Returns
+///
+/// * `true` if the type is a complex type in the given FHIR version, `false` otherwise
+pub fn is_complex_type_for_version(type_name: &str, fhir_version: &FhirVersion) -> bool {
+    match fhir_version {
+        #[cfg(feature = "R4")]
+        FhirVersion::R4 => helios_fhir::r4::ComplexTypes::is_complex_type(type_name),
+        #[cfg(feature = "R4B")]
+        FhirVersion::R4B => helios_fhir::r4b::ComplexTypes::is_complex_type(type_name),
+        #[cfg(feature = "R5")]
+        FhirVersion::R5 => helios_fhir::r5::ComplexTypes::is_complex_type(type_name),
+        #[cfg(feature = "R6")]
+        FhirVersion::R6 => helios_fhir::r6::ComplexTypes::is_complex_type(type_name),
         #[allow(unreachable_patterns)]
         _ => false, // For versions not enabled by feature flags
     }
@@ -297,7 +322,7 @@ pub fn is_of_type_for_of_type(
     value: &EvaluationResult,
     type_spec: &TypeSpecifier,
 ) -> Result<bool, EvaluationError> {
-    let (target_namespace, target_type) = extract_namespace_and_type(type_spec)?;
+    let (target_namespace, target_type) = extract_namespace_and_type_without_context(type_spec)?;
 
     match value {
         EvaluationResult::Boolean(_, type_info) => {
@@ -546,7 +571,7 @@ pub fn is_of_type(
     value: &EvaluationResult,
     type_spec: &TypeSpecifier,
 ) -> Result<bool, EvaluationError> {
-    let (target_namespace, target_type) = extract_namespace_and_type(type_spec)?;
+    let (target_namespace, target_type) = extract_namespace_and_type_without_context(type_spec)?;
 
     match value {
         EvaluationResult::Boolean(_, type_info) => {
@@ -1083,15 +1108,30 @@ pub fn extract_namespace_and_type_with_context(
 
                 Ok((Some("FHIR".to_string()), normalized_type))
             }
-            // Use context-aware resource checking instead of hard-coded lists
+            // Use context-aware resource checking
             else if is_resource_type_for_version(&clean_name, &context.fhir_version) {
-                // Resource types default to FHIR namespace when unqualified since FHIR resources have FHIR type info
+                // Resource types default to FHIR namespace
                 Ok((
                     Some("FHIR".to_string()),
                     capitalize_first_letter(&clean_name),
                 ))
             }
-            // For complex types and unknown types, make an educated guess based on capitalization
+            // Check for complex types
+            else if is_complex_type_for_version(&clean_name, &context.fhir_version) {
+                // Complex types default to FHIR namespace
+                Ok((
+                    Some("FHIR".to_string()),
+                    capitalize_first_letter(&clean_name),
+                ))
+            }
+            // For unknown types, validate them
+            else if !is_valid_type_name(&clean_name, &context.fhir_version) {
+                // Unknown type - this should throw an error
+                Err(EvaluationError::InvalidTypeSpecifier(format!(
+                    "The type '{}' is unknown",
+                    clean_name
+                )))
+            }
             else if is_likely_system_type {
                 // Capitalized types are likely System types
                 Ok((Some("System".to_string()), clean_name))
@@ -1103,10 +1143,44 @@ pub fn extract_namespace_and_type_with_context(
     }
 }
 
-/// Extract namespace and type name from a TypeSpecifier (legacy version without context)
+/// Validates if a type name is a known primitive type (without version context)
+fn is_primitive_type(type_name: &str) -> bool {
+    // Known System primitive types
+    let system_primitives = [
+        "Boolean", "String", "Integer", "Decimal", "Date", "DateTime", "Time", "Quantity",
+        "boolean", "string", "integer", "decimal", "date", "datetime", "time", "quantity"
+    ];
+    
+    // Check against System primitives
+    if system_primitives.iter().any(|&t| t.eq_ignore_ascii_case(type_name)) {
+        return true;
+    }
+    
+    // Check against FHIR primitives using the existing function
+    is_fhir_primitive_type(type_name)
+}
+
+/// Validates if a type name is valid in the FHIR/System type system
+fn is_valid_type_name(type_name: &str, fhir_version: &FhirVersion) -> bool {
+    // Check the common types first (primitives)
+    if is_primitive_type(type_name) {
+        return true;
+    }
+    
+    // Check if it's a valid resource type
+    if is_resource_type_for_version(type_name, fhir_version) {
+        return true;
+    }
+    
+    // Check if it's a valid complex type
+    is_complex_type_for_version(type_name, fhir_version)
+}
+
+/// Extract namespace and type name from a TypeSpecifier (version without context)
 /// Handles qualified names like "System.Boolean" or "FHIR.Patient"
 /// including backtick-quoted variants
-pub fn extract_namespace_and_type(
+/// Note: This version cannot validate resource/complex types without FHIR version context
+pub fn extract_namespace_and_type_without_context(
     type_spec: &TypeSpecifier,
 ) -> Result<(Option<String>, String), EvaluationError> {
     match type_spec {
@@ -1201,43 +1275,8 @@ pub fn extract_namespace_and_type(
                 "uuid",
             ];
 
-            // Known FHIR resource types (always start with uppercase)
-            let fhir_resource_types = [
-                "Patient",
-                "Observation",
-                "MedicationRequest",
-                "Condition",
-                "Encounter",
-                "DomainResource",
-                "Resource",
-                "Questionnaire",
-                "ValueSet",
-                "Bundle",
-                "Practitioner",
-                "Organization",
-                "CarePlan",
-                "Procedure",
-                "Immunization",
-                "DiagnosticReport",
-            ];
-
-            // Known FHIR complex types (always start with uppercase)
-            let fhir_complex_types = [
-                "Quantity",
-                "Money",
-                "HumanName",
-                "Address",
-                "Reference",
-                "Identifier",
-                "CodeableConcept",
-                "Period",
-                "Timing",
-                "ContactPoint",
-                "Coding",
-                "Attachment",
-                "Range",
-                "Ratio",
-            ];
+            // Note: Without context, we cannot check against version-specific resource/complex types
+            // This legacy function relies on primitive type checking and basic heuristics
 
             // Check if the clean_name is a known System primitive type
             if system_primitives
@@ -1271,29 +1310,15 @@ pub fn extract_namespace_and_type(
 
                 Ok((Some("FHIR".to_string()), normalized_type))
             }
-            // Check if the clean_name is a known FHIR resource type
-            else if fhir_resource_types
-                .iter()
-                .any(|&t| t.eq_ignore_ascii_case(&clean_name))
-            {
-                // Unqualified resource types default to FHIR namespace
-                Ok((
-                    Some("FHIR".to_string()),
-                    capitalize_first_letter(&clean_name),
-                ))
+            // For non-primitive types, make an educated guess
+            // But reject obviously invalid types (lowercase non-primitives that look like typos)
+            else if !is_likely_system_type && clean_name.chars().any(|c| c.is_digit(10)) {
+                // Types with digits that aren't primitives are likely invalid (e.g., "string1")
+                Err(EvaluationError::InvalidTypeSpecifier(format!(
+                    "The type '{}' is unknown",
+                    clean_name
+                )))
             }
-            // Check if the clean_name is a known FHIR complex type
-            else if fhir_complex_types
-                .iter()
-                .any(|&t| t.eq_ignore_ascii_case(&clean_name))
-            {
-                // Unqualified complex types default to FHIR namespace
-                Ok((
-                    Some("FHIR".to_string()),
-                    capitalize_first_letter(&clean_name),
-                ))
-            }
-            // For types we're not confident about, make an educated guess based on capitalization
             else if is_likely_system_type {
                 // Capitalized types are likely System types
                 Ok((Some("System".to_string()), clean_name))
@@ -1379,12 +1404,38 @@ pub fn as_type(
     }
 }
 
+/// Casts a value to a specified type if it matches (context-aware version)
+///
+/// # Arguments
+///
+/// * `value` - The value to cast
+/// * `type_spec` - The type specifier to cast to
+/// * `context` - The evaluation context containing FHIR version information
+///
+/// # Returns
+///
+/// * The original value if it matches the type, Empty otherwise
+pub fn as_type_with_context(
+    value: &EvaluationResult,
+    type_spec: &TypeSpecifier,
+    context: &EvaluationContext,
+) -> Result<EvaluationResult, EvaluationError> {
+    // Check if the value is of the specified type using context-aware version
+    if is_of_type_with_context(value, type_spec, context)? {
+        // If it matches, return the value as-is
+        Ok(value.clone())
+    } else {
+        // If it doesn't match, return Empty
+        Ok(EvaluationResult::Empty)
+    }
+}
+
 /// Helper function to try converting a value to a target type for ofType operations
 fn try_convert_for_of_type(
     value: &EvaluationResult,
     type_spec: &TypeSpecifier,
 ) -> Result<Option<EvaluationResult>, EvaluationError> {
-    let (_target_namespace, target_type) = extract_namespace_and_type(type_spec)?;
+    let (_target_namespace, target_type) = extract_namespace_and_type_without_context(type_spec)?;
 
     match value {
         EvaluationResult::String(s, type_info) => {
@@ -1519,18 +1570,77 @@ fn try_convert_for_of_type(
     }
 }
 
-/// Filters a collection based on a type specifier
+/// Filters a collection based on a type specifier (context-aware version)
 ///
 /// # Arguments
 ///
 /// * `collection` - The collection to filter
 /// * `type_spec` - The type to filter by
+/// * `context` - The evaluation context containing FHIR version information
 ///
 /// # Returns
 ///
 /// * A new collection containing only items of the specified type
 /// * If there's only one item in the collection, returns that item directly (unwrapped)
 /// * If the collection is empty, returns Empty
+pub fn of_type_with_context(
+    collection: &EvaluationResult,
+    type_spec: &TypeSpecifier,
+    context: &EvaluationContext,
+) -> Result<EvaluationResult, EvaluationError> {
+    // Use a consistent helper function for applying the type filter
+    let apply_type_filter =
+        |items: &[EvaluationResult]| -> Result<EvaluationResult, EvaluationError> {
+            let mut result = Vec::new();
+
+            for item in items {
+                // Use context-aware type checking
+                if is_of_type_with_context(item, type_spec, context)? {
+                    result.push(item.clone());
+                }
+                // Note: try_convert_for_of_type uses the without-context version
+                // which can't validate complex types, so we skip it for now
+            }
+
+            if result.is_empty() {
+                Ok(EvaluationResult::Empty)
+            } else if result.len() == 1 {
+                Ok(result[0].clone())
+            } else {
+                // ofType preserves the order of the input collection
+                let input_was_unordered = matches!(
+                    collection,
+                    EvaluationResult::Collection {
+                        has_undefined_order: true,
+                        ..
+                    }
+                );
+                Ok(EvaluationResult::Collection {
+                    items: result,
+                    has_undefined_order: input_was_unordered,
+                    type_info: None,
+                })
+            }
+        };
+
+    match collection {
+        EvaluationResult::Collection { items, .. } => apply_type_filter(items), // Destructure
+        EvaluationResult::Empty => Ok(EvaluationResult::Empty),
+
+        // For a singleton value, treat it like a collection of one
+        _ => {
+            if is_of_type_with_context(collection, type_spec, context)? {
+                // Return the value directly for a singleton that matches
+                Ok(collection.clone())
+            } else {
+                Ok(EvaluationResult::Empty)
+            }
+        }
+    }
+}
+
+/// Filters a collection based on a type specifier (version without context)
+/// This version is deprecated - use of_type_with_context instead
 pub fn of_type(
     collection: &EvaluationResult,
     type_spec: &TypeSpecifier,

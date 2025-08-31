@@ -320,9 +320,10 @@ fn is_primitive_type(def: &StructureDefinition) -> bool {
 /// - Proper derive macros for serialization and FHIR-specific functionality
 fn generate_code(bundle: Bundle, output_path: impl AsRef<Path>) -> io::Result<()> {
     // First collect all ElementDefinitions across all StructureDefinitions
-    // Also collect all Resource names
+    // Also collect all Resource names and Complex Type names
     let mut all_elements = Vec::new();
     let mut all_resources = Vec::new();
+    let mut all_complex_types = Vec::new();
 
     if let Some(entries) = bundle.entry.as_ref() {
         // First pass: collect all elements
@@ -337,6 +338,8 @@ fn generate_code(bundle: Bundle, output_path: impl AsRef<Path>) -> io::Result<()
                         }
                         if def.kind == "resource" && !def.r#abstract {
                             all_resources.push(&def.name);
+                        } else if def.kind == "complex-type" && !def.r#abstract {
+                            all_complex_types.push(&def.name);
                         }
                     }
                 }
@@ -381,6 +384,7 @@ fn generate_code(bundle: Bundle, output_path: impl AsRef<Path>) -> io::Result<()
                 .append(true)
                 .open(output_path.as_ref())?;
             write!(file, "{}", resource_enum)?;
+            
             // Add From<T> implementations for base types ONCE after all types are defined
             writeln!(
                 file,
@@ -419,6 +423,26 @@ fn generate_code(bundle: Bundle, output_path: impl AsRef<Path>) -> io::Result<()
             writeln!(file, "    }}")?;
             writeln!(file, "}}")?;
             writeln!(file, "// --- End From<T> Implementations ---")?;
+        }
+        
+        // Generate ComplexTypes struct and FhirComplexTypeProvider implementation
+        if !all_complex_types.is_empty() {
+            let mut file = std::fs::OpenOptions::new()
+                .create(true)
+                .append(true)
+                .open(output_path.as_ref())?;
+            writeln!(file, "\n// --- Complex Types Provider ---")?;
+            writeln!(file, "/// Marker struct for complex type information")?;
+            writeln!(file, "pub struct ComplexTypes;")?;
+            writeln!(file, "\nimpl crate::FhirComplexTypeProvider for ComplexTypes {{")?;
+            writeln!(file, "    fn get_complex_type_names() -> Vec<&'static str> {{")?;
+            writeln!(file, "        vec![")?;
+            for complex_type in &all_complex_types {
+                writeln!(file, "            \"{}\",", complex_type)?;
+            }
+            writeln!(file, "        ]")?;
+            writeln!(file, "    }}")?;
+            writeln!(file, "}}")?;
         }
     }
 

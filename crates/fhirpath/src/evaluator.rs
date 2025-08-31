@@ -7221,6 +7221,12 @@ fn apply_type_operation(
     };
 
     if (op == "is" || op == "as") && is_fhir_type_for_poly {
+        // First validate that the type is known - extract namespace and type will validate
+        let validation_result = crate::resource_type::extract_namespace_and_type_with_context(type_spec, context);
+        if let Err(e) = validation_result {
+            return Err(e);
+        }
+        
         // Handle with polymorphic_access
         let poly_result = crate::polymorphic_access::apply_polymorphic_type_operation(
             actual_value,
@@ -7250,7 +7256,7 @@ fn apply_type_operation(
         }
         "as" => {
             // This path is for System types.
-            let cast_result = crate::resource_type::as_type(actual_value, type_spec)?;
+            let cast_result = crate::resource_type::as_type_with_context(actual_value, type_spec, context)?;
             if context.is_strict_mode
                 && actual_value != &EvaluationResult::Empty
                 && cast_result == EvaluationResult::Empty
@@ -7264,7 +7270,7 @@ fn apply_type_operation(
                 Ok(cast_result)
             }
         }
-        "ofType" => crate::resource_type::of_type(value, type_spec),
+        "ofType" => crate::resource_type::of_type_with_context(value, type_spec, context),
         _ => Err(EvaluationError::InvalidOperation(format!(
             "Unknown type operator: {}",
             op
