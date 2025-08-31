@@ -796,31 +796,22 @@ fn check_type_match(
     // When target is FHIR.string, FHIR string subtypes should match
     if let (Some(value_ns), Some(target_ns)) = (value_namespace, target_namespace) {
         if value_ns.eq_ignore_ascii_case("FHIR") && target_ns.eq_ignore_ascii_case("FHIR") {
-            // FHIR string subtypes that should match FHIR.string
-            if target_type.eq_ignore_ascii_case("string") {
-                let fhir_string_subtypes = [
-                    "string", "code", "id", "uri", "url", "canonical", 
-                    "markdown", "uuid", "oid", "base64binary"
-                ];
-                if fhir_string_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
-                    return Ok(true);
-                }
+            // Use generated type hierarchy to check if value_type is a subtype of target_type
+            #[cfg(feature = "R4")]
+            if helios_fhir::r4::type_hierarchy::is_subtype_of(value_type, target_type) {
+                return Ok(true);
             }
-            
-            // FHIR integer subtypes that should match FHIR.integer
-            if target_type.eq_ignore_ascii_case("integer") {
-                let fhir_integer_subtypes = ["integer", "positiveint", "unsignedint"];
-                if fhir_integer_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
-                    return Ok(true);
-                }
+            #[cfg(feature = "R4B")]
+            if helios_fhir::r4b::type_hierarchy::is_subtype_of(value_type, target_type) {
+                return Ok(true);
             }
-            
-            // FHIR Quantity subtypes/profiles that should match FHIR.Quantity
-            if target_type.eq_ignore_ascii_case("quantity") {
-                let fhir_quantity_subtypes = ["quantity", "age", "distance", "duration", "count"];
-                if fhir_quantity_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
-                    return Ok(true);
-                }
+            #[cfg(feature = "R5")]
+            if helios_fhir::r5::type_hierarchy::is_subtype_of(value_type, target_type) {
+                return Ok(true);
+            }
+            #[cfg(feature = "R6")]
+            if helios_fhir::r6::type_hierarchy::is_subtype_of(value_type, target_type) {
+                return Ok(true);
             }
         }
     }
@@ -829,32 +820,34 @@ fn check_type_match(
     if target_namespace.is_none() {
         if let Some(ns) = value_namespace {
             if ns.eq_ignore_ascii_case("FHIR") {
-                // FHIR string subtypes that should match unqualified "string"
-                if target_type.eq_ignore_ascii_case("string") {
-                    let fhir_string_subtypes = [
-                        "string", "code", "id", "uri", "url", "canonical", 
-                        "markdown", "uuid", "oid", "base64binary"
-                    ];
-                    if fhir_string_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
+                // Use generated type hierarchy for FHIR subtypes
+                #[cfg(feature = "R4")]
+                if helios_fhir::r4::type_hierarchy::is_subtype_of(value_type, target_type) {
+                    if target_type.eq_ignore_ascii_case("string") {
                         eprintln!("Matched FHIR string subtype: {} -> string", value_type);
-                        return Ok(true);
                     }
+                    return Ok(true);
                 }
-                
-                // FHIR integer subtypes that should match unqualified "integer"
-                if target_type.eq_ignore_ascii_case("integer") {
-                    let fhir_integer_subtypes = ["integer", "positiveint", "unsignedint"];
-                    if fhir_integer_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
-                        return Ok(true);
+                #[cfg(feature = "R4B")]
+                if helios_fhir::r4b::type_hierarchy::is_subtype_of(value_type, target_type) {
+                    if target_type.eq_ignore_ascii_case("string") {
+                        eprintln!("Matched FHIR string subtype: {} -> string", value_type);
                     }
+                    return Ok(true);
                 }
-                
-                // FHIR Quantity subtypes that should match unqualified "quantity"
-                if target_type.eq_ignore_ascii_case("quantity") {
-                    let fhir_quantity_subtypes = ["quantity", "age", "distance", "duration", "count"];
-                    if fhir_quantity_subtypes.iter().any(|&t| t.eq_ignore_ascii_case(value_type)) {
-                        return Ok(true);
+                #[cfg(feature = "R5")]
+                if helios_fhir::r5::type_hierarchy::is_subtype_of(value_type, target_type) {
+                    if target_type.eq_ignore_ascii_case("string") {
+                        eprintln!("Matched FHIR string subtype: {} -> string", value_type);
                     }
+                    return Ok(true);
+                }
+                #[cfg(feature = "R6")]
+                if helios_fhir::r6::type_hierarchy::is_subtype_of(value_type, target_type) {
+                    if target_type.eq_ignore_ascii_case("string") {
+                        eprintln!("Matched FHIR string subtype: {} -> string", value_type);
+                    }
+                    return Ok(true);
                 }
                 
                 // Other FHIR primitive types should match their unqualified equivalents
@@ -878,8 +871,51 @@ fn check_type_match(
     
     // For Quantity types and their subtypes, we need to allow cross-namespace matching
     // because FHIR.Age should match System.Quantity
-    let allow_cross_namespace = target_type.eq_ignore_ascii_case("quantity") &&
-        matches!(value_type.to_lowercase().as_str(), "age" | "distance" | "duration" | "count");
+    let allow_cross_namespace = if target_type.eq_ignore_ascii_case("quantity") {
+        #[cfg(feature = "R4")]
+        if helios_fhir::r4::type_hierarchy::is_subtype_of(value_type, "Quantity") {
+            return check_type_match_with_cross_namespace(
+                value_namespace,
+                value_type,
+                target_namespace,
+                target_type,
+                true,
+            );
+        }
+        #[cfg(feature = "R4B")]
+        if helios_fhir::r4b::type_hierarchy::is_subtype_of(value_type, "Quantity") {
+            return check_type_match_with_cross_namespace(
+                value_namespace,
+                value_type,
+                target_namespace,
+                target_type,
+                true,
+            );
+        }
+        #[cfg(feature = "R5")]
+        if helios_fhir::r5::type_hierarchy::is_subtype_of(value_type, "Quantity") {
+            return check_type_match_with_cross_namespace(
+                value_namespace,
+                value_type,
+                target_namespace,
+                target_type,
+                true,
+            );
+        }
+        #[cfg(feature = "R6")]
+        if helios_fhir::r6::type_hierarchy::is_subtype_of(value_type, "Quantity") {
+            return check_type_match_with_cross_namespace(
+                value_namespace,
+                value_type,
+                target_namespace,
+                target_type,
+                true,
+            );
+        }
+        false
+    } else {
+        false
+    };
     
     check_type_match_with_cross_namespace(
         value_namespace,
@@ -901,14 +937,29 @@ fn check_type_match_with_cross_namespace(
     // Case-insensitive type name comparison
     let type_matches = value_type.eq_ignore_ascii_case(target_type);
     
-    // Check FHIR type hierarchy
-    let type_hierarchy_matches = match (value_type.to_lowercase().as_str(), target_type.to_lowercase().as_str()) {
-        // uuid is a subtype of uri (only when both are FHIR namespace)
-        ("uuid", "uri") if value_namespace.as_deref() == Some("FHIR") && target_namespace.as_deref() == Some("FHIR") => true,
-        // Quantity subtypes match Quantity (cross-namespace allowed with allow_cross_namespace flag)
-        ("age" | "distance" | "duration" | "count", "quantity") if allow_cross_namespace || 
-            (value_namespace.as_deref() == target_namespace.as_deref()) => true,
-        _ => false,
+    // Check FHIR type hierarchy using generated hierarchy
+    let type_hierarchy_matches = if allow_cross_namespace || 
+        (value_namespace.as_deref() == target_namespace.as_deref() && 
+         value_namespace.as_deref() == Some("FHIR")) {
+        #[cfg(feature = "R4")]
+        if helios_fhir::r4::type_hierarchy::is_subtype_of(value_type, target_type) {
+            return Ok(true);
+        }
+        #[cfg(feature = "R4B")]
+        if helios_fhir::r4b::type_hierarchy::is_subtype_of(value_type, target_type) {
+            return Ok(true);
+        }
+        #[cfg(feature = "R5")]
+        if helios_fhir::r5::type_hierarchy::is_subtype_of(value_type, target_type) {
+            return Ok(true);
+        }
+        #[cfg(feature = "R6")]
+        if helios_fhir::r6::type_hierarchy::is_subtype_of(value_type, target_type) {
+            return Ok(true);
+        }
+        false
+    } else {
+        false
     };
     
     let type_or_hierarchy_matches = type_matches || type_hierarchy_matches;

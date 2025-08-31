@@ -93,18 +93,41 @@ fn process_single_version(version: &FhirVersion, output_path: impl AsRef<Path>) 
         "use helios_fhir_macro::{FhirPath, FhirSerde};\nuse serde::{Deserialize, Serialize};\n\nuse crate::{DecimalElement, Element};\n\n",
     )?;
 
-    // Process all JSON files in the resources/{FhirVersion} directory
-    visit_dirs(&version_dir)?
+    // Collect all type hierarchy information across all bundles
+    let mut global_type_hierarchy = std::collections::HashMap::new();
+    let mut all_resources = Vec::new();
+    let mut all_complex_types = Vec::new();
+
+    // First pass: collect all bundles and extract global information
+    let bundles: Vec<_> = visit_dirs(&version_dir)?
         .into_iter()
-        .try_for_each::<_, io::Result<()>>(|file_path| {
+        .filter_map(|file_path| {
             match parse_structure_definitions(&file_path) {
-                Ok(bundle) => generate_code(bundle, &version_path)?,
+                Ok(bundle) => Some(bundle),
                 Err(e) => {
-                    eprintln!("Warning: Failed to parse {}: {}", file_path.display(), e)
+                    eprintln!("Warning: Failed to parse {}: {}", file_path.display(), e);
+                    None
                 }
             }
-            Ok(())
-        })?;
+        })
+        .collect();
+
+    // Extract global information from all bundles
+    for bundle in &bundles {
+        if let Some((hierarchy, resources, complex_types)) = extract_bundle_info(bundle) {
+            global_type_hierarchy.extend(hierarchy);
+            all_resources.extend(resources);
+            all_complex_types.extend(complex_types);
+        }
+    }
+
+    // Second pass: generate code for each bundle
+    for bundle in bundles {
+        generate_code(bundle, &version_path, false)?; // false = don't generate global constructs
+    }
+
+    // Generate global constructs once at the end
+    generate_global_constructs(&version_path, &global_type_hierarchy, &all_resources, &all_complex_types)?;
 
     Ok(())
 }
@@ -291,6 +314,124 @@ fn is_primitive_type(def: &StructureDefinition) -> bool {
     def.kind == "primitive-type"
 }
 
+/// Extracts type hierarchy and resource information from a bundle
+fn extract_bundle_info(bundle: &Bundle) -> Option<(
+    std::collections::HashMap<String, String>,
+    Vec<String>,
+    Vec<String>
+)> {
+    let mut type_hierarchy = std::collections::HashMap::new();
+    let mut resources = Vec::new();
+    let mut complex_types = Vec::new();
+
+    if let Some(entries) = bundle.entry.as_ref() {
+        for entry in entries {
+            if let Some(resource) = &entry.resource {
+                if let Resource::StructureDefinition(def) = resource {
+                    if is_valid_structure_definition(def) {
+                        // Extract type hierarchy from baseDefinition
+                        if let Some(base_def) = &def.base_definition {
+                            if let Some(parent) = base_def.split('/').last() {
+                                type_hierarchy.insert(def.name.clone(), parent.to_string());
+                            }
+                        }
+                        
+                        if def.kind == "resource" && !def.r#abstract {
+                            resources.push(def.name.clone());
+                        } else if def.kind == "complex-type" && !def.r#abstract {
+                            complex_types.push(def.name.clone());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Some((type_hierarchy, resources, complex_types))
+}
+
+/// Generates global constructs (Resource enum, type hierarchy, etc.) once at the end
+fn generate_global_constructs(
+    output_path: impl AsRef<Path>,
+    type_hierarchy: &std::collections::HashMap<String, String>,
+    all_resources: &[String],
+    all_complex_types: &[String],
+) -> io::Result<()> {
+    let mut file = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(output_path.as_ref())?;
+
+    // Generate the Resource enum
+    if !all_resources.is_empty() {
+        let resource_enum = generate_resource_enum(all_resources.to_vec());
+        write!(file, "{}", resource_enum)?;
+        
+        // Add From<T> implementations for base types
+        writeln!(
+            file,
+            "// --- From<T> Implementations for Element<T, Extension> ---"
+        )?;
+        writeln!(file, "impl From<bool> for Element<bool, Extension> {{")?;
+        writeln!(file, "    fn from(value: bool) -> Self {{")?;
+        writeln!(file, "        Self {{")?;
+        writeln!(file, "            value: Some(value),")?;
+        writeln!(file, "            ..Default::default()")?;
+        writeln!(file, "        }}")?;
+        writeln!(file, "    }}")?;
+        writeln!(file, "}}")?;
+
+        writeln!(
+            file,
+            "impl From<std::primitive::i32> for Element<std::primitive::i32, Extension> {{"
+        )?;
+        writeln!(file, "    fn from(value: std::primitive::i32) -> Self {{")?;
+        writeln!(file, "        Self {{")?;
+        writeln!(file, "            value: Some(value),")?;
+        writeln!(file, "            ..Default::default()")?;
+        writeln!(file, "        }}")?;
+        writeln!(file, "    }}")?;
+        writeln!(file, "}}")?;
+
+        writeln!(
+            file,
+            "impl From<std::string::String> for Element<std::string::String, Extension> {{"
+        )?;
+        writeln!(file, "    fn from(value: std::string::String) -> Self {{")?;
+        writeln!(file, "        Self {{")?;
+        writeln!(file, "            value: Some(value),")?;
+        writeln!(file, "            ..Default::default()")?;
+        writeln!(file, "        }}")?;
+        writeln!(file, "    }}")?;
+        writeln!(file, "}}")?;
+        writeln!(file, "// --- End From<T> Implementations ---")?;
+    }
+    
+    // Generate type hierarchy module
+    if !type_hierarchy.is_empty() {
+        let type_hierarchy_module = generate_type_hierarchy_module(type_hierarchy);
+        write!(file, "{}", type_hierarchy_module)?;
+    }
+    
+    // Generate ComplexTypes struct and FhirComplexTypeProvider implementation
+    if !all_complex_types.is_empty() {
+        writeln!(file, "\n// --- Complex Types Provider ---")?;
+        writeln!(file, "/// Marker struct for complex type information")?;
+        writeln!(file, "pub struct ComplexTypes;")?;
+        writeln!(file, "\nimpl crate::FhirComplexTypeProvider for ComplexTypes {{")?;
+        writeln!(file, "    fn get_complex_type_names() -> Vec<&'static str> {{")?;
+        writeln!(file, "        vec![")?;
+        for complex_type in all_complex_types {
+            writeln!(file, "            \"{}\",", complex_type)?;
+        }
+        writeln!(file, "        ]")?;
+        writeln!(file, "    }}")?;
+        writeln!(file, "}}")?;
+    }
+
+    Ok(())
+}
+
 /// Generates Rust code from a Bundle of FHIR StructureDefinitions.
 ///
 /// This is the main code generation function that processes all StructureDefinitions
@@ -318,12 +459,9 @@ fn is_primitive_type(def: &StructureDefinition) -> bool {
 /// - A Resource enum containing all resource types
 /// - From<T> implementations for primitive type conversions
 /// - Proper derive macros for serialization and FHIR-specific functionality
-fn generate_code(bundle: Bundle, output_path: impl AsRef<Path>) -> io::Result<()> {
+fn generate_code(bundle: Bundle, output_path: impl AsRef<Path>, generate_globals: bool) -> io::Result<()> {
     // First collect all ElementDefinitions across all StructureDefinitions
-    // Also collect all Resource names and Complex Type names
     let mut all_elements = Vec::new();
-    let mut all_resources = Vec::new();
-    let mut all_complex_types = Vec::new();
 
     if let Some(entries) = bundle.entry.as_ref() {
         // First pass: collect all elements
@@ -335,11 +473,6 @@ fn generate_code(bundle: Bundle, output_path: impl AsRef<Path>) -> io::Result<()
                             if let Some(elements) = &snapshot.element {
                                 all_elements.extend(elements.iter());
                             }
-                        }
-                        if def.kind == "resource" && !def.r#abstract {
-                            all_resources.push(&def.name);
-                        } else if def.kind == "complex-type" && !def.r#abstract {
-                            all_complex_types.push(&def.name);
                         }
                     }
                 }
@@ -373,76 +506,6 @@ fn generate_code(bundle: Bundle, output_path: impl AsRef<Path>) -> io::Result<()
                     _ => {} // Skip other resource types for now
                 }
             }
-        }
-
-        // Finally, generate the Resource enum
-        if !all_resources.is_empty() {
-            let resource_enum =
-                generate_resource_enum(all_resources.iter().map(|s| s.to_string()).collect());
-            let mut file = std::fs::OpenOptions::new()
-                .create(true)
-                .append(true)
-                .open(output_path.as_ref())?;
-            write!(file, "{}", resource_enum)?;
-            
-            // Add From<T> implementations for base types ONCE after all types are defined
-            writeln!(
-                file,
-                "// --- From<T> Implementations for Element<T, Extension> ---"
-            )?;
-            writeln!(file, "impl From<bool> for Element<bool, Extension> {{")?;
-            writeln!(file, "    fn from(value: bool) -> Self {{")?;
-            writeln!(file, "        Self {{")?;
-            writeln!(file, "            value: Some(value),")?;
-            writeln!(file, "            ..Default::default()")?;
-            writeln!(file, "        }}")?;
-            writeln!(file, "    }}")?;
-            writeln!(file, "}}")?;
-
-            writeln!(
-                file,
-                "impl From<std::primitive::i32> for Element<std::primitive::i32, Extension> {{"
-            )?;
-            writeln!(file, "    fn from(value: std::primitive::i32) -> Self {{")?;
-            writeln!(file, "        Self {{")?;
-            writeln!(file, "            value: Some(value),")?;
-            writeln!(file, "            ..Default::default()")?;
-            writeln!(file, "        }}")?;
-            writeln!(file, "    }}")?;
-            writeln!(file, "}}")?;
-
-            writeln!(
-                file,
-                "impl From<std::string::String> for Element<std::string::String, Extension> {{"
-            )?;
-            writeln!(file, "    fn from(value: std::string::String) -> Self {{")?;
-            writeln!(file, "        Self {{")?;
-            writeln!(file, "            value: Some(value),")?;
-            writeln!(file, "            ..Default::default()")?;
-            writeln!(file, "        }}")?;
-            writeln!(file, "    }}")?;
-            writeln!(file, "}}")?;
-            writeln!(file, "// --- End From<T> Implementations ---")?;
-        }
-        
-        // Generate ComplexTypes struct and FhirComplexTypeProvider implementation
-        if !all_complex_types.is_empty() {
-            let mut file = std::fs::OpenOptions::new()
-                .create(true)
-                .append(true)
-                .open(output_path.as_ref())?;
-            writeln!(file, "\n// --- Complex Types Provider ---")?;
-            writeln!(file, "/// Marker struct for complex type information")?;
-            writeln!(file, "pub struct ComplexTypes;")?;
-            writeln!(file, "\nimpl crate::FhirComplexTypeProvider for ComplexTypes {{")?;
-            writeln!(file, "    fn get_complex_type_names() -> Vec<&'static str> {{")?;
-            writeln!(file, "        vec![")?;
-            for complex_type in &all_complex_types {
-                writeln!(file, "            \"{}\",", complex_type)?;
-            }
-            writeln!(file, "        ]")?;
-            writeln!(file, "    }}")?;
-            writeln!(file, "}}")?;
         }
     }
 
@@ -479,6 +542,87 @@ fn generate_resource_enum(resources: Vec<String>) -> String {
         output.push_str(&format!("    {}({}),\n", resource, resource));
     }
 
+    output.push_str("}\n\n");
+    output
+}
+
+/// Generates a module containing type hierarchy information extracted from FHIR specifications.
+///
+/// This function creates a module with functions to query type relationships at runtime,
+/// allowing the code to understand FHIR type inheritance without hard-coding.
+///
+/// # Arguments
+///
+/// * `type_hierarchy` - HashMap mapping type names to their parent types
+///
+/// # Returns
+///
+/// Returns a string containing the type hierarchy module definition.
+fn generate_type_hierarchy_module(type_hierarchy: &std::collections::HashMap<String, String>) -> String {
+    let mut output = String::new();
+    
+    output.push_str("\n// --- Type Hierarchy Module ---\n");
+    output.push_str("/// Type hierarchy information extracted from FHIR specifications\n");
+    output.push_str("pub mod type_hierarchy {\n");
+    output.push_str("    use std::collections::HashMap;\n");
+    output.push_str("    use std::sync::OnceLock;\n\n");
+    
+    // Generate the static HashMap
+    output.push_str("    /// Maps FHIR type names to their parent types\n");
+    output.push_str("    static TYPE_PARENTS: OnceLock<HashMap<&'static str, &'static str>> = OnceLock::new();\n\n");
+    
+    output.push_str("    fn get_type_parents() -> &'static HashMap<&'static str, &'static str> {\n");
+    output.push_str("        TYPE_PARENTS.get_or_init(|| {\n");
+    output.push_str("            let mut m = HashMap::new();\n");
+    
+    // Sort entries for consistent output
+    let mut sorted_entries: Vec<_> = type_hierarchy.iter().collect();
+    sorted_entries.sort_by_key(|(k, _)| k.as_str());
+    
+    for (child, parent) in sorted_entries {
+        output.push_str(&format!("            m.insert(\"{}\", \"{}\");\n", child, parent));
+    }
+    
+    output.push_str("            m\n");
+    output.push_str("        })\n");
+    output.push_str("    }\n\n");
+    
+    // Generate helper functions
+    output.push_str("    /// Checks if a type is a subtype of another type\n");
+    output.push_str("    pub fn is_subtype_of(child: &str, parent: &str) -> bool {\n");
+    output.push_str("        // Direct match\n");
+    output.push_str("        if child.eq_ignore_ascii_case(parent) {\n");
+    output.push_str("            return true;\n");
+    output.push_str("        }\n\n");
+    output.push_str("        // Walk up the type hierarchy\n");
+    output.push_str("        let mut current = child;\n");
+    output.push_str("        while let Some(&parent_type) = get_type_parents().get(current) {\n");
+    output.push_str("            if parent_type.eq_ignore_ascii_case(parent) {\n");
+    output.push_str("                return true;\n");
+    output.push_str("            }\n");
+    output.push_str("            current = parent_type;\n");
+    output.push_str("        }\n");
+    output.push_str("        false\n");
+    output.push_str("    }\n\n");
+    
+    output.push_str("    /// Gets the parent type of a given type\n");
+    output.push_str("    pub fn get_parent_type(type_name: &str) -> Option<&'static str> {\n");
+    output.push_str("        get_type_parents().get(type_name).copied()\n");
+    output.push_str("    }\n\n");
+    
+    output.push_str("    /// Gets all subtypes of a given parent type\n");
+    output.push_str("    pub fn get_subtypes(parent: &str) -> Vec<&'static str> {\n");
+    output.push_str("        get_type_parents().iter()\n");
+    output.push_str("            .filter_map(|(child, p)| {\n");
+    output.push_str("                if p.eq_ignore_ascii_case(parent) {\n");
+    output.push_str("                    Some(*child)\n");
+    output.push_str("                } else {\n");
+    output.push_str("                    None\n");
+    output.push_str("                }\n");
+    output.push_str("            })\n");
+    output.push_str("            .collect()\n");
+    output.push_str("    }\n");
+    
     output.push_str("}\n\n");
     output
 }
