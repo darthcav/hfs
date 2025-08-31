@@ -1,6 +1,6 @@
 
 [FHIR]
-FhirVersion=6.0.0-ballot2
-version=6.0.0-ballot2
-buildId=v5.0.0-3437-g579625d95a
-date=20250808212411
+FhirVersion=6.0.0-ballot3
+version=6.0.0-ballot3
+buildId=v5.0.0-3744-gf0e900e6f6
+date=20250828211018

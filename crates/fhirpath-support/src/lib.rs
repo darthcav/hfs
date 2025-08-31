@@ -1038,14 +1038,17 @@ impl EvaluationResult {
         // Default to R5 behavior for backward compatibility
         self.to_boolean_for_logic_with_r4_compat(false)
     }
-    
+
     /// Converts this evaluation result to its boolean representation for logical operations
     /// with R4 compatibility mode for integer handling
-    /// 
+    ///
     /// # Arguments
     /// * `r4_compat` - If true, uses R4 semantics where 0 is false and non-zero is true.
     ///                 If false, uses R5+ semantics where all integers are truthy.
-    pub fn to_boolean_for_logic_with_r4_compat(&self, r4_compat: bool) -> Result<EvaluationResult, EvaluationError> {
+    pub fn to_boolean_for_logic_with_r4_compat(
+        &self,
+        r4_compat: bool,
+    ) -> Result<EvaluationResult, EvaluationError> {
         match self {
             EvaluationResult::Boolean(b, type_info) => {
                 Ok(EvaluationResult::Boolean(*b, type_info.clone()))
@@ -1313,14 +1316,27 @@ fn format_unit_for_display(unit: &str) -> String {
     // FHIRPath spec formatting for units in toString():
     // - Calendar word units (week, day, etc.): displayed without quotes
     // - UCUM code units ('wk', 'mg', etc.): displayed with quotes
-    
+
     // Calendar word units that don't need quotes
     const CALENDAR_WORDS: &[&str] = &[
-        "year", "years", "month", "months", "week", "weeks",
-        "day", "days", "hour", "hours", "minute", "minutes",
-        "second", "seconds", "millisecond", "milliseconds"
+        "year",
+        "years",
+        "month",
+        "months",
+        "week",
+        "weeks",
+        "day",
+        "days",
+        "hour",
+        "hours",
+        "minute",
+        "minutes",
+        "second",
+        "seconds",
+        "millisecond",
+        "milliseconds",
     ];
-    
+
     if CALENDAR_WORDS.contains(&unit) {
         // Calendar word units: display without quotes (R5 behavior, likely correct)
         unit.to_string()

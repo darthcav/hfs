@@ -122,7 +122,7 @@ mod tests {
         let zero = EvaluationResult::integer(0);
         let result = not_function(&zero, &context_r5).unwrap();
         assert_eq!(result, EvaluationResult::boolean(false)); // In R5, 0 is truthy
-        
+
         // In R4, integers have C-like semantics: 0 is false, non-zero is true
         let context_r4 = EvaluationContext::new_empty(FhirVersion::R4);
         let integer = EvaluationResult::integer(42);

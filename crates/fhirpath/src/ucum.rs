@@ -3,10 +3,8 @@
 //! This module provides integration with the octofhir-ucum crate for handling
 //! UCUM (Unified Code for Units of Measure) operations in FHIRPath expressions.
 
-use octofhir_ucum::{
-    analyse, is_comparable, unit_divide, unit_multiply, validate,
-};
-use octofhir_ucum::fhir::{convert_quantity, FhirError, FhirQuantity};
+use octofhir_ucum::fhir::{FhirError, FhirQuantity, convert_quantity};
+use octofhir_ucum::{analyse, is_comparable, unit_divide, unit_multiply, validate};
 use rust_decimal::Decimal;
 use std::str::FromStr;
 
@@ -25,32 +23,30 @@ pub fn convert_units(value: Decimal, from_unit: &str, to_unit: &str) -> Result<D
     // Normalize calendar units to UCUM format
     let ucum_from = calendar_to_ucum_unit(from_unit);
     let ucum_to = calendar_to_ucum_unit(to_unit);
-    
+
     // Convert Decimal to f64 more safely
-    let value_f64 = value.to_string().parse::<f64>()
+    let value_f64 = value
+        .to_string()
+        .parse::<f64>()
         .map_err(|e| format!("Failed to convert value to f64: {}", e))?;
-    
+
     // Create a FhirQuantity with the source value and unit
     let source_quantity = FhirQuantity::with_ucum_code(value_f64, &ucum_from);
-    
+
     // Convert to the target unit
     match convert_quantity(&source_quantity, &ucum_to) {
         Ok(converted) => {
             // Round to avoid floating point precision issues
             // Use 10 decimal places which should be sufficient for UCUM conversions
             let rounded_value = (converted.value * 1e10).round() / 1e10;
-            
+
             // Convert to Decimal
             Decimal::try_from(rounded_value)
                 .or_else(|_| Decimal::from_str(&format!("{:.10}", rounded_value)))
                 .map_err(|e| format!("Failed to convert result to Decimal: {}", e))
         }
-        Err(FhirError::UcumError(e)) => {
-            Err(format!("UCUM conversion error: {}", e))
-        }
-        Err(e) => {
-            Err(format!("Conversion error: {}", e))
-        }
+        Err(FhirError::UcumError(e)) => Err(format!("UCUM conversion error: {}", e)),
+        Err(e) => Err(format!("Conversion error: {}", e)),
     }
 }
 
@@ -72,21 +68,25 @@ pub fn quantities_are_equivalent(
     // Normalize calendar units to UCUM format
     let ucum_unit1 = calendar_to_ucum_unit(unit1);
     let ucum_unit2 = calendar_to_ucum_unit(unit2);
-    
+
     // Convert Decimals to f64
-    let value1_f64 = value1.to_string().parse::<f64>()
+    let value1_f64 = value1
+        .to_string()
+        .parse::<f64>()
         .map_err(|e| format!("Failed to convert value1 to f64: {}", e))?;
-    let value2_f64 = value2.to_string().parse::<f64>()
+    let value2_f64 = value2
+        .to_string()
+        .parse::<f64>()
         .map_err(|e| format!("Failed to convert value2 to f64: {}", e))?;
-    
+
     let _q1 = FhirQuantity::with_ucum_code(value1_f64, &ucum_unit1);
     let q2 = FhirQuantity::with_ucum_code(value2_f64, &ucum_unit2);
-    
+
     // Check if units are comparable first
     if !is_comparable(&ucum_unit1, &ucum_unit2).unwrap_or(false) {
         return Ok(false);
     }
-    
+
     // Convert both to a common unit for comparison
     // If units are the same, no conversion needed
     if ucum_unit1 == ucum_unit2 {
@@ -95,7 +95,7 @@ pub fn quantities_are_equivalent(
         let diff = (value1_f64 - value2_f64).abs();
         return Ok(diff <= tolerance);
     }
-    
+
     // Convert q2 to q1's unit for comparison
     match convert_quantity(&q2, &ucum_unit1) {
         Ok(converted) => {
@@ -106,7 +106,7 @@ pub fn quantities_are_equivalent(
             let diff = (value1_f64 - converted.value).abs();
             Ok(diff <= tolerance)
         }
-        Err(_) => Ok(false)
+        Err(_) => Ok(false),
     }
 }
 
@@ -115,7 +115,7 @@ pub fn multiply_units(unit1: &str, unit2: &str) -> Result<String, String> {
     // Normalize calendar units to UCUM format
     let ucum_unit1 = calendar_to_ucum_unit(unit1);
     let ucum_unit2 = calendar_to_ucum_unit(unit2);
-    
+
     match unit_multiply(&ucum_unit1, &ucum_unit2) {
         Ok(result) => Ok(result.expression),
         Err(e) => Err(format!("Unit multiplication error: {}", e)),
@@ -127,7 +127,7 @@ pub fn divide_units(numerator: &str, denominator: &str) -> Result<String, String
     // Normalize calendar units to UCUM format
     let ucum_numerator = calendar_to_ucum_unit(numerator);
     let ucum_denominator = calendar_to_ucum_unit(denominator);
-    
+
     match unit_divide(&ucum_numerator, &ucum_denominator) {
         Ok(result) => Ok(result.expression),
         Err(e) => Err(format!("Unit division error: {}", e)),
@@ -149,7 +149,7 @@ pub fn get_canonical_unit(unit: &str) -> Result<String, String> {
 pub fn normalize_unit_string(unit: &str) -> String {
     // Remove unnecessary braces that may be added during processing
     let cleaned = unit.trim_start_matches('{').trim_end_matches('}');
-    
+
     // Map common calendar units to their canonical UCUM forms if needed
     match cleaned {
         "days" => "d".to_string(),
@@ -207,10 +207,29 @@ pub fn ucum_to_calendar_unit(unit: &str) -> String {
 pub fn is_time_unit(unit: &str) -> bool {
     matches!(
         unit,
-        "a" | "mo" | "wk" | "d" | "h" | "min" | "s" | "ms" |
-        "year" | "years" | "month" | "months" | "week" | "weeks" |
-        "day" | "days" | "hour" | "hours" | "minute" | "minutes" |
-        "second" | "seconds" | "millisecond" | "milliseconds"
+        "a" | "mo"
+            | "wk"
+            | "d"
+            | "h"
+            | "min"
+            | "s"
+            | "ms"
+            | "year"
+            | "years"
+            | "month"
+            | "months"
+            | "week"
+            | "weeks"
+            | "day"
+            | "days"
+            | "hour"
+            | "hours"
+            | "minute"
+            | "minutes"
+            | "second"
+            | "seconds"
+            | "millisecond"
+            | "milliseconds"
     )
 }
 
