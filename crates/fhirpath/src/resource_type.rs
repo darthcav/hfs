@@ -1951,7 +1951,8 @@ mod tests {
         }
 
         // Create type specifiers with exact case matching the resourceType property
-        let patient_type = TypeSpecifier::QualifiedIdentifier("Patient".to_string(), None);
+        // Since Patient is a FHIR resource, we need to specify the FHIR namespace
+        let patient_type = TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Patient".to_string()));
 
         // Print the type specifier for debugging
         eprintln!("Patient type: {:?}", patient_type);
@@ -1963,7 +1964,7 @@ mod tests {
         assert!(is_result.unwrap());
 
         // Create the rest of the type specifiers
-        let obs_type = TypeSpecifier::QualifiedIdentifier("Observation".to_string(), None);
+        let obs_type = TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Observation".to_string()));
         let fhir_patient_type =
             TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Patient".to_string()));
 
@@ -1972,7 +1973,7 @@ mod tests {
 
         // Test with different casing (should still work with case-insensitive comparison)
         let patient_type_lowercase =
-            TypeSpecifier::QualifiedIdentifier("patient".to_string(), None);
+            TypeSpecifier::QualifiedIdentifier("fhir".to_string(), Some("patient".to_string()));
         assert!(is_of_type(&patient, &patient_type_lowercase).unwrap());
 
         // Test incorrect matches
@@ -1989,8 +1990,8 @@ mod tests {
 
         // Create type specifiers with exact case matching the resourceType property
         let bool_type = TypeSpecifier::QualifiedIdentifier("Boolean".to_string(), None);
-        let patient_type = TypeSpecifier::QualifiedIdentifier("Patient".to_string(), None);
-        let obs_type = TypeSpecifier::QualifiedIdentifier("Observation".to_string(), None);
+        let patient_type = TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Patient".to_string()));
+        let obs_type = TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Observation".to_string()));
 
         // Test correct casts
         assert_eq!(as_type(&bool_val, &bool_type).unwrap(), bool_val);
@@ -1999,7 +2000,7 @@ mod tests {
 
         // Test with different casing (should still work)
         let patient_type_lowercase =
-            TypeSpecifier::QualifiedIdentifier("patient".to_string(), None);
+            TypeSpecifier::QualifiedIdentifier("fhir".to_string(), Some("patient".to_string()));
         assert_eq!(as_type(&patient, &patient_type_lowercase).unwrap(), patient);
 
         // Test incorrect casts

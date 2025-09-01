@@ -85,11 +85,11 @@ fn create_patient_context() -> EvaluationContext {
 
     // Set as context - both the patient and the _birthDate object for different tests
     ctx.set_this(EvaluationResult::object(patient_obj));
-    ctx.set_variable_result("_birthDate", EvaluationResult::object(underscore_birthdate));
+    ctx.set_variable_result("%_birthDate", EvaluationResult::object(underscore_birthdate));
 
     // Add a variable for the extension URL
     ctx.set_variable(
-        "ext-patient-birthTime",
+        "%ext-patient-birthTime",
         "http://hl7.org/fhir/StructureDefinition/patient-birthTime".to_string(),
     );
 

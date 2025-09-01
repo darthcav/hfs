@@ -51,7 +51,7 @@ fn test_low_boundary_time_integration() {
 
     // Test time 12:34 -> 12:34:00.000
     let result = evaluate_expression("@T12:34.lowBoundary()", &context).unwrap();
-    assert_eq!(result, EvaluationResult::time("12:34:00.000".to_string()));
+    assert_eq!(result, EvaluationResult::time("@T12:34:00.000".to_string()));
 }
 
 #[test]
@@ -60,7 +60,7 @@ fn test_high_boundary_time_integration() {
 
     // Test time 12:34 -> 12:34:59.999
     let result = evaluate_expression("@T12:34.highBoundary()", &context).unwrap();
-    assert_eq!(result, EvaluationResult::time("12:34:59.999".to_string()));
+    assert_eq!(result, EvaluationResult::time("@T12:34:59.999".to_string()));
 }
 
 #[test]

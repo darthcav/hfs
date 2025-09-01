@@ -2664,6 +2664,18 @@ fn generate_fhirpath_enum_impl(
                     } else if fhir_field_name.ends_with("String") {
                         // Special case for FHIR string primitives - use lowercase
                         "string".to_string()
+                    } else if fhir_field_name.ends_with("Instant") {
+                        // Special case for FHIR instant primitives - use lowercase
+                        "instant".to_string()
+                    } else if fhir_field_name.ends_with("DateTime") {
+                        // Special case for FHIR dateTime primitives - use lowercase
+                        "dateTime".to_string()
+                    } else if fhir_field_name.ends_with("Date") {
+                        // Special case for FHIR date primitives - use lowercase
+                        "date".to_string()
+                    } else if fhir_field_name.ends_with("Time") {
+                        // Special case for FHIR time primitives - use lowercase
+                        "time".to_string()
                     } else {
                         // Fallback to variant name if it doesn't match known patterns
                         // Convert first character to lowercase for consistency with FHIR primitive naming
@@ -2675,7 +2687,50 @@ fn generate_fhirpath_enum_impl(
                     };
                     // For choice type enums that will be flattened, we need to return an object
                     // with the polymorphic field name as the key
-                    let is_choice_type_enum = name.to_string().contains("Value");
+                    // A choice type enum is one where variants have rename attributes with type suffixes
+                    // e.g., "deceasedBoolean", "valueString", etc.
+                    let is_choice_type_enum = fhir_field_name != variant_name_str && 
+                        (fhir_field_name.ends_with("Boolean") || 
+                         fhir_field_name.ends_with("String") ||
+                         fhir_field_name.ends_with("Integer") ||
+                         fhir_field_name.ends_with("Decimal") ||
+                         fhir_field_name.ends_with("DateTime") ||
+                         fhir_field_name.ends_with("Date") ||
+                         fhir_field_name.ends_with("Time") ||
+                         fhir_field_name.ends_with("Instant") ||
+                         fhir_field_name.ends_with("Period") ||
+                         fhir_field_name.ends_with("Quantity") ||
+                         fhir_field_name.ends_with("Range") ||
+                         fhir_field_name.ends_with("Ratio") ||
+                         fhir_field_name.ends_with("Reference") ||
+                         fhir_field_name.ends_with("CodeableConcept") ||
+                         fhir_field_name.ends_with("Coding") ||
+                         fhir_field_name.ends_with("Identifier") ||
+                         fhir_field_name.ends_with("Age") ||
+                         fhir_field_name.ends_with("Annotation") ||
+                         fhir_field_name.ends_with("Attachment") ||
+                         fhir_field_name.ends_with("Duration") ||
+                         fhir_field_name.ends_with("HumanName") ||
+                         fhir_field_name.ends_with("Address") ||
+                         fhir_field_name.ends_with("ContactPoint") ||
+                         fhir_field_name.ends_with("SampledData") ||
+                         fhir_field_name.ends_with("Money") ||
+                         fhir_field_name.ends_with("Count") ||
+                         fhir_field_name.ends_with("Distance") ||
+                         fhir_field_name.ends_with("Timing") ||
+                         fhir_field_name.ends_with("Meta") ||
+                         fhir_field_name.ends_with("PositiveInt") ||
+                         fhir_field_name.ends_with("UnsignedInt") ||
+                         fhir_field_name.ends_with("Code") ||
+                         fhir_field_name.ends_with("Markdown") ||
+                         fhir_field_name.ends_with("Base64Binary") ||
+                         fhir_field_name.ends_with("Uri") ||
+                         fhir_field_name.ends_with("Url") ||
+                         fhir_field_name.ends_with("Canonical") ||
+                         fhir_field_name.ends_with("Uuid") ||
+                         fhir_field_name.ends_with("Oid") ||
+                         fhir_field_name.ends_with("Id") ||
+                         name.to_string().contains("Value")); // Keep the original check as fallback
 
                     if is_choice_type_enum {
                         quote! {
@@ -2683,10 +2738,11 @@ fn generate_fhirpath_enum_impl(
                                 // Get the base evaluation result from the inner value
                                 let mut result = value.to_evaluation_result();
                                 // Add FHIR type information to preserve type for .ofType() operations
-                                // Only override type info if it's not already set correctly
+                                // For choice type enums, always use the type determined from the field name
                                 result = match result {
-                                    helios_fhirpath_support::EvaluationResult::String(s, existing_type_info) => {
-                                        let type_info = existing_type_info.unwrap_or_else(|| helios_fhirpath_support::TypeInfoResult::new("FHIR", &#fhir_type));
+                                    helios_fhirpath_support::EvaluationResult::String(s, _existing_type_info) => {
+                                        // Always use the determined type from the field name for choice types
+                                        let type_info = helios_fhirpath_support::TypeInfoResult::new("FHIR", &#fhir_type);
                                         helios_fhirpath_support::EvaluationResult::String(s, Some(type_info))
                                     },
                                     helios_fhirpath_support::EvaluationResult::Integer(i, existing_type_info) => {
@@ -2726,10 +2782,11 @@ fn generate_fhirpath_enum_impl(
                                 // Get the base evaluation result from the inner value
                                 let mut result = value.to_evaluation_result();
                                 // Add FHIR type information to preserve type for .ofType() operations
-                                // Only override type info if it's not already set correctly
+                                // For choice type enums, always use the type determined from the field name
                                 result = match result {
-                                    helios_fhirpath_support::EvaluationResult::String(s, existing_type_info) => {
-                                        let type_info = existing_type_info.unwrap_or_else(|| helios_fhirpath_support::TypeInfoResult::new("FHIR", &#fhir_type));
+                                    helios_fhirpath_support::EvaluationResult::String(s, _existing_type_info) => {
+                                        // Always use the determined type from the field name for choice types
+                                        let type_info = helios_fhirpath_support::TypeInfoResult::new("FHIR", &#fhir_type);
                                         helios_fhirpath_support::EvaluationResult::String(s, Some(type_info))
                                     },
                                     helios_fhirpath_support::EvaluationResult::Integer(i, existing_type_info) => {

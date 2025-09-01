@@ -22,6 +22,7 @@
 use crate::SofError;
 use helios_fhir::FhirResource;
 use helios_fhirpath::EvaluationResult;
+use helios_fhirpath_support::TypeInfoResult;
 
 /// Trait for abstracting ViewDefinition across FHIR versions.
 ///
@@ -468,10 +469,24 @@ mod r4_impl {
                         EvaluationResult::Date(d.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::DateTime(dt) => {
-                        EvaluationResult::DateTime(dt.value.clone().unwrap_or_default(), None)
+                        let value = dt.value.clone().unwrap_or_default();
+                        // Ensure DateTime values have the "@" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@") {
+                            value
+                        } else {
+                            format!("@{}", value)
+                        };
+                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "dateTime")))
                     }
                     ViewDefinitionConstantValue::Time(t) => {
-                        EvaluationResult::Time(t.value.clone().unwrap_or_default(), None)
+                        let value = t.value.clone().unwrap_or_default();
+                        // Ensure Time values have the "@T" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@T") {
+                            value
+                        } else {
+                            format!("@T{}", value)
+                        };
+                        EvaluationResult::Time(prefixed, None)
                     }
                     ViewDefinitionConstantValue::Code(c) => {
                         EvaluationResult::String(c.value.clone().unwrap_or_default(), None)
@@ -483,7 +498,14 @@ mod r4_impl {
                         EvaluationResult::String(i.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::Instant(i) => {
-                        EvaluationResult::DateTime(i.value.clone().unwrap_or_default(), None)
+                        let value = i.value.clone().unwrap_or_default();
+                        // Ensure Instant values have the "@" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@") {
+                            value
+                        } else {
+                            format!("@{}", value)
+                        };
+                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "instant")))
                     }
                     ViewDefinitionConstantValue::Oid(o) => {
                         EvaluationResult::String(o.value.clone().unwrap_or_default(), None)
@@ -659,10 +681,24 @@ mod r4b_impl {
                         EvaluationResult::Date(d.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::DateTime(dt) => {
-                        EvaluationResult::DateTime(dt.value.clone().unwrap_or_default(), None)
+                        let value = dt.value.clone().unwrap_or_default();
+                        // Ensure DateTime values have the "@" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@") {
+                            value
+                        } else {
+                            format!("@{}", value)
+                        };
+                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "dateTime")))
                     }
                     ViewDefinitionConstantValue::Time(t) => {
-                        EvaluationResult::Time(t.value.clone().unwrap_or_default(), None)
+                        let value = t.value.clone().unwrap_or_default();
+                        // Ensure Time values have the "@T" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@T") {
+                            value
+                        } else {
+                            format!("@T{}", value)
+                        };
+                        EvaluationResult::Time(prefixed, None)
                     }
                     ViewDefinitionConstantValue::Code(c) => {
                         EvaluationResult::String(c.value.clone().unwrap_or_default(), None)
@@ -674,7 +710,14 @@ mod r4b_impl {
                         EvaluationResult::String(i.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::Instant(i) => {
-                        EvaluationResult::DateTime(i.value.clone().unwrap_or_default(), None)
+                        let value = i.value.clone().unwrap_or_default();
+                        // Ensure Instant values have the "@" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@") {
+                            value
+                        } else {
+                            format!("@{}", value)
+                        };
+                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "instant")))
                     }
                     ViewDefinitionConstantValue::Oid(o) => {
                         EvaluationResult::String(o.value.clone().unwrap_or_default(), None)
@@ -852,10 +895,24 @@ mod r5_impl {
                         EvaluationResult::Date(d.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::DateTime(dt) => {
-                        EvaluationResult::DateTime(dt.value.clone().unwrap_or_default(), None)
+                        let value = dt.value.clone().unwrap_or_default();
+                        // Ensure DateTime values have the "@" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@") {
+                            value
+                        } else {
+                            format!("@{}", value)
+                        };
+                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "dateTime")))
                     }
                     ViewDefinitionConstantValue::Time(t) => {
-                        EvaluationResult::Time(t.value.clone().unwrap_or_default(), None)
+                        let value = t.value.clone().unwrap_or_default();
+                        // Ensure Time values have the "@T" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@T") {
+                            value
+                        } else {
+                            format!("@T{}", value)
+                        };
+                        EvaluationResult::Time(prefixed, None)
                     }
                     ViewDefinitionConstantValue::Code(c) => {
                         EvaluationResult::String(c.value.clone().unwrap_or_default(), None)
@@ -867,7 +924,14 @@ mod r5_impl {
                         EvaluationResult::String(i.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::Instant(i) => {
-                        EvaluationResult::DateTime(i.value.clone().unwrap_or_default(), None)
+                        let value = i.value.clone().unwrap_or_default();
+                        // Ensure Instant values have the "@" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@") {
+                            value
+                        } else {
+                            format!("@{}", value)
+                        };
+                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "instant")))
                     }
                     ViewDefinitionConstantValue::Oid(o) => {
                         EvaluationResult::String(o.value.clone().unwrap_or_default(), None)
@@ -1053,10 +1117,24 @@ mod r6_impl {
                         EvaluationResult::Date(d.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::DateTime(dt) => {
-                        EvaluationResult::DateTime(dt.value.clone().unwrap_or_default(), None)
+                        let value = dt.value.clone().unwrap_or_default();
+                        // Ensure DateTime values have the "@" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@") {
+                            value
+                        } else {
+                            format!("@{}", value)
+                        };
+                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "dateTime")))
                     }
                     ViewDefinitionConstantValue::Time(t) => {
-                        EvaluationResult::Time(t.value.clone().unwrap_or_default(), None)
+                        let value = t.value.clone().unwrap_or_default();
+                        // Ensure Time values have the "@T" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@T") {
+                            value
+                        } else {
+                            format!("@T{}", value)
+                        };
+                        EvaluationResult::Time(prefixed, None)
                     }
                     ViewDefinitionConstantValue::Code(c) => {
                         EvaluationResult::String(c.value.clone().unwrap_or_default(), None)
@@ -1068,7 +1146,14 @@ mod r6_impl {
                         EvaluationResult::String(i.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::Instant(i) => {
-                        EvaluationResult::DateTime(i.value.clone().unwrap_or_default(), None)
+                        let value = i.value.clone().unwrap_or_default();
+                        // Ensure Instant values have the "@" prefix for FHIRPath
+                        let prefixed = if value.starts_with("@") {
+                            value
+                        } else {
+                            format!("@{}", value)
+                        };
+                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "instant")))
                     }
                     ViewDefinitionConstantValue::Oid(o) => {
                         EvaluationResult::String(o.value.clone().unwrap_or_default(), None)

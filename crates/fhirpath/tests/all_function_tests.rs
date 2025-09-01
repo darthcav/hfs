@@ -255,7 +255,7 @@ fn test_all_with_variable_references() {
 
     let mut context = EvaluationContext::new_empty_with_default_version();
     context.set_this(collection.clone());
-    context.set_variable_result("threshold", EvaluationResult::integer(7));
+    context.set_variable_result("%threshold", EvaluationResult::integer(7));
 
     // Test: all values are greater than the threshold variable
     let expr_str = "$this.all($this > %threshold)";
@@ -266,7 +266,7 @@ fn test_all_with_variable_references() {
 
     // Test with more complex variable use and path navigation
     context.set_variable_result(
-        "limits",
+        "%limits",
         EvaluationResult::Collection {
             items: vec![EvaluationResult::integer(4), EvaluationResult::integer(12)],
             has_undefined_order: false,

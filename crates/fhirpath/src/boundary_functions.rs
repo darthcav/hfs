@@ -883,7 +883,7 @@ mod tests {
         // Test time with minute precision
         let time_val = EvaluationResult::time("12:34".to_string());
         let result = low_boundary_function(&time_val, &[]).unwrap();
-        assert_eq!(result, EvaluationResult::time("12:34:00.000".to_string()));
+        assert_eq!(result, EvaluationResult::time("@T12:34:00.000".to_string()));
     }
 
     #[test]
@@ -891,7 +891,7 @@ mod tests {
         // Test time with minute precision
         let time_val = EvaluationResult::time("12:34".to_string());
         let result = high_boundary_function(&time_val, &[]).unwrap();
-        assert_eq!(result, EvaluationResult::time("12:34:59.999".to_string()));
+        assert_eq!(result, EvaluationResult::time("@T12:34:59.999".to_string()));
     }
 
     #[test]

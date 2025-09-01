@@ -310,7 +310,13 @@ fn load_variables_from_file(context: &mut EvaluationContext, path: &PathBuf) -> 
     let variables: HashMap<String, Value> = serde_json::from_str(&content)?;
 
     for (key, value) in variables {
-        set_variable_from_json(context, &key, &value)?;
+        // Add % prefix if not already present
+        let var_name = if key.starts_with('%') {
+            key
+        } else {
+            format!("%{}", key)
+        };
+        set_variable_from_json(context, &var_name, &value)?;
     }
 
     Ok(())
@@ -318,12 +324,19 @@ fn load_variables_from_file(context: &mut EvaluationContext, path: &PathBuf) -> 
 
 /// Set a variable from string value
 fn set_variable(context: &mut EvaluationContext, key: &str, value: &str) -> FhirPathResult<()> {
+    // Add % prefix if not already present
+    let var_name = if key.starts_with('%') {
+        key.to_string()
+    } else {
+        format!("%{}", key)
+    };
+    
     // Try to parse as JSON first
     if let Ok(json_value) = serde_json::from_str::<Value>(value) {
-        set_variable_from_json(context, key, &json_value)?;
+        set_variable_from_json(context, &var_name, &json_value)?;
     } else {
         // Treat as string
-        context.set_variable_result(key, EvaluationResult::string(value.to_string()));
+        context.set_variable_result(&var_name, EvaluationResult::string(value.to_string()));
     }
     Ok(())
 }
@@ -537,6 +550,9 @@ mod tests {
         args.variables = Some(vars_path);
 
         let result = run_cli(args);
+        if let Err(e) = &result {
+            eprintln!("test_variables_from_file error: {:?}", e);
+        }
         assert!(result.is_ok());
     }
 
@@ -550,6 +566,9 @@ mod tests {
         args.var = vec![("myVar".to_string(), "test-value".to_string())];
 
         let result = run_cli(args);
+        if let Err(e) = &result {
+            eprintln!("test_inline_variables error: {:?}", e);
+        }
         assert!(result.is_ok());
     }
 

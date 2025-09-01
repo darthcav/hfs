@@ -268,8 +268,12 @@ fn convert_fhir_field_to_fhirpath_type(value: &EvaluationResult, suffix: &str) -
                     EvaluationResult::time(s.clone())
                 }
                 "Instant" => {
-                    // Convert string to DateTime for instant (which is a datetime with required timezone)
-                    EvaluationResult::datetime(s.clone())
+                    // Convert string to Instant type (which is a datetime with required timezone)
+                    // Use DateTime with instant type info
+                    EvaluationResult::DateTime(
+                        s.clone(),
+                        Some(helios_fhirpath_support::TypeInfoResult::new("FHIR", "instant"))
+                    )
                 }
                 "Code" => {
                     // Convert string to code type
@@ -366,7 +370,7 @@ pub fn is_choice_element(field_name: &str) -> bool {
     }
 
     // List of common FHIR choice elements, can be expanded
-    const CHOICE_ELEMENTS: [&str; 30] = [
+    const CHOICE_ELEMENTS: [&str; 32] = [
         // Common FHIR Choice Elements
         "value",
         "component",
@@ -398,6 +402,8 @@ pub fn is_choice_element(field_name: &str) -> bool {
         "response",
         "requisition",
         "content",
+        "deceased",
+        "identified",
     ];
 
     // In case this is a field with a [x] suffix, we should strip that off

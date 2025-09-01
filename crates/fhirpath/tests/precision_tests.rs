@@ -78,8 +78,8 @@ fn test_precision_datetime_milliseconds() {
     match result {
         EvaluationResult::Integer(value, _) => {
             assert_eq!(
-                value, 23,
-                "@2014-01-05T10:30:00.000 should have precision 23"
+                value, 17,
+                "@2014-01-05T10:30:00.000 should have precision 17"
             );
         }
         _ => panic!("Expected Integer result, got {:?}", result),
@@ -95,8 +95,8 @@ fn test_precision_time_minutes() {
     match result {
         EvaluationResult::Integer(value, _) => {
             assert_eq!(
-                value, 5,
-                "@T10:30 should have precision 5 (length of '10:30')"
+                value, 4,
+                "@T10:30 should have precision 4"
             );
         }
         _ => panic!("Expected Integer result, got {:?}", result),
@@ -112,8 +112,8 @@ fn test_precision_time_milliseconds() {
     match result {
         EvaluationResult::Integer(value, _) => {
             assert_eq!(
-                value, 12,
-                "@T10:30:00.000 should have precision 12 (length of '10:30:00.000')"
+                value, 9,
+                "@T10:30:00.000 should have precision 9"
             );
         }
         _ => panic!("Expected Integer result, got {:?}", result),

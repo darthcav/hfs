@@ -22,12 +22,12 @@ fn test_datetime_with_time_boundary() {
     let result = evaluate_expression("@2010-10-10T12:30.lowBoundary()", &context).unwrap();
     assert_eq!(
         result,
-        EvaluationResult::datetime("2010-10-10T12:30:00.000+14:00".to_string())
+        EvaluationResult::datetime("@2010-10-10T12:30:00.000+14:00".to_string())
     );
 
     let result = evaluate_expression("@2010-10-10T12:30.highBoundary()", &context).unwrap();
     assert_eq!(
         result,
-        EvaluationResult::datetime("2010-10-10T12:30:59.999-12:00".to_string())
+        EvaluationResult::datetime("@2010-10-10T12:30:59.999-12:00".to_string())
     );
 }

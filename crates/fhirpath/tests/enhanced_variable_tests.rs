@@ -20,17 +20,17 @@ fn test_enhanced_variable_handling() {
     let mut context = EvaluationContext::new_empty_with_default_version();
 
     // Set variables with different types using the new API
-    context.set_variable_result("intVar", EvaluationResult::integer(42));
+    context.set_variable_result("%intVar", EvaluationResult::integer(42));
     context.set_variable_result(
-        "decimalVar",
+        "%decimalVar",
         EvaluationResult::decimal(Decimal::from_f32(3.25).unwrap()),
     );
-    context.set_variable_result("boolVar", EvaluationResult::boolean(true));
-    context.set_variable_result("stringVar", EvaluationResult::string("Hello".to_string()));
+    context.set_variable_result("%boolVar", EvaluationResult::boolean(true));
+    context.set_variable_result("%stringVar", EvaluationResult::string("Hello".to_string()));
 
     // Create a collection variable
     context.set_variable_result(
-        "collectionVar",
+        "%collectionVar",
         EvaluationResult::Collection {
             items: vec![
                 EvaluationResult::integer(1),
@@ -53,7 +53,7 @@ fn test_enhanced_variable_handling() {
         EvaluationResult::string("Doe".to_string()),
     );
     obj.insert("age".to_string(), EvaluationResult::integer(30));
-    context.set_variable_result("personVar", EvaluationResult::object(obj));
+    context.set_variable_result("%personVar", EvaluationResult::object(obj));
 
     // Test accessing variables of different types
     assert_eq!(
@@ -117,7 +117,7 @@ fn test_enhanced_variable_handling() {
     );
 
     // Test backward compatibility with string variables
-    context.set_variable("oldStyleVar", "42".to_string());
+    context.set_variable("%oldStyleVar", "42".to_string());
 
     // Should be auto-converted to number in numeric context
     assert_eq!(
@@ -131,12 +131,12 @@ fn test_variable_coercion() {
     let mut context = EvaluationContext::new_empty_with_default_version();
 
     // Set variables with different types
-    context.set_variable_result("intVar", EvaluationResult::integer(42));
+    context.set_variable_result("%intVar", EvaluationResult::integer(42));
     context.set_variable_result(
-        "decimalVar",
+        "%decimalVar",
         EvaluationResult::decimal(Decimal::from_f32(3.25).unwrap()),
     );
-    context.set_variable_result("boolVar", EvaluationResult::boolean(true));
+    context.set_variable_result("%boolVar", EvaluationResult::boolean(true));
 
     // Test type conversion functions on variables
     assert_eq!(
@@ -185,7 +185,7 @@ fn test_variable_error_handling() {
     // Test evaluating a variable that doesn't support the operation
     let mut context = EvaluationContext::new_empty_with_default_version();
     context.set_variable_result(
-        "stringVar",
+        "%stringVar",
         EvaluationResult::string("not a number".to_string()),
     );
 

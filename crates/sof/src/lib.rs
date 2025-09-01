@@ -1000,7 +1000,8 @@ fn extract_view_definition_constants<VD: ViewDefinitionTrait>(
                 .to_string();
 
             let eval_result = constant.to_evaluation_result()?;
-            variables.insert(name, eval_result);
+            // Constants are referenced with % prefix in FHIRPath expressions
+            variables.insert(format!("%{}", name), eval_result);
         }
     }
 
@@ -1378,8 +1379,16 @@ fn fhirpath_result_to_json_value(result: EvaluationResult) -> Option<serde_json:
         }
         EvaluationResult::String(s, _) => Some(serde_json::Value::String(s)),
         EvaluationResult::Date(s, _) => Some(serde_json::Value::String(s)),
-        EvaluationResult::DateTime(s, _) => Some(serde_json::Value::String(s)),
-        EvaluationResult::Time(s, _) => Some(serde_json::Value::String(s)),
+        EvaluationResult::DateTime(s, _) => {
+            // Remove "@" prefix from datetime strings if present
+            let cleaned = s.strip_prefix("@").unwrap_or(&s);
+            Some(serde_json::Value::String(cleaned.to_string()))
+        }
+        EvaluationResult::Time(s, _) => {
+            // Remove "@T" prefix from time strings if present
+            let cleaned = s.strip_prefix("@T").unwrap_or(&s);
+            Some(serde_json::Value::String(cleaned.to_string()))
+        }
         EvaluationResult::Collection { items, .. } => {
             if items.len() == 1 {
                 // Single item collection - unwrap to the item itself

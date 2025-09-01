@@ -38,8 +38,8 @@ mod tests {
 
     #[test]
     fn test_define_variable_not_accessible() {
-        // This test documents current limitation: variables defined by defineVariable
-        // are not accessible in subsequent operations
+        // This test verifies that variables defined by defineVariable
+        // ARE accessible in subsequent operations
 
         // Test 1: When defineVariable is called on a non-empty collection
         let expr = "'test'.defineVariable('v1', 'value1').select(%v1)";
@@ -48,29 +48,24 @@ mod tests {
         let context = EvaluationContext::new_empty(FhirVersion::R4);
         let result = evaluate(&parsed, &context, None);
 
-        // This should error with undefined variable since select() tries to access %v1
+        // The variable should be accessible and return its value
         assert!(
-            result.is_err(),
-            "Expected error when accessing undefined variable"
+            result.is_ok(),
+            "Should successfully access the defined variable"
         );
-        assert!(
-            result
-                .unwrap_err()
-                .to_string()
-                .contains("Undefined Variable: %v1")
-        );
+        assert_eq!(result.unwrap(), EvaluationResult::string("value1".to_string()));
 
         // Test 2: When defineVariable is called with empty input
         let expr2 = "defineVariable('v1', 'value1').select(%v1)";
         let parsed2 = parser().parse(expr2).unwrap();
         let result2 = evaluate(&parsed2, &context, None);
 
-        // With empty input, defineVariable returns Empty, and select() on Empty returns Empty
+        // The variable is accessible even when defineVariable is called with empty input
         assert!(
             result2.is_ok(),
-            "Should not error when select is called on Empty"
+            "Should successfully access the defined variable"
         );
-        assert_eq!(result2.unwrap(), EvaluationResult::Empty);
+        assert_eq!(result2.unwrap(), EvaluationResult::string("value1".to_string()));
     }
 
     #[test]
