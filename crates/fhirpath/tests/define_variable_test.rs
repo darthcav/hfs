@@ -53,7 +53,10 @@ mod tests {
             result.is_ok(),
             "Should successfully access the defined variable"
         );
-        assert_eq!(result.unwrap(), EvaluationResult::string("value1".to_string()));
+        assert_eq!(
+            result.unwrap(),
+            EvaluationResult::string("value1".to_string())
+        );
 
         // Test 2: When defineVariable is called with empty input
         let expr2 = "defineVariable('v1', 'value1').select(%v1)";
@@ -65,7 +68,10 @@ mod tests {
             result2.is_ok(),
             "Should successfully access the defined variable"
         );
-        assert_eq!(result2.unwrap(), EvaluationResult::string("value1".to_string()));
+        assert_eq!(
+            result2.unwrap(),
+            EvaluationResult::string("value1".to_string())
+        );
     }
 
     #[test]

@@ -330,7 +330,7 @@ fn set_variable(context: &mut EvaluationContext, key: &str, value: &str) -> Fhir
     } else {
         format!("%{}", key)
     };
-    
+
     // Try to parse as JSON first
     if let Ok(json_value) = serde_json::from_str::<Value>(value) {
         set_variable_from_json(context, &var_name, &json_value)?;

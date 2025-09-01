@@ -2305,7 +2305,7 @@ fn generate_deserialize_impl(data: &Data, name: &Ident) -> proc_macro2::TokenStr
 /// - `None` values in `Option<T>` fields
 /// - Empty collections
 /// - Objects with no meaningful content
-#[proc_macro_derive(FhirPath, attributes(fhir_serde))]
+#[proc_macro_derive(FhirPath, attributes(fhir_serde, fhir_choice_element, fhir_resource))]
 pub fn fhir_path_derive(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let name = &input.ident;
@@ -2313,12 +2313,22 @@ pub fn fhir_path_derive(input: TokenStream) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
 
     let trait_impl = match &input.data {
-        Data::Struct(data) => {
-            generate_fhirpath_struct_impl(name, data, &impl_generics, &ty_generics, where_clause)
-        }
-        Data::Enum(data) => {
-            generate_fhirpath_enum_impl(name, data, &impl_generics, &ty_generics, where_clause)
-        }
+        Data::Struct(data) => generate_fhirpath_struct_impl(
+            name,
+            data,
+            &input.attrs,
+            &impl_generics,
+            &ty_generics,
+            where_clause,
+        ),
+        Data::Enum(data) => generate_fhirpath_enum_impl(
+            name,
+            data,
+            &input.attrs,
+            &impl_generics,
+            &ty_generics,
+            where_clause,
+        ),
         Data::Union(_) => panic!("FhirPath derive macro does not support unions."),
     };
 
@@ -2387,6 +2397,7 @@ fn get_fhirpath_field_name(field: &syn::Field) -> String {
 fn generate_fhirpath_struct_impl(
     name: &Ident,
     data: &syn::DataStruct,
+    attrs: &[syn::Attribute],
     impl_generics: &syn::ImplGenerics,
     ty_generics: &syn::TypeGenerics,
     where_clause: Option<&syn::WhereClause>,
@@ -2522,7 +2533,7 @@ fn generate_fhirpath_struct_impl(
     // For now, we'll use the struct name as the type name
     let type_name_str = name.to_string();
 
-    quote! {
+    let into_evaluation_result_impl = quote! {
         impl #impl_generics helios_fhirpath_support::IntoEvaluationResult for #name #ty_generics #where_clause {
             fn to_evaluation_result(&self) -> helios_fhirpath_support::EvaluationResult {
                 // Use fully qualified path for HashMap
@@ -2538,12 +2549,33 @@ fn generate_fhirpath_struct_impl(
                 )
             }
         }
+    };
+
+    // Check if this struct has the fhir_resource attribute with choice_elements
+    if let Some(choice_elements) = extract_resource_choice_elements(attrs) {
+        let choice_element_literals: Vec<_> = choice_elements
+            .iter()
+            .map(|elem| quote! { #elem })
+            .collect();
+
+        quote! {
+            #into_evaluation_result_impl
+
+            impl #impl_generics helios_fhirpath_support::FhirResourceMetadata for #name #ty_generics #where_clause {
+                fn choice_elements() -> &'static [&'static str] {
+                    &[#(#choice_element_literals),*]
+                }
+            }
+        }
+    } else {
+        into_evaluation_result_impl
     }
 }
 
 fn generate_fhirpath_enum_impl(
     name: &Ident,
     data: &syn::DataEnum,
+    attrs: &[syn::Attribute],
     impl_generics: &syn::ImplGenerics,
     ty_generics: &syn::TypeGenerics,
     where_clause: Option<&syn::WhereClause>,
@@ -2689,48 +2721,8 @@ fn generate_fhirpath_enum_impl(
                     // with the polymorphic field name as the key
                     // A choice type enum is one where variants have rename attributes with type suffixes
                     // e.g., "deceasedBoolean", "valueString", etc.
-                    let is_choice_type_enum = fhir_field_name != variant_name_str && 
-                        (fhir_field_name.ends_with("Boolean") || 
-                         fhir_field_name.ends_with("String") ||
-                         fhir_field_name.ends_with("Integer") ||
-                         fhir_field_name.ends_with("Decimal") ||
-                         fhir_field_name.ends_with("DateTime") ||
-                         fhir_field_name.ends_with("Date") ||
-                         fhir_field_name.ends_with("Time") ||
-                         fhir_field_name.ends_with("Instant") ||
-                         fhir_field_name.ends_with("Period") ||
-                         fhir_field_name.ends_with("Quantity") ||
-                         fhir_field_name.ends_with("Range") ||
-                         fhir_field_name.ends_with("Ratio") ||
-                         fhir_field_name.ends_with("Reference") ||
-                         fhir_field_name.ends_with("CodeableConcept") ||
-                         fhir_field_name.ends_with("Coding") ||
-                         fhir_field_name.ends_with("Identifier") ||
-                         fhir_field_name.ends_with("Age") ||
-                         fhir_field_name.ends_with("Annotation") ||
-                         fhir_field_name.ends_with("Attachment") ||
-                         fhir_field_name.ends_with("Duration") ||
-                         fhir_field_name.ends_with("HumanName") ||
-                         fhir_field_name.ends_with("Address") ||
-                         fhir_field_name.ends_with("ContactPoint") ||
-                         fhir_field_name.ends_with("SampledData") ||
-                         fhir_field_name.ends_with("Money") ||
-                         fhir_field_name.ends_with("Count") ||
-                         fhir_field_name.ends_with("Distance") ||
-                         fhir_field_name.ends_with("Timing") ||
-                         fhir_field_name.ends_with("Meta") ||
-                         fhir_field_name.ends_with("PositiveInt") ||
-                         fhir_field_name.ends_with("UnsignedInt") ||
-                         fhir_field_name.ends_with("Code") ||
-                         fhir_field_name.ends_with("Markdown") ||
-                         fhir_field_name.ends_with("Base64Binary") ||
-                         fhir_field_name.ends_with("Uri") ||
-                         fhir_field_name.ends_with("Url") ||
-                         fhir_field_name.ends_with("Canonical") ||
-                         fhir_field_name.ends_with("Uuid") ||
-                         fhir_field_name.ends_with("Oid") ||
-                         fhir_field_name.ends_with("Id") ||
-                         name.to_string().contains("Value")); // Keep the original check as fallback
+                    let is_choice_type_enum = fhir_field_name != variant_name_str &&
+                        extract_type_suffix_from_field_name(&fhir_field_name).is_some();
 
                     if is_choice_type_enum {
                         quote! {
@@ -2938,7 +2930,50 @@ fn generate_fhirpath_enum_impl(
             }
         }
     } else {
-        into_evaluation_result_impl
+        // Check if this is a choice element enum
+        if let Some(base_name) = extract_choice_element_base_name(attrs) {
+            // Extract possible field names from the enum variants
+            let field_names: Vec<String> = data.variants.iter().filter_map(|variant| {
+                // Look for the fhir_serde(rename = "...") attribute
+                for attr in &variant.attrs {
+                    if attr.path().is_ident("fhir_serde") {
+                        if let Ok(list) = attr.parse_args_with(syn::punctuated::Punctuated::<syn::Meta, syn::token::Comma>::parse_terminated) {
+                            for meta in list {
+                                if let syn::Meta::NameValue(nv) = meta {
+                                    if nv.path.is_ident("rename") {
+                                        if let syn::Expr::Lit(expr_lit) = nv.value {
+                                            if let syn::Lit::Str(lit_str) = expr_lit.lit {
+                                                return Some(lit_str.value());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                None
+            }).collect();
+
+            let field_name_literals: Vec<_> =
+                field_names.iter().map(|name| quote! { #name }).collect();
+
+            quote! {
+                #into_evaluation_result_impl
+
+                impl #impl_generics helios_fhirpath_support::ChoiceElement for #name #ty_generics #where_clause {
+                    fn base_name() -> &'static str {
+                        #base_name
+                    }
+
+                    fn possible_field_names() -> Vec<&'static str> {
+                        vec![#(#field_name_literals),*]
+                    }
+                }
+            }
+        } else {
+            into_evaluation_result_impl
+        }
     }
 }
 
@@ -3026,6 +3061,100 @@ fn extract_type_info_attributes(attrs: &[syn::Attribute], type_name: &Ident) -> 
 
     // Default: Assume FHIR namespace and use the type name
     ("\"FHIR\"".to_string(), format!("\"{}\"", type_name))
+}
+
+/// Extracts the FHIR type suffix from a choice element field name using pattern matching.
+/// For example, "valueQuantity" -> Some(("value", "Quantity")), "valueString" -> Some(("value", "String"))
+fn extract_type_suffix_from_field_name(field_name: &str) -> Option<(&str, &str)> {
+    let chars: Vec<char> = field_name.chars().collect();
+
+    // Look for the pattern: lowercase...Uppercase...
+    // This indicates the transition from base name to type name
+    let mut transition_index = None;
+
+    for i in 1..chars.len() {
+        if chars[i - 1].is_lowercase() && chars[i].is_uppercase() {
+            transition_index = Some(i);
+            break;
+        }
+    }
+
+    if let Some(idx) = transition_index {
+        let base_name = &field_name[..idx];
+        let type_suffix = &field_name[idx..];
+
+        // Validate that this looks like a valid FHIR type suffix:
+        // - Starts with uppercase letter
+        // - Has at least 2 characters (to avoid false positives like "valueA")
+        // - Contains only alphanumeric characters (and potentially numbers at the end like Integer64)
+        if type_suffix.len() >= 2
+            && type_suffix
+                .chars()
+                .next()
+                .is_some_and(|c| c.is_uppercase())
+            && type_suffix.chars().all(|c| c.is_alphanumeric())
+            && !base_name.is_empty()
+        {
+            return Some((base_name, type_suffix));
+        }
+    }
+
+    None
+}
+
+/// Extracts the base name from fhir_choice_element attribute if present.
+fn extract_choice_element_base_name(attrs: &[syn::Attribute]) -> Option<String> {
+    for attr in attrs {
+        if attr.path().is_ident("fhir_choice_element") {
+            if let Ok(list) =
+                attr.parse_args_with(Punctuated::<Meta, token::Comma>::parse_terminated)
+            {
+                for meta in list {
+                    if let Meta::NameValue(nv) = meta {
+                        if nv.path.is_ident("base_name") {
+                            if let syn::Expr::Lit(expr_lit) = nv.value {
+                                if let Lit::Str(lit_str) = expr_lit.lit {
+                                    return Some(lit_str.value());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    None
+}
+
+/// Extracts choice elements from fhir_resource attribute if present.
+fn extract_resource_choice_elements(attrs: &[syn::Attribute]) -> Option<Vec<String>> {
+    for attr in attrs {
+        if attr.path().is_ident("fhir_resource") {
+            if let Ok(list) =
+                attr.parse_args_with(Punctuated::<Meta, token::Comma>::parse_terminated)
+            {
+                for meta in list {
+                    if let Meta::NameValue(nv) = meta {
+                        if nv.path.is_ident("choice_elements") {
+                            if let syn::Expr::Lit(expr_lit) = nv.value {
+                                if let Lit::Str(lit_str) = expr_lit.lit {
+                                    // Split the comma-separated list of choice elements
+                                    let elements: Vec<String> = lit_str
+                                        .value()
+                                        .split(',')
+                                        .map(|s| s.trim().to_string())
+                                        .filter(|s| !s.is_empty())
+                                        .collect();
+                                    return Some(elements);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    None
 }
 
 /// Extracts the FHIR type name from a type path for primitive FHIR types.

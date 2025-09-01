@@ -476,7 +476,10 @@ mod r4_impl {
                         } else {
                             format!("@{}", value)
                         };
-                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "dateTime")))
+                        EvaluationResult::DateTime(
+                            prefixed,
+                            Some(TypeInfoResult::new("FHIR", "dateTime")),
+                        )
                     }
                     ViewDefinitionConstantValue::Time(t) => {
                         let value = t.value.clone().unwrap_or_default();
@@ -505,7 +508,10 @@ mod r4_impl {
                         } else {
                             format!("@{}", value)
                         };
-                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "instant")))
+                        EvaluationResult::DateTime(
+                            prefixed,
+                            Some(TypeInfoResult::new("FHIR", "instant")),
+                        )
                     }
                     ViewDefinitionConstantValue::Oid(o) => {
                         EvaluationResult::String(o.value.clone().unwrap_or_default(), None)
@@ -688,7 +694,10 @@ mod r4b_impl {
                         } else {
                             format!("@{}", value)
                         };
-                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "dateTime")))
+                        EvaluationResult::DateTime(
+                            prefixed,
+                            Some(TypeInfoResult::new("FHIR", "dateTime")),
+                        )
                     }
                     ViewDefinitionConstantValue::Time(t) => {
                         let value = t.value.clone().unwrap_or_default();
@@ -717,7 +726,10 @@ mod r4b_impl {
                         } else {
                             format!("@{}", value)
                         };
-                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "instant")))
+                        EvaluationResult::DateTime(
+                            prefixed,
+                            Some(TypeInfoResult::new("FHIR", "instant")),
+                        )
                     }
                     ViewDefinitionConstantValue::Oid(o) => {
                         EvaluationResult::String(o.value.clone().unwrap_or_default(), None)
@@ -902,7 +914,10 @@ mod r5_impl {
                         } else {
                             format!("@{}", value)
                         };
-                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "dateTime")))
+                        EvaluationResult::DateTime(
+                            prefixed,
+                            Some(TypeInfoResult::new("FHIR", "dateTime")),
+                        )
                     }
                     ViewDefinitionConstantValue::Time(t) => {
                         let value = t.value.clone().unwrap_or_default();
@@ -931,7 +946,10 @@ mod r5_impl {
                         } else {
                             format!("@{}", value)
                         };
-                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "instant")))
+                        EvaluationResult::DateTime(
+                            prefixed,
+                            Some(TypeInfoResult::new("FHIR", "instant")),
+                        )
                     }
                     ViewDefinitionConstantValue::Oid(o) => {
                         EvaluationResult::String(o.value.clone().unwrap_or_default(), None)
@@ -1124,7 +1142,10 @@ mod r6_impl {
                         } else {
                             format!("@{}", value)
                         };
-                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "dateTime")))
+                        EvaluationResult::DateTime(
+                            prefixed,
+                            Some(TypeInfoResult::new("FHIR", "dateTime")),
+                        )
                     }
                     ViewDefinitionConstantValue::Time(t) => {
                         let value = t.value.clone().unwrap_or_default();
@@ -1153,7 +1174,10 @@ mod r6_impl {
                         } else {
                             format!("@{}", value)
                         };
-                        EvaluationResult::DateTime(prefixed, Some(TypeInfoResult::new("FHIR", "instant")))
+                        EvaluationResult::DateTime(
+                            prefixed,
+                            Some(TypeInfoResult::new("FHIR", "instant")),
+                        )
                     }
                     ViewDefinitionConstantValue::Oid(o) => {
                         EvaluationResult::String(o.value.clone().unwrap_or_default(), None)

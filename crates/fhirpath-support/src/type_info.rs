@@ -13,3 +13,15 @@ impl TypeInfoResult {
         }
     }
 }
+
+/// Trait for types that can provide their type information for FHIRPath.
+///
+/// This trait is implemented by FHIR types to provide namespace and name
+/// information used by the FHIRPath type() function and type operations.
+pub trait TypeInfo {
+    /// Returns the namespace for this type (e.g., "FHIR", "System").
+    fn type_namespace() -> &'static str;
+
+    /// Returns the name of this type within its namespace.
+    fn type_name() -> &'static str;
+}

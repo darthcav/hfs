@@ -42,7 +42,63 @@ use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
 
 mod type_info;
-pub use type_info::TypeInfoResult;
+pub use type_info::{TypeInfo, TypeInfoResult};
+
+/// Trait for FHIR choice element types.
+///
+/// This trait is implemented by generated enum types that represent FHIR choice elements
+/// (fields with [x] in the FHIR specification). It provides metadata about the choice
+/// element that enables proper polymorphic access in FHIRPath expressions.
+///
+/// # Example
+///
+/// For a FHIR field like `Observation.value[x]`, the generated enum would implement:
+/// ```rust,ignore
+/// impl ChoiceElement for ObservationValue {
+///     fn base_name() -> &'static str {
+///         "value"
+///     }
+///     
+///     fn possible_field_names() -> Vec<&'static str> {
+///         vec!["valueQuantity", "valueCodeableConcept", "valueString", ...]
+///     }
+/// }
+/// ```
+pub trait ChoiceElement {
+    /// Returns the base name of the choice element without the [x] suffix.
+    ///
+    /// For example, for `value[x]`, this returns "value".
+    fn base_name() -> &'static str;
+
+    /// Returns all possible field names that this choice element can manifest as.
+    ///
+    /// For example, for `value[x]`, this might return:
+    /// ["valueQuantity", "valueCodeableConcept", "valueString", ...]
+    fn possible_field_names() -> Vec<&'static str>;
+}
+
+/// Trait for FHIR resource metadata.
+///
+/// This trait is implemented by generated FHIR resource structs to provide
+/// metadata about the resource's structure, particularly which fields are
+/// choice elements. This enables accurate polymorphic field access in FHIRPath.
+///
+/// # Example
+///
+/// ```rust,ignore
+/// impl FhirResourceMetadata for Observation {
+///     fn choice_elements() -> &'static [&'static str] {
+///         &["value", "effective", "component.value"]
+///     }
+/// }
+/// ```
+pub trait FhirResourceMetadata {
+    /// Returns the names of all choice element fields in this resource.
+    ///
+    /// The returned slice contains the base names (without [x]) of fields
+    /// that are choice elements in the FHIR specification.
+    fn choice_elements() -> &'static [&'static str];
+}
 
 /// Universal conversion trait for transforming values into FHIRPath evaluation results.
 ///

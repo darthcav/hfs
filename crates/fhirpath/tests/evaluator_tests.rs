@@ -2195,7 +2195,10 @@ fn test_function_string_contains() {
         EvaluationResult::Empty
     );
     // Test multi-item collection - base can be collection
-    assert_eq!(eval("('a' | 'b').contains('a')", &context).unwrap(), EvaluationResult::boolean(true));
+    assert_eq!(
+        eval("('a' | 'b').contains('a')", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
     assert!(eval("'abc'.contains(('a' | 'b'))", &context).is_err()); // Arg cannot be collection
 }
 
@@ -3444,8 +3447,14 @@ fn test_operator_math_div() {
         EvaluationResult::integer(-2)
     );
     // Mixed types for div are allowed
-    assert_eq!(eval("5.5 div 2", &context).unwrap(), EvaluationResult::integer(2));
-    assert_eq!(eval("5 div 2.1", &context).unwrap(), EvaluationResult::integer(2));
+    assert_eq!(
+        eval("5.5 div 2", &context).unwrap(),
+        EvaluationResult::integer(2)
+    );
+    assert_eq!(
+        eval("5 div 2.1", &context).unwrap(),
+        EvaluationResult::integer(2)
+    );
     // Divide by zero -> Empty
     assert_eq!(eval("5 div 0", &context).unwrap(), EvaluationResult::Empty);
     assert_eq!(
@@ -3483,8 +3492,14 @@ fn test_operator_math_mod() {
         EvaluationResult::decimal(dec!(-1.3)) // Result has sign of dividend
     );
     // Mixed types for mod are allowed
-    assert_eq!(eval("5.5 mod 2", &context).unwrap(), EvaluationResult::decimal(dec!(1.5)));
-    assert_eq!(eval("5 mod 2.1", &context).unwrap(), EvaluationResult::decimal(dec!(0.8)));
+    assert_eq!(
+        eval("5.5 mod 2", &context).unwrap(),
+        EvaluationResult::decimal(dec!(1.5))
+    );
+    assert_eq!(
+        eval("5 mod 2.1", &context).unwrap(),
+        EvaluationResult::decimal(dec!(0.8))
+    );
     // Modulo zero -> Empty
     assert_eq!(eval("5 mod 0", &context).unwrap(), EvaluationResult::Empty);
     assert_eq!(
@@ -4167,9 +4182,15 @@ fn test_boolean_operations() {
 
     // Test boolean operations with type coercion
     // 'and' operator supports type coercion for integers and strings
-    assert_eq!(eval("1 and true", &context).unwrap(), EvaluationResult::boolean(true));
-    assert_eq!(eval("true and 'a'", &context).unwrap(), EvaluationResult::boolean(true));
-    
+    assert_eq!(
+        eval("1 and true", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
+    assert_eq!(
+        eval("true and 'a'", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
+
     // 'or', 'xor', and 'implies' operators require strict boolean types
     assert!(eval("1 or true", &context).is_err());
     assert!(eval("true or 'a'", &context).is_err());
@@ -4355,7 +4376,10 @@ fn test_string_operations() {
 
     // Test multi-item collection for contains function
     // Base collection can have multiple items
-    assert_eq!(eval("('a' | 'b').contains('a')", &context).unwrap(), EvaluationResult::boolean(true));
+    assert_eq!(
+        eval("('a' | 'b').contains('a')", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
     // Argument must be singleton
     assert!(eval("'abc'.contains(('a' | 'b'))", &context).is_err());
 }
@@ -4400,7 +4424,10 @@ fn test_functions() {
     // Test error cases for functions requiring singletons
     assert!(eval("(1 | 2).length()", &context).is_err());
     // Test contains: base can be collection, it checks if any item contains the arg
-    assert_eq!(eval("('a' | 'b').contains('a')", &context).unwrap(), EvaluationResult::boolean(true));
+    assert_eq!(
+        eval("('a' | 'b').contains('a')", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
     assert!(eval("'abc'.contains(('a' | 'b'))", &context).is_err()); // Arg cannot be collection
 }
 

@@ -117,20 +117,20 @@ pub fn access_polymorphic_element(
         return None;
     }
 
-    // Check if this is a choice element (not a path)
-    if is_choice_element(field_name) {
-        // Get all possible polymorphic fields
-        let matching_fields = get_polymorphic_fields(obj, field_name);
+    // Check if this could be a choice element
+    // Even without metadata, we can try to find polymorphic fields
+    // based on the pattern of fields in the object
+    let matching_fields = get_polymorphic_fields(obj, field_name);
 
+    // If we found any matches, it's likely a choice element
+    if !matching_fields.is_empty() {
         // If we found exactly one match, return it
         if matching_fields.len() == 1 {
             return Some(matching_fields[0].1.clone());
         }
 
         // If we found multiple matches, return the first one
-        if !matching_fields.is_empty() {
-            return Some(matching_fields[0].1.clone());
-        }
+        return Some(matching_fields[0].1.clone());
     }
 
     // No matching field found
@@ -162,73 +162,37 @@ fn get_polymorphic_fields(
         matches.push((base_name.to_string(), value.clone()));
     }
 
-    // Special case for Observation resources with value field
-    if base_name == "value" {
-        // Check if this is an Observation with valueQuantity
-        if obj.get("resourceType") == Some(&EvaluationResult::string("Observation".to_string())) {
-            // Prioritize valueQuantity for Observation resources
-            if let Some(value_quantity) = obj.get("valueQuantity") {
-                // Add at the beginning to prioritize over other matches
-                matches.insert(0, ("valueQuantity".to_string(), value_quantity.clone()));
+    // Look for fields that start with the base name and have a type suffix
+    for (field_name, value) in obj {
+        // Skip if we already have this field
+        if matches.iter().any(|(name, _)| name == field_name) {
+            continue;
+        }
+
+        // Check if this field starts with our base name
+        if field_name.starts_with(base_name) && field_name.len() > base_name.len() {
+            // Check if the character after base name is uppercase (indicating a type suffix)
+            if let Some(c) = field_name.chars().nth(base_name.len()) {
+                if c.is_uppercase() {
+                    // Extract the type suffix
+                    let type_suffix = &field_name[base_name.len()..];
+                    // Convert the value based on the type suffix
+                    let converted_value = convert_fhir_field_to_fhirpath_type(value, type_suffix);
+                    matches.push((field_name.clone(), converted_value));
+                }
             }
         }
     }
 
-    // List of known FHIR datatypes for choice elements
-    let type_suffixes = [
-        "Quantity",
-        "CodeableConcept",
-        "String",
-        "Boolean",
-        "Integer",
-        "Decimal",
-        "Date",
-        "DateTime",
-        "Time",
-        "Period",
-        "Coding",
-        "Attachment",
-        "Identifier",
-        "Reference",
-        "Annotation",
-        "Signature",
-        "HumanName",
-        "Address",
-        "ContactPoint",
-        "Timing",
-        "Range",
-        "Ratio",
-        "SampledData",
-        "Dosage",
-        "Uri",
-        "Url",
-        "Uuid",
-        "Canonical",
-        "Instant",
-        "Markdown",
-        "Oid",
-        "PositiveInt",
-        "UnsignedInt",
-        "Id",
-        "Code",
-        "Base64Binary",
-        "Money",
-        "Duration",
-        "Age",
-        "Distance",
-        "Count",
-        "MoneyQuantity",
-    ];
-
-    // Try each possible type-specific field
-    for suffix in &type_suffixes {
-        let field_with_type = format!("{}{}", base_name, suffix);
-        if let Some(value) = obj.get(&field_with_type) {
-            // Don't add duplicates
-            if !matches.iter().any(|(name, _)| name == &field_with_type) {
-                // Convert the value to the appropriate FHIRPath type based on the suffix
-                let converted_value = convert_fhir_field_to_fhirpath_type(value, suffix);
-                matches.push((field_with_type, converted_value));
+    // Special case for Observation resources with value field
+    // This prioritization helps with common patterns
+    if base_name == "value" && matches.len() > 1 {
+        // Check if this is an Observation
+        if obj.get("resourceType") == Some(&EvaluationResult::string("Observation".to_string())) {
+            // Prioritize valueQuantity for Observation resources if it exists
+            if let Some(idx) = matches.iter().position(|(name, _)| name == "valueQuantity") {
+                let item = matches.remove(idx);
+                matches.insert(0, item);
             }
         }
     }
@@ -272,7 +236,9 @@ fn convert_fhir_field_to_fhirpath_type(value: &EvaluationResult, suffix: &str) -
                     // Use DateTime with instant type info
                     EvaluationResult::DateTime(
                         s.clone(),
-                        Some(helios_fhirpath_support::TypeInfoResult::new("FHIR", "instant"))
+                        Some(helios_fhirpath_support::TypeInfoResult::new(
+                            "FHIR", "instant",
+                        )),
                     )
                 }
                 "Code" => {
@@ -347,70 +313,57 @@ fn convert_fhir_field_to_fhirpath_type(value: &EvaluationResult, suffix: &str) -
 /// assert!(is_choice_element("effective"));
 /// assert!(!is_choice_element("name"));
 /// ```
-pub fn is_choice_element(field_name: &str) -> bool {
-    // In FHIR, choice elements are indicated by [x] in the name
-    // For example, value[x], effective[x], etc.
-    // In JSON, this becomes valueQuantity, valueString, etc.
-    // So for a field like "value", we check if it's likely to be a choice element
-
-    // Exact match for "value" - special case for Observation.value -> valueQuantity
-    if field_name == "value" {
+/// Checks if a field name represents a FHIR choice element.
+///
+/// This function uses context-aware detection to determine if a field
+/// is a choice element. When metadata is available (through FhirResourceMetadata),
+/// it uses that for accurate detection. Otherwise, it falls back to
+/// conservative heuristics.
+///
+/// # Arguments
+/// * `field_name` - The field name to check
+/// * `context_metadata` - Optional slice of known choice element names for the context
+///
+/// # Returns
+/// `true` if the field is a choice element, `false` otherwise
+pub fn is_choice_element_with_context(field_name: &str, context_metadata: Option<&[&str]>) -> bool {
+    // Pattern 1: Field name contains [x] - definitely a choice element
+    if field_name.contains("[x]") {
         return true;
     }
 
-    // Special case: If the field name starts with "value" and contains a camelCase suffix
-    // like "valueQuantity" or "valueString", treat it as a potential match
-    if field_name.starts_with("value") && field_name.len() > 5 {
-        // Check if there's an uppercase letter after "value"
-        if let Some(c) = field_name.chars().nth(5) {
-            if c.is_uppercase() {
-                return true;
+    // If we have metadata, use it for accurate detection
+    if let Some(choice_elements) = context_metadata {
+        // Check if this field name is in the known choice elements
+        if choice_elements.contains(&field_name) {
+            return true;
+        }
+
+        // Also check if this looks like a typed variant of a known choice element
+        // e.g., if "value" is a choice element, then "valueQuantity" is too
+        for base_name in choice_elements {
+            if field_name.starts_with(base_name) && field_name.len() > base_name.len() {
+                // Check if the character after the base name is uppercase
+                if let Some(c) = field_name.chars().nth(base_name.len()) {
+                    if c.is_uppercase() {
+                        return true;
+                    }
+                }
             }
         }
+
+        return false;
     }
 
-    // List of common FHIR choice elements, can be expanded
-    const CHOICE_ELEMENTS: [&str; 32] = [
-        // Common FHIR Choice Elements
-        "value",
-        "component",
-        "effective",
-        "onset",
-        "abatement",
-        "recorded",
-        "asserted",
-        "occurred",
-        "performed",
-        "reported",
-        "issued",
-        "received",
-        "authored",
-        "notGiven",
-        "reason",
-        "diagnosis",
-        "medication",
-        "substance",
-        "modifier",
-        "specimen",
-        "identifier",
-        "category",
-        "type",
-        "target",
-        "entity",
-        "status",
-        "result",
-        "response",
-        "requisition",
-        "content",
-        "deceased",
-        "identified",
-    ];
+    // Without metadata, we can't reliably determine if it's a choice element
+    // Be conservative and return false to avoid false positives
+    false
+}
 
-    // In case this is a field with a [x] suffix, we should strip that off
-    let clean_name = field_name.replace("[x]", "");
-
-    // Check if the clean name (without [x]) is in our list of known choice elements
-    CHOICE_ELEMENTS.contains(&clean_name.as_str())
+/// Convenience function that calls is_choice_element_with_context without metadata.
+/// This is less accurate but maintains backward compatibility.
+pub fn is_choice_element(field_name: &str) -> bool {
+    is_choice_element_with_context(field_name, None)
 }
 
 /// Applies a type-based operation to a value, handling polymorphic choice elements.

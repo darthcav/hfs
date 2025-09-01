@@ -8477,26 +8477,80 @@ fn could_be_typed_polymorphic_field(
         return false;
     }
 
-    // Check if the base name is a known choice element
-    if !crate::polymorphic_access::is_choice_element(&base_name) {
-        return false;
-    }
+    // For strict mode checking, we need to determine if this is a polymorphic field
+    // by examining the object structure and metadata
 
-    // Additional check: see if there are other fields with the same base name
-    // This helps confirm it's a polymorphic field
-    for key in obj.keys() {
-        if key != field_name && key.starts_with(&base_name) && key.len() > base_name.len() {
-            if let Some(c) = key.chars().nth(base_name.len()) {
-                if c.is_uppercase() {
-                    // Found another field with the same base, confirming it's polymorphic
-                    return true;
-                }
-            }
+    // First, check if we have metadata about choice elements
+    // Look for the resourceType to get metadata
+    if let Some(EvaluationResult::String(_resource_type, _)) = obj.get("resourceType") {
+        // Try to get metadata for this resource type
+        // Since we can't directly access the metadata here, we need to use a different approach
+
+        // Check if the base name follows common polymorphic patterns
+        // Common polymorphic fields in FHIR include: value[x], effective[x], onset[x], etc.
+        // In strict mode, we want to be conservative and check if this could be polymorphic
+
+        // Look for evidence that this is a polymorphic field:
+        // 1. The field name has a camelCase pattern with type suffix
+        // 2. There might be other fields with the same base name
+        // 3. The base name is commonly known as polymorphic
+
+        // Check if there are other fields with the same base name
+        let has_other_variants = obj.keys().any(|key| {
+            key != field_name
+                && key.starts_with(&base_name)
+                && key.len() > base_name.len()
+                && key
+                    .chars()
+                    .nth(base_name.len())
+                    .is_some_and(|c| c.is_uppercase())
+        });
+
+        // If we find other variants, it's definitely polymorphic
+        if has_other_variants {
+            return true;
+        }
+
+        // Even without other variants present, check if this looks like a typed polymorphic field
+        // by examining if the suffix is a known FHIR type
+        let suffix = &field_name[base_name.len()..];
+        let known_type_suffixes = [
+            "Quantity",
+            "CodeableConcept",
+            "String",
+            "Boolean",
+            "Integer",
+            "DateTime",
+            "Date",
+            "Time",
+            "Period",
+            "Ratio",
+            "Reference",
+            "SampledData",
+            "Attachment",
+            "Coding",
+            "Identifier",
+            "HumanName",
+            "Address",
+            "ContactPoint",
+            "Timing",
+            "Age",
+            "Range",
+            "Duration",
+            "Distance",
+            "Count",
+            "Money",
+            "SimpleQuantity",
+            "Annotation",
+            "Signature",
+        ];
+
+        if known_type_suffixes.contains(&suffix) {
+            return true;
         }
     }
 
-    // Even if we don't find other variants, if it matches the pattern and the base is a choice element, it's polymorphic
-    true
+    false
 }
 
 /// Extracts the potential base name from what might be a typed polymorphic field

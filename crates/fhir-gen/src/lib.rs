@@ -989,6 +989,12 @@ fn process_elements(
             let enum_derives = ["Debug", "Clone", "PartialEq", "Eq", "FhirSerde", "FhirPath"];
             output.push_str(&format!("#[derive({})]\n", enum_derives.join(", ")));
 
+            // Add choice element attribute to mark this as a choice type
+            output.push_str(&format!(
+                "#[fhir_choice_element(base_name = \"{}\")]\n",
+                base_name
+            ));
+
             // Add other serde attributes and enum definition
             output.push_str(&format!("pub enum {} {{\n", enum_name));
 
@@ -1012,6 +1018,14 @@ fn process_elements(
             output.push_str("}\n\n");
         }
 
+        // Collect all choice element fields for this struct
+        let choice_element_fields: Vec<String> = group
+            .iter()
+            .filter(|e| e.path.ends_with("[x]"))
+            .filter_map(|e| e.path.rsplit('.').next())
+            .map(|name| name.trim_end_matches("[x]").to_string())
+            .collect();
+
         // Generate struct derives - Add Clone, PartialEq, Eq to all structs
         let derives = [
             "Debug",
@@ -1023,6 +1037,15 @@ fn process_elements(
             "Default",
         ];
         output.push_str(&format!("#[derive({})]\n", derives.join(", ")));
+
+        // Add fhir_resource attribute if there are choice elements
+        if !choice_element_fields.is_empty() {
+            let choice_elements_str = choice_element_fields.join(",");
+            output.push_str(&format!(
+                "#[fhir_resource(choice_elements = \"{}\")]\n",
+                choice_elements_str
+            ));
+        }
 
         // Add other serde attributes and struct definition
         output.push_str(&format!(

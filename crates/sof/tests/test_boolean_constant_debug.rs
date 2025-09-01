@@ -8,7 +8,7 @@ fn test_boolean_constant_debug() {
         "id": "pt2",
         "deceasedBoolean": true
     }"#;
-    
+
     // First test: Check if deceased field is accessible
     let view_def_json1 = r#"{
         "resourceType": "ViewDefinition",
@@ -33,26 +33,30 @@ fn test_boolean_constant_debug() {
             }]
         }]
     }"#;
-    
-    let bundle_json = format!(r#"{{
+
+    let bundle_json = format!(
+        r#"{{
         "resourceType": "Bundle",
         "type": "collection",
         "entry": [{{
             "resource": {}
         }}]
-    }}"#, patient_json);
-    
+    }}"#,
+        patient_json
+    );
+
     println!("=== Test 1: Checking deceased field access ===");
-    let view_definition: helios_fhir::r4::ViewDefinition = serde_json::from_str(view_def_json1).unwrap();
+    let view_definition: helios_fhir::r4::ViewDefinition =
+        serde_json::from_str(view_def_json1).unwrap();
     let bundle: helios_fhir::r4::Bundle = serde_json::from_str(&bundle_json).unwrap();
-    
+
     let sof_view = SofViewDefinition::R4(view_definition);
     let sof_bundle = SofBundle::R4(bundle.clone());
-    
+
     let result = run_view_definition(sof_view, sof_bundle, ContentType::Json).unwrap();
     let json_str = String::from_utf8(result).unwrap();
     println!("Result 1: {}", json_str);
-    
+
     // Second test: With constant
     let view_def_json2 = r#"{
         "resourceType": "ViewDefinition",
@@ -72,14 +76,15 @@ fn test_boolean_constant_debug() {
             }]
         }]
     }"#;
-    
+
     println!("\n=== Test 2: With constant comparison ===");
-    let view_definition2: helios_fhir::r4::ViewDefinition = serde_json::from_str(view_def_json2).unwrap();
+    let view_definition2: helios_fhir::r4::ViewDefinition =
+        serde_json::from_str(view_def_json2).unwrap();
     let bundle2: helios_fhir::r4::Bundle = serde_json::from_str(&bundle_json).unwrap();
-    
+
     let sof_view2 = SofViewDefinition::R4(view_definition2);
     let sof_bundle2 = SofBundle::R4(bundle2);
-    
+
     let result2 = run_view_definition(sof_view2, sof_bundle2, ContentType::Json).unwrap();
     let json_str2 = String::from_utf8(result2).unwrap();
     println!("Result 2: {}", json_str2);

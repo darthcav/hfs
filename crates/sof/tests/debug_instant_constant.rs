@@ -1,25 +1,28 @@
+use helios_fhir::r4::{Bundle, BundleEntry, Observation};
 use helios_sof::{ContentType, SofBundle, SofViewDefinition, run_view_definition};
-use helios_fhir::r4::{Observation, Bundle, BundleEntry};
 
 #[test]
 fn test_instant_constant_debug() {
     // Create Observation resource with effectiveInstant
-    let observation: Observation = serde_json::from_str(r#"{
+    let observation: Observation = serde_json::from_str(
+        r#"{
         "resourceType": "Observation",
         "id": "o1",
         "status": "final",
         "code": { "text": "code" },
         "effectiveInstant": "2015-02-07T13:28:17.239+02:00"
-    }"#).unwrap();
-    
+    }"#,
+    )
+    .unwrap();
+
     // Create bundle manually
     let mut bundle = Bundle::default();
     bundle.r#type.value = Some("collection".to_string());
-    
+
     let mut entry = BundleEntry::default();
     entry.resource = Some(helios_fhir::r4::Resource::Observation(observation));
     bundle.entry = Some(vec![entry]);
-    
+
     // Test with instant constant comparison
     let view_def_json = r#"{
         "resourceType": "ViewDefinition",
@@ -65,12 +68,13 @@ fn test_instant_constant_debug() {
             }]
         }]
     }"#;
-    
-    let view_definition: helios_fhir::r4::ViewDefinition = serde_json::from_str(view_def_json).unwrap();
-    
+
+    let view_definition: helios_fhir::r4::ViewDefinition =
+        serde_json::from_str(view_def_json).unwrap();
+
     let sof_view = SofViewDefinition::R4(view_definition);
     let sof_bundle = SofBundle::R4(bundle);
-    
+
     let result = run_view_definition(sof_view, sof_bundle, ContentType::Json).unwrap();
     let json_str = String::from_utf8(result).unwrap();
     println!("Instant constant comparison debug result: {}", json_str);

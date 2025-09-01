@@ -1952,7 +1952,8 @@ mod tests {
 
         // Create type specifiers with exact case matching the resourceType property
         // Since Patient is a FHIR resource, we need to specify the FHIR namespace
-        let patient_type = TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Patient".to_string()));
+        let patient_type =
+            TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Patient".to_string()));
 
         // Print the type specifier for debugging
         eprintln!("Patient type: {:?}", patient_type);
@@ -1964,7 +1965,8 @@ mod tests {
         assert!(is_result.unwrap());
 
         // Create the rest of the type specifiers
-        let obs_type = TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Observation".to_string()));
+        let obs_type =
+            TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Observation".to_string()));
         let fhir_patient_type =
             TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Patient".to_string()));
 
@@ -1990,8 +1992,10 @@ mod tests {
 
         // Create type specifiers with exact case matching the resourceType property
         let bool_type = TypeSpecifier::QualifiedIdentifier("Boolean".to_string(), None);
-        let patient_type = TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Patient".to_string()));
-        let obs_type = TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Observation".to_string()));
+        let patient_type =
+            TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Patient".to_string()));
+        let obs_type =
+            TypeSpecifier::QualifiedIdentifier("FHIR".to_string(), Some("Observation".to_string()));
 
         // Test correct casts
         assert_eq!(as_type(&bool_val, &bool_type).unwrap(), bool_val);
