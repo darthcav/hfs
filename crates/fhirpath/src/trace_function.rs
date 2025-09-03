@@ -53,7 +53,7 @@ mod tests {
         for (expr, expected) in trace_cases {
             println!("Testing: {}", expr);
 
-            let parsed = parser().parse(expr).unwrap();
+            let parsed = parser().parse(expr).into_result().unwrap();
             let result = evaluate(&parsed, &context, None).unwrap();
 
             assert_eq!(result, expected, "Expression: {}", expr);
@@ -70,7 +70,7 @@ mod tests {
         for expr in error_cases {
             println!("Testing error case: {}", expr);
 
-            let parsed = parser().parse(expr).unwrap();
+            let parsed = parser().parse(expr).into_result().unwrap();
             let result = evaluate(&parsed, &context, None);
 
             assert!(result.is_err(), "Expected error for expression: {}", expr);

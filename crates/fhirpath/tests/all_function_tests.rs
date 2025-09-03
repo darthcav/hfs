@@ -128,14 +128,14 @@ fn test_all_with_simple_criteria() {
 
     // Test: all elements are > 0
     let expr_str = "$this.all($this > 0)";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None).unwrap();
 
     assert_eq!(result, EvaluationResult::boolean(true));
 
     // Test: all elements are < 3
     let expr_str = "$this.all($this < 3)";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None).unwrap();
 
     assert_eq!(result, EvaluationResult::boolean(false));
@@ -151,7 +151,7 @@ fn test_all_with_nested_collections() {
 
     // Test: all inner collections have at least one element
     let expr_str = "$this.all($this.count() > 0)";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None).unwrap();
 
     assert_eq!(result, EvaluationResult::boolean(true));
@@ -159,7 +159,7 @@ fn test_all_with_nested_collections() {
     // Test: all elements in inner collections are positive
     // This might be problematic because it requires nested collection traversal
     let expr_str = "$this.all($this.all($this > 0))";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None);
 
     // This assertion may fail if the implementation doesn't handle nested all() correctly
@@ -179,7 +179,7 @@ fn test_all_with_complex_object_paths() {
 
     // Test: all observations have a status
     let expr_str = "observations.all(status.exists())";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None).unwrap();
 
     assert_eq!(result, EvaluationResult::boolean(true));
@@ -187,7 +187,7 @@ fn test_all_with_complex_object_paths() {
     // Test: all observations have a value
     // This should fail because obs3 doesn't have a value
     let expr_str = "observations.all(value.exists())";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None).unwrap();
 
     assert_eq!(result, EvaluationResult::boolean(false));
@@ -195,7 +195,7 @@ fn test_all_with_complex_object_paths() {
     // Test: all final observations have a value
     // This involves a more complex criteria with multiple conditions
     let expr_str = "observations.all(status = 'final' implies value.exists())";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None).unwrap();
 
     // This assertion may fail if the implementation can't handle complex boolean logic
@@ -220,14 +220,14 @@ fn test_all_with_type_operations() {
 
     // Test: check if all elements can be converted to decimal
     let expr_str = "$this.all($this.convertsToDecimal())";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None).unwrap();
 
     assert_eq!(result, EvaluationResult::boolean(true));
 
     // Test: check using is/as operators with all()
     let expr_str = "$this.all($this is decimal or $this is integer or $this is string)";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None);
 
     // Check if we get a boolean result
@@ -259,7 +259,7 @@ fn test_all_with_variable_references() {
 
     // Test: all values are greater than the threshold variable
     let expr_str = "$this.all($this > %threshold)";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None).unwrap();
 
     assert_eq!(result, EvaluationResult::boolean(false));
@@ -277,7 +277,7 @@ fn test_all_with_variable_references() {
     // Test: all values are greater than the first limit
     // We'll simplify this test to avoid complex indexing
     let expr_str = "$this.all($this > %limits.first())";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None);
 
     // Check if we get a boolean result
@@ -308,7 +308,7 @@ fn test_all_with_non_boolean_result() {
 
     // This expression doesn't return a boolean - it returns the value itself
     let expr_str = "$this.all($this)";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     let result = evaluate(&expr, &context, None);
 
     // This should produce an error because the criteria doesn't evaluate to a boolean

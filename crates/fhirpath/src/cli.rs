@@ -229,6 +229,7 @@ fn handle_parse_debug(args: &Args) -> FhirPathResult<()> {
     // Parse the expression
     let parsed = crate::parser::parser()
         .parse(args.expression.as_str())
+        .into_result()
         .map_err(|e| FhirPathError::ParseError(format!("{:?}", e)))?;
 
     let output = if args.parse_debug_tree {

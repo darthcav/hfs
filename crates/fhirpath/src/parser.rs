@@ -1,8 +1,7 @@
 use chumsky::Parser;
-use chumsky::error::Simple;
+use chumsky::error::Rich;
 use chumsky::prelude::*;
 use rust_decimal::Decimal;
-use rust_decimal_macros::dec;
 use std::fmt;
 use std::str::FromStr;
 
@@ -258,9 +257,11 @@ impl fmt::Display for Literal {
 /// The parser returns detailed error information when it encounters syntax errors
 /// in the input, including the location and nature of the error.
 /// Parser that matches a custom whitespace including comments  
-fn custom_padded<T, P>(parser: P) -> impl Parser<char, T, Error = Simple<char>> + Clone
+fn custom_padded<'src, T, P>(
+    parser: P,
+) -> impl Parser<'src, &'src str, T, extra::Err<Rich<'src, char>>> + Clone
 where
-    P: Parser<char, T, Error = Simple<char>> + Clone,
+    P: Parser<'src, &'src str, T, extra::Err<Rich<'src, char>>> + Clone,
     T: Clone,
 {
     // First consume any leading whitespace/comments
@@ -269,22 +270,25 @@ where
         text::whitespace().at_least(1).ignored(),
         // Single-line comment: // ... newline or EOF
         just("//")
-            .then(take_until(text::newline().or(end())))
+            .then(any().and_is(text::newline().or(end()).not()).repeated())
             .ignored(),
         // Multi-line comment: /* ... */
-        just("/*").then(take_until(just("*/"))).ignored(),
+        just("/*")
+            .then(any().and_is(just("*/").not()).repeated())
+            .then(just("*/"))
+            .ignored(),
     ))
     .repeated()
     .ignored();
 
     ws_or_comment
-        .clone()
         .then(parser)
         .map(|(_, result)| result)
         .then_ignore(ws_or_comment)
 }
 
-pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
+pub fn parser<'src>()
+-> impl Parser<'src, &'src str, Expression, extra::Err<Rich<'src, char>>> + Clone + 'src {
     // Parser for escape sequences within string literals
     // Handles standard escape sequences like \n, \t, \r, etc., plus Unicode
     // escape sequences in the form \uXXXX where XXXX is a 4-digit hex code.
@@ -300,25 +304,20 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
         just('"').to('"'),        // Double quote escape
         // Unicode escape sequence: \uXXXX
         just('u').ignore_then(
-            filter(|c: &char| c.is_ascii_hexdigit())
+            any()
+                .filter(|c: &char| c.is_ascii_hexdigit())
                 .repeated()
                 .exactly(4) // Require exactly 4 hex digits
                 .collect::<String>()
-                .validate(|digits, span, emit| {
-                    match u32::from_str_radix(&digits, 16) {
+                .try_map(
+                    |digits: String, span| match u32::from_str_radix(&digits, 16) {
                         Ok(code) => match char::from_u32(code) {
-                            Some(c) => c,
-                            None => {
-                                emit(Simple::custom(span, "Invalid Unicode code point"));
-                                ' ' // Placeholder for invalid code point
-                            }
+                            Some(c) => Ok(c),
+                            None => Err(Rich::custom(span, "Invalid Unicode code point")),
                         },
-                        Err(_) => {
-                            emit(Simple::custom(span, "Invalid hex digits"));
-                            ' ' // Placeholder for invalid hex
-                        }
-                    }
-                }),
+                        Err(_) => Err(Rich::custom(span, "Invalid hex digits")),
+                    },
+                ),
         ),
     )));
 
@@ -338,8 +337,8 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
     // Parser for boolean literals: true, false
     // Note: These need to be parsed before identifiers to avoid ambiguity
     let boolean = choice((
-        text::keyword::<char, _, Simple<char>>("true").to(Literal::Boolean(true)),
-        text::keyword::<char, _, Simple<char>>("false").to(Literal::Boolean(false)),
+        text::keyword("true").to(Literal::Boolean(true)),
+        text::keyword("false").to(Literal::Boolean(false)),
     ))
     .boxed();
 
@@ -361,16 +360,14 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
     // Parses sequences of digits without a decimal point into an i64 value.
     // The FHIRPath specification defines integers as 64-bit signed values.
     // This parser validates that the integer is within the valid range.
-    let integer = filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+    let integer = any()
+        .filter(|c: &char| c.is_ascii_digit())
         .repeated()
         .at_least(1) // Require at least one digit
         .collect::<String>()
-        .validate(|digits, span, emit| match i64::from_str(&digits) {
-            Ok(n) => Literal::Integer(n),
-            Err(_) => {
-                emit(Simple::custom(span, format!("Invalid integer: {}", digits)));
-                Literal::Integer(0) // Default value on error
-            }
+        .try_map(|digits: String, span| match i64::from_str(&digits) {
+            Ok(n) => Ok(Literal::Integer(n)),
+            Err(_) => Err(Rich::custom(span, format!("Invalid integer: {}", digits))),
         });
     let integer = padded!(integer); // Allow whitespace around integers
 
@@ -382,25 +379,24 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
     //
     // Format: <digits>.<digits>
     // Example: 3.14159
-    let number = filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+    let number = any()
+        .filter(|c: &char| c.is_ascii_digit())
         .repeated()
         .at_least(1) // Require at least one digit before the decimal
         .collect::<String>()
         .then(just('.')) // Require the decimal point
         .then(
-            filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+            any()
+                .filter(|c: &char| c.is_ascii_digit())
                 .repeated()
                 .at_least(1) // Require at least one digit after the decimal
                 .collect::<String>(),
         )
-        .validate(|((i, _), d), span, emit| {
+        .try_map(|((i, _), d), span| {
             let num_str = format!("{}.{}", i, d);
             match Decimal::from_str(&num_str) {
-                Ok(decimal) => Literal::Number(decimal),
-                Err(_) => {
-                    emit(Simple::custom(span, format!("Invalid number: {}", num_str)));
-                    Literal::Number(dec!(0)) // Default value on error
-                }
+                Ok(decimal) => Ok(Literal::Number(decimal)),
+                Err(_) => Err(Rich::custom(span, format!("Invalid number: {}", num_str))),
             }
         })
         .padded(); // Allow whitespace around numbers
@@ -416,7 +412,8 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
     // - 14:30 (hours and minutes)
     // - 09:45:30 (hours, minutes, seconds)
     // - 23:59:59.999 (hours, minutes, seconds, and milliseconds)
-    let time_format = filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+    let time_format = any()
+        .filter(|c: &char| c.is_ascii_digit())
         .repeated()
         .at_least(2) // Hours: exactly 2 digits
         .at_most(2)
@@ -424,7 +421,8 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
         .then(
             just(':') // Optional minutes part
                 .ignore_then(
-                    filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+                    any()
+                        .filter(|c: &char| c.is_ascii_digit())
                         .repeated()
                         .at_least(2) // Minutes: exactly 2 digits
                         .at_most(2)
@@ -433,7 +431,8 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
                 .then(
                     just(':') // Optional seconds part
                         .ignore_then(
-                            filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+                            any()
+                                .filter(|c: &char| c.is_ascii_digit())
                                 .repeated()
                                 .at_least(2) // Seconds: exactly 2 digits
                                 .at_most(2)
@@ -442,7 +441,8 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
                         .then(
                             just('.') // Optional milliseconds part
                                 .ignore_then(
-                                    filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+                                    any()
+                                        .filter(|c: &char| c.is_ascii_digit())
                                         .repeated()
                                         .at_least(1) // Milliseconds: 1-3 digits
                                         .at_most(3)
@@ -488,7 +488,8 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
         .or(one_of("+-") // Or timezone offset
             .map(|c: char| c.to_string()) // Get sign as string
             .then(
-                filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+                any()
+                    .filter(|c: &char| c.is_ascii_digit())
                     .repeated()
                     .at_most(2) // Hours: exactly 2 digits
                     .at_least(2)
@@ -496,7 +497,8 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
             )
             .then(just(':')) // Colon separator
             .then(
-                filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+                any()
+                    .filter(|c: &char| c.is_ascii_digit())
                     .repeated()
                     .at_most(2) // Minutes: exactly 2 digits
                     .at_least(2)
@@ -520,21 +522,24 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
     // - 1972 (year only)
     // - 2015-12 (year and month)
     // - 1972-12-14 (full date)
-    let date_format_str = filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+    let date_format_str = any()
+        .filter(|c: &char| c.is_ascii_digit())
         .repeated()
         .exactly(4) // Year: exactly 4 digits
         .collect::<String>()
         .then(
             just('-') // Optional month part
                 .ignore_then(
-                    filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+                    any()
+                        .filter(|c: &char| c.is_ascii_digit())
                         .repeated()
                         .exactly(2) // Month: exactly 2 digits
                         .collect::<String>()
                         .then(
                             just('-') // Optional day part
                                 .ignore_then(
-                                    filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+                                    any()
+                                        .filter(|c: &char| c.is_ascii_digit())
                                         .repeated()
                                         .exactly(2) // Day: exactly 2 digits
                                         .collect::<String>(),
@@ -618,37 +623,34 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
     .padded(); // Allow whitespace around units
 
     // Define integer/number parsers specifically for quantity, without consuming trailing whitespace.
-    let integer_for_quantity = filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+    let integer_for_quantity = any()
+        .filter(|c: &char| c.is_ascii_digit())
         .repeated()
         .at_least(1)
         .collect::<String>()
-        .validate(|digits, span, emit| match i64::from_str(&digits) {
-            Ok(n) => n, // Return the i64 directly
-            Err(_) => {
-                emit(Simple::custom(span, format!("Invalid integer: {}", digits)));
-                0
-            }
+        .try_map(|digits: String, span| match i64::from_str(&digits) {
+            Ok(n) => Ok(n), // Return the i64 directly
+            Err(_) => Err(Rich::custom(span, format!("Invalid integer: {}", digits))),
         });
 
-    let number_for_quantity = filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+    let number_for_quantity = any()
+        .filter(|c: &char| c.is_ascii_digit())
         .repeated()
         .at_least(1)
         .collect::<String>()
         .then(just('.'))
         .then(
-            filter::<_, _, Simple<char>>(|c: &char| c.is_ascii_digit())
+            any()
+                .filter(|c: &char| c.is_ascii_digit())
                 .repeated()
                 .at_least(1)
                 .collect::<String>(),
         )
-        .validate(|((i, _), d), span, emit| {
+        .try_map(|((i, _), d), span| {
             let num_str = format!("{}.{}", i, d);
             match Decimal::from_str(&num_str) {
-                Ok(decimal) => decimal, // Return the Decimal directly
-                Err(_) => {
-                    emit(Simple::custom(span, format!("Invalid number: {}", num_str)));
-                    dec!(0)
-                }
+                Ok(decimal) => Ok(decimal), // Return the Decimal directly
+                Err(_) => Err(Rich::custom(span, format!("Invalid number: {}", num_str))),
             }
         });
 
@@ -698,7 +700,7 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
         .try_map(|(time_str, tz_opt), span| {
             // Validate that timezone is not present
             if tz_opt.is_some() {
-                Err(Simple::custom(
+                Err(Rich::custom(
                     span,
                     "Time literal cannot have a timezone offset",
                 ))
@@ -730,9 +732,15 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
     .map(Term::Literal);
 
     // IDENTIFIER: ([A-Za-z] | '_')([A-Za-z0-9] | '_')*
-    let standard_identifier = filter(|c: &char| c.is_ascii_alphabetic() || *c == '_')
-        .then(filter(|c: &char| c.is_ascii_alphanumeric() || *c == '_').repeated())
-        .map(|(first, rest)| {
+    let standard_identifier = any()
+        .filter(|c: &char| c.is_ascii_alphabetic() || *c == '_')
+        .then(
+            any()
+                .filter(|c: &char| c.is_ascii_alphanumeric() || *c == '_')
+                .repeated()
+                .collect::<Vec<_>>(),
+        )
+        .map(|(first, rest): (char, Vec<char>)| {
             let mut s = first.to_string();
             s.extend(rest);
             s
@@ -827,7 +835,8 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
         .map(Term::ExternalConstant)
         .padded();
 
-    // Recursive parser definition that directly mirrors the grammar structure
+    // Use explicit boxing to prevent infinite type recursion in chumsky 0.10
+
     recursive(|expr| {
         // Atom: the most basic elements like literals, identifiers, parenthesized expressions.
         let atom = choice((
@@ -860,10 +869,10 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
             .map(Term::Invocation) // Map these simple invocations to Term
             .map(Expression::Term) // Map Term to Expression
             .boxed(),
-            // Parenthesized expression
+            // Parenthesized expression - add extra boxing to break recursion
             expr.clone()
+                .boxed()
                 .delimited_by(just('(').padded(), just(')').padded())
-                // Parenthesized expression directly yields an Expression
                 .boxed(),
         ))
         .padded();
@@ -876,6 +885,7 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
                     identifier.clone().then(
                         // Optionally parse arguments
                         expr.clone()
+                            .boxed()
                             .separated_by(just(',').padded())
                             .allow_trailing()
                             .collect::<Vec<_>>()
@@ -907,20 +917,21 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
 
         let atom_with_postfix = atom
             .clone()
-            .then(postfix_op.repeated())
-            .foldl(|left, op_fn| op_fn(left));
+            .then(postfix_op.repeated().collect::<Vec<_>>())
+            .map(|(left, ops)| ops.into_iter().fold(left, |acc, op| op(acc)));
 
         // Prefix operators (Polarity)
-        let prefix_op = choice((
-            just::<_, _, Simple<char>>('+').to('+'),
-            just::<_, _, Simple<char>>('-').to('-'),
-        ))
-        .padded();
+        let prefix_op = choice((just('+').to('+'), just('-').to('-'))).padded();
 
         let term_with_polarity = prefix_op
             .repeated()
+            .collect::<Vec<_>>()
             .then(atom_with_postfix)
-            .foldr(|op, right| Expression::Polarity(op, Box::new(right)));
+            .map(|(ops, right)| {
+                ops.into_iter()
+                    .rev()
+                    .fold(right, |acc, op| Expression::Polarity(op, Box::new(acc)))
+            });
 
         // Infix operators with precedence levels (from high to low)
 
@@ -934,26 +945,39 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
         .padded();
         let multiplicative = term_with_polarity
             .clone()
-            .then(op_mul.then(term_with_polarity).repeated())
-            .foldl(|left, (op_str, right)| {
-                Expression::Multiplicative(Box::new(left), op_str.to_string(), Box::new(right))
+            .then(
+                op_mul
+                    .then(term_with_polarity)
+                    .repeated()
+                    .collect::<Vec<_>>(),
+            )
+            .map(|(left, ops)| {
+                ops.into_iter().fold(left, |acc, (op_str, right)| {
+                    Expression::Multiplicative(Box::new(acc), op_str.to_string(), Box::new(right))
+                })
             });
 
         // Level 2: Additive (+, -, &) - Left associative
         let op_add = choice((just('+').to("+"), just('-').to("-"), just('&').to("&"))).padded();
         let additive = multiplicative
             .clone()
-            .then(op_add.then(multiplicative).repeated())
-            .foldl(|left, (op_str, right)| {
-                Expression::Additive(Box::new(left), op_str.to_string(), Box::new(right))
+            .then(op_add.then(multiplicative).repeated().collect::<Vec<_>>())
+            .map(|(left, ops)| {
+                ops.into_iter().fold(left, |acc, (op_str, right)| {
+                    Expression::Additive(Box::new(acc), op_str.to_string(), Box::new(right))
+                })
             });
 
         // Level 3: Union (|) - Left associative (though spec doesn't strictly define associativity here)
         let op_union = just('|').padded();
         let union = additive
             .clone()
-            .then(op_union.then(additive).repeated())
-            .foldl(|left, (_, right)| Expression::Union(Box::new(left), Box::new(right)));
+            .then(op_union.then(additive).repeated().collect::<Vec<_>>())
+            .map(|(left, ops)| {
+                ops.into_iter().fold(left, |acc, (_, right)| {
+                    Expression::Union(Box::new(acc), Box::new(right))
+                })
+            });
 
         // Level 4: Inequality (<, <=, >, >=) - Left associative
         let op_ineq = choice((
@@ -963,21 +987,29 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
             just(">").to(">"),
         ))
         .padded();
-        let inequality =
-            union
-                .clone()
-                .then(op_ineq.then(union).repeated())
-                .foldl(|left, (op_str, right)| {
-                    Expression::Inequality(Box::new(left), op_str.to_string(), Box::new(right))
-                });
+        let inequality = union
+            .clone()
+            .then(op_ineq.then(union).repeated().collect::<Vec<_>>())
+            .map(|(left, ops)| {
+                ops.into_iter().fold(left, |acc, (op_str, right)| {
+                    Expression::Inequality(Box::new(acc), op_str.to_string(), Box::new(right))
+                })
+            });
 
         // Level 5: Type (is, as) - Left associative
         let op_type = choice((text::keyword("is").to("is"), text::keyword("as").to("as"))).padded();
         let type_expr = inequality
             .clone()
-            .then(op_type.then(qualified_identifier.clone()).repeated()) // Type specifier follows 'is'/'as'
-            .foldl(|left, (op_str, type_spec)| {
-                Expression::Type(Box::new(left), op_str.to_string(), type_spec)
+            .then(
+                op_type
+                    .then(qualified_identifier.clone())
+                    .repeated()
+                    .collect::<Vec<_>>(),
+            ) // Type specifier follows 'is'/'as'
+            .map(|(left, ops)| {
+                ops.into_iter().fold(left, |acc, (op_str, type_spec)| {
+                    Expression::Type(Box::new(acc), op_str.to_string(), type_spec)
+                })
             });
 
         // Level 6: Equality (=, ~, !=, !~) - Left associative
@@ -990,9 +1022,17 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
         .padded();
         let equality = type_expr
             .clone()
-            .then(op_eq.then(type_expr).repeated())
-            .foldl(|left, (op_str, right)| {
-                Expression::Equality(Box::new(left), op_str.to_string(), Box::new(right))
+            .boxed()
+            .then(
+                op_eq
+                    .then(type_expr.clone().boxed())
+                    .repeated()
+                    .collect::<Vec<_>>(),
+            )
+            .map(|(left, ops)| {
+                ops.into_iter().fold(left, |acc, (op_str, right)| {
+                    Expression::Equality(Box::new(acc), op_str.to_string(), Box::new(right))
+                })
             });
 
         // Level 7: Membership (in, contains) - Left associative
@@ -1003,36 +1043,69 @@ pub fn parser() -> impl Parser<char, Expression, Error = Simple<char>> + Clone {
         .padded();
         let membership = equality
             .clone()
-            .then(op_mem.then(equality).repeated())
-            .foldl(|left, (op_str, right)| {
-                Expression::Membership(Box::new(left), op_str.to_string(), Box::new(right))
+            .boxed()
+            .then(
+                op_mem
+                    .then(equality.clone().boxed())
+                    .repeated()
+                    .collect::<Vec<_>>(),
+            )
+            .map(|(left, ops)| {
+                ops.into_iter().fold(left, |acc, (op_str, right)| {
+                    Expression::Membership(Box::new(acc), op_str.to_string(), Box::new(right))
+                })
             });
 
         // Level 8: Logical AND (and) - Left associative
         let op_and = text::keyword("and").padded();
         let logical_and = membership
             .clone()
-            .then(op_and.then(membership).repeated())
-            .foldl(|left, (_, right)| Expression::And(Box::new(left), Box::new(right)));
+            .boxed()
+            .then(
+                op_and
+                    .then(membership.clone().boxed())
+                    .repeated()
+                    .collect::<Vec<_>>(),
+            )
+            .map(|(left, ops)| {
+                ops.into_iter().fold(left, |acc, (_, right)| {
+                    Expression::And(Box::new(acc), Box::new(right))
+                })
+            });
 
         // Level 9: Logical OR/XOR (or, xor) - Left associative
         let op_or = choice((text::keyword("or").to("or"), text::keyword("xor").to("xor"))).padded();
         let logical_or = logical_and
             .clone()
-            .then(op_or.then(logical_and).repeated())
-            .foldl(|left, (op_str, right)| {
-                Expression::Or(Box::new(left), op_str.to_string(), Box::new(right))
+            .boxed()
+            .then(
+                op_or
+                    .then(logical_and.clone().boxed())
+                    .repeated()
+                    .collect::<Vec<_>>(),
+            )
+            .map(|(left, ops)| {
+                ops.into_iter().fold(left, |acc, (op_str, right)| {
+                    Expression::Or(Box::new(acc), op_str.to_string(), Box::new(right))
+                })
             });
 
-        // Level 10: Implies (implies) - Right associative (or handle as non-assoc if simpler)
-        // Let's treat it as left-associative for simplicity, though the spec implies right-to-left evaluation.
-        // A proper right-associative fold might be needed if complex implies chains are common.
+        // Level 10: Implies (implies) - Right associative
         let op_implies = text::keyword("implies").padded();
-        // The final expression parser is the one with the lowest precedence
         logical_or
             .clone()
-            .then(op_implies.then(logical_or).repeated())
-            .foldl(|left, (_, right)| Expression::Implies(Box::new(left), Box::new(right)))
+            .boxed()
+            .then(
+                op_implies
+                    .then(logical_or.clone().boxed())
+                    .repeated()
+                    .collect::<Vec<_>>(),
+            )
+            .map(|(left, ops)| {
+                ops.into_iter().fold(left, |acc, (_, right)| {
+                    Expression::Implies(Box::new(acc), Box::new(right))
+                })
+            })
     }) // Close the recursive closure here
     .then_ignore(end()) // Ensure the entire input is consumed after the expression
 }

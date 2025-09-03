@@ -10,7 +10,7 @@ fn test_date_formats() {
     // Test just the simplest case first
     let expr = "@2015";
     println!("Attempting to parse: '{}'", expr);
-    let result = parser().parse(expr);
+    let result = parser().parse(expr).into_result();
 
     // Print detailed error information if it fails
     if let Err(ref err) = result {
@@ -41,7 +41,7 @@ fn test_date_formats() {
     ];
 
     for expr in date_expressions {
-        let result = parser().parse(expr);
+        let result = parser().parse(expr).into_result();
         assert!(
             result.is_ok(),
             "Failed to parse date expression: '{}', error: {:?}",
@@ -54,7 +54,7 @@ fn test_date_formats() {
 #[test]
 fn test_just_date() {
     // Use the main parser directly
-    let result = parser().parse("@2015");
+    let result = parser().parse("@2015").into_result();
 
     // Print detailed error information if it fails
     if let Err(ref err) = result {
@@ -78,7 +78,7 @@ fn test_just_date() {
 #[test]
 fn test_simple_date_parsing() {
     // Test year-only format
-    let result = parser().parse("@2015");
+    let result = parser().parse("@2015").into_result();
     assert!(
         result.is_ok(),
         "Failed to parse simple date '@2015', error: {:?}",
@@ -86,7 +86,7 @@ fn test_simple_date_parsing() {
     );
 
     // Test year-month format
-    let result = parser().parse("@2015-01");
+    let result = parser().parse("@2015-01").into_result();
     assert!(
         result.is_ok(),
         "Failed to parse date '@2015-01', error: {:?}",
@@ -94,7 +94,7 @@ fn test_simple_date_parsing() {
     );
 
     // Test full date format
-    let result = parser().parse("@2015-01-01");
+    let result = parser().parse("@2015-01-01").into_result();
     assert!(
         result.is_ok(),
         "Failed to parse date '@2015-01-01', error: {:?}",
@@ -132,7 +132,7 @@ fn test_parse_simple_expressions() {
     ];
 
     for expr in test_cases {
-        let result = parser().parse(expr);
+        let result = parser().parse(expr).into_result();
         assert!(
             result.is_ok(),
             "Failed to parse expression: '{}', error: {:?}",
@@ -203,7 +203,7 @@ fn test_multiple_expressions_from_file() {
             continue;
         }
 
-        let result = parser().parse(expr_str.clone());
+        let result = parser().parse(expr_str.as_str()).into_result();
         if result.is_ok() {
             success_count += 1;
         } else {

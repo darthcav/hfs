@@ -72,7 +72,8 @@ mod tests {
         ];
 
         for (expr, expected_namespace, expected_name) in test_cases {
-            let result = evaluate(&parser().parse(expr).unwrap(), &context, None).unwrap();
+            let result =
+                evaluate(&parser().parse(expr).into_result().unwrap(), &context, None).unwrap();
 
             match result {
                 EvaluationResult::Collection { items, .. } => {

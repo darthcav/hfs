@@ -64,7 +64,10 @@ pub async fn evaluate_fhirpath(
     let (parse_debug_tree, parse_debug) = if extracted.validate {
         use chumsky::Parser as ChumskyParser;
 
-        match crate::parser::parser().parse(expression.as_str()) {
+        match crate::parser::parser()
+            .parse(expression.as_str())
+            .into_result()
+        {
             Ok(parsed) => {
                 // Create a type context with the resource type
                 let mut type_context = TypeContext::new();
@@ -125,7 +128,10 @@ pub async fn evaluate_fhirpath(
 
         // Parse the main expression once
         use chumsky::Parser as ChumskyParser;
-        let parsed_expr = match crate::parser::parser().parse(expression.as_str()) {
+        let parsed_expr = match crate::parser::parser()
+            .parse(expression.as_str())
+            .into_result()
+        {
             Ok(parsed) => parsed,
             Err(e) => {
                 return create_error_response(
@@ -239,7 +245,10 @@ async fn evaluate_fhirpath_with_version(
     let (parse_debug_tree, parse_debug) = if extracted.validate {
         use chumsky::Parser as ChumskyParser;
 
-        match crate::parser::parser().parse(expression.as_str()) {
+        match crate::parser::parser()
+            .parse(expression.as_str())
+            .into_result()
+        {
             Ok(parsed) => {
                 // Create a type context with the resource type
                 let mut type_context = TypeContext::new();
@@ -300,7 +309,10 @@ async fn evaluate_fhirpath_with_version(
 
         // Parse the main expression once
         use chumsky::Parser as ChumskyParser;
-        let parsed_expr = match crate::parser::parser().parse(expression.as_str()) {
+        let parsed_expr = match crate::parser::parser()
+            .parse(expression.as_str())
+            .into_result()
+        {
             Ok(parsed) => parsed,
             Err(e) => {
                 return create_error_response(

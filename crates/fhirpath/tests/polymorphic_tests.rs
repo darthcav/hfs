@@ -50,7 +50,7 @@ fn test_polymorphic_access() {
 
     // Test: $this.value should access valueQuantity thanks to polymorphic access
     let expr_str = "$this.value";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for value: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of value: {:?}", result);
@@ -60,7 +60,7 @@ fn test_polymorphic_access() {
 
     // Access valueQuantity directly
     let expr_str = "$this.valueQuantity";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for valueQuantity: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of valueQuantity: {:?}", result);
@@ -70,7 +70,7 @@ fn test_polymorphic_access() {
 
     // Test: $this.valueQuantity.unit should access valueQuantity.unit
     let expr_str = "$this.valueQuantity.unit";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for unit: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of unit: {:?}", result);
@@ -79,7 +79,7 @@ fn test_polymorphic_access() {
 
     // NEW TEST: $this.value.unit should access valueQuantity.unit via polymorphic access
     let expr_str = "$this.value.unit";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for value.unit: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of value.unit: {:?}", result);
@@ -132,7 +132,7 @@ fn test_polymorphic_access_simple() {
     // Now test accessing valueQuantity directly using $this
     println!("\nTrying a direct test with manual context");
     let expr_str = "$this.valueQuantity";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for valueQuantity: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of valueQuantity: {:?}", result);
@@ -142,7 +142,7 @@ fn test_polymorphic_access_simple() {
 
     // Test: $this.valueQuantity.unit should access the unit property
     let expr_str = "$this.valueQuantity.unit";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for unit: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of unit: {:?}", result);
@@ -200,7 +200,7 @@ fn test_polymorphic_as_operator() {
 
     // Temporarily use a known working test instead - check direct polymorphic access first
     let expr_str = "$this.value";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for value: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of value: {:?}", result);
@@ -209,7 +209,7 @@ fn test_polymorphic_as_operator() {
 
     // Test 2: Test direct access to valueQuantity first to make sure this part works
     let expr_str = "$this.valueQuantity";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for valueQuantity: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of valueQuantity: {:?}", result);
@@ -218,7 +218,7 @@ fn test_polymorphic_as_operator() {
 
     // Test 3: Test the unit property directly to ensure it works
     let expr_str = "$this.valueQuantity.unit";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for unit: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of unit: {:?}", result);
@@ -227,7 +227,7 @@ fn test_polymorphic_as_operator() {
 
     // Test 4: Direct access to value.unit should work via polymorphic resolution
     let expr_str = "$this.value.unit";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for value.unit: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of value.unit: {:?}", result);
@@ -279,7 +279,7 @@ fn test_polymorphic_access_on_direct_object() {
 
     // Test direct access to 'value' property
     let expr_str = "$this.value";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for value: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of value: {:?}", result);
@@ -289,7 +289,7 @@ fn test_polymorphic_access_on_direct_object() {
 
     // Test direct access to 'value.unit' should work
     let expr_str = "$this.value.unit";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for value.unit: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of value.unit: {:?}", result);
@@ -338,7 +338,7 @@ fn test_more_complex_polymorphic_expressions() {
 
     // Test: $this.value.unit = 'beats/minute'
     let expr_str = "$this.value.unit = 'beats/minute'";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for comparison: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of comparison: {:?}", result);
@@ -348,7 +348,7 @@ fn test_more_complex_polymorphic_expressions() {
     // Test: $this.where(value.unit = 'beats/minute')
     // This is more complex and might need further fixes to the evaluator
     let expr_str = "$this.where(value.unit = 'beats/minute')";
-    let expr = parser().parse(expr_str).unwrap();
+    let expr = parser().parse(expr_str).into_result().unwrap();
     println!("Parsed expression for where: {:?}", expr);
     let result = evaluate(&expr, &context, None).unwrap();
     println!("Result of where clause: {:?}", result);

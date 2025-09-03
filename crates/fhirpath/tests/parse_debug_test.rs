@@ -12,6 +12,7 @@ mod tests {
         // Parse the expression
         let parsed = helios_fhirpath::parser::parser()
             .parse(expression)
+            .into_result()
             .expect("Failed to parse expression");
 
         // Create a type context with Patient.name as the root type
@@ -47,6 +48,7 @@ mod tests {
 
         let parsed = helios_fhirpath::parser::parser()
             .parse(expression)
+            .into_result()
             .expect("Failed to parse expression");
 
         let type_context = TypeContext::new().with_root_type(InferredType::fhir("HumanName"));

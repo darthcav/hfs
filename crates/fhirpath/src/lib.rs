@@ -351,12 +351,15 @@ pub fn evaluate_expression(
     use chumsky::Parser;
 
     // Parse the expression
-    let parsed = parser::parser().parse(expression).map_err(|e| {
-        format!(
-            "Failed to parse FHIRPath expression '{}': {:?}",
-            expression, e
-        )
-    })?;
+    let parsed = parser::parser()
+        .parse(expression)
+        .into_result()
+        .map_err(|e| {
+            format!(
+                "Failed to parse FHIRPath expression '{}': {:?}",
+                expression, e
+            )
+        })?;
 
     // Evaluate the parsed expression
     evaluator::evaluate(&parsed, context, None).map_err(|e| {

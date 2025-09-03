@@ -16,7 +16,7 @@ mod tests {
     fn test_define_variable_basic_syntax() {
         // Test that defineVariable parses and doesn't error on basic syntax
         let expr = "defineVariable('v1', 'value1')";
-        let parsed = parser().parse(expr);
+        let parsed = parser().parse(expr).into_result();
         assert!(parsed.is_ok(), "Failed to parse defineVariable expression");
 
         let context = EvaluationContext::new_empty(FhirVersion::R4);
@@ -28,7 +28,7 @@ mod tests {
     fn test_define_variable_returns_input() {
         // Test that defineVariable returns its input unchanged
         let expr = "5.defineVariable('v1', 10)";
-        let parsed = parser().parse(expr).unwrap();
+        let parsed = parser().parse(expr).into_result().unwrap();
 
         let context = EvaluationContext::new_empty(FhirVersion::R4);
         let result = evaluate(&parsed, &context, None).unwrap();
@@ -43,7 +43,7 @@ mod tests {
 
         // Test 1: When defineVariable is called on a non-empty collection
         let expr = "'test'.defineVariable('v1', 'value1').select(%v1)";
-        let parsed = parser().parse(expr).unwrap();
+        let parsed = parser().parse(expr).into_result().unwrap();
 
         let context = EvaluationContext::new_empty(FhirVersion::R4);
         let result = evaluate(&parsed, &context, None);
@@ -60,7 +60,7 @@ mod tests {
 
         // Test 2: When defineVariable is called with empty input
         let expr2 = "defineVariable('v1', 'value1').select(%v1)";
-        let parsed2 = parser().parse(expr2).unwrap();
+        let parsed2 = parser().parse(expr2).into_result().unwrap();
         let result2 = evaluate(&parsed2, &context, None);
 
         // The variable is accessible even when defineVariable is called with empty input
@@ -78,7 +78,7 @@ mod tests {
     fn test_system_variable_protection() {
         // Test that system variables cannot be overridden
         let expr = "defineVariable('context', 'oops')";
-        let parsed = parser().parse(expr).unwrap();
+        let parsed = parser().parse(expr).into_result().unwrap();
 
         let context = EvaluationContext::new_empty(FhirVersion::R4);
         let result = evaluate(&parsed, &context, None);
@@ -97,7 +97,7 @@ mod tests {
         // This test documents that child contexts are created for select()
         // but defineVariable still doesn't work due to architectural limitations
         let expr = "1 | 2 | 3";
-        let parsed = parser().parse(expr).unwrap();
+        let parsed = parser().parse(expr).into_result().unwrap();
 
         let context = EvaluationContext::new_empty(FhirVersion::R4);
         let result = evaluate(&parsed, &context, None).unwrap();

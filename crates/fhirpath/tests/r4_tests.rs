@@ -90,14 +90,14 @@ fn test_truncate() {
 
     // Run success cases
     for (expr, expected) in truncate_cases {
-        let parsed = parser().parse(expr).unwrap();
+        let parsed = parser().parse(expr).into_result().unwrap();
         let result = evaluate(&parsed, &context, None).unwrap();
         assert_eq!(result, expected, "Expression: {}", expr);
     }
 
     // Run error cases
     for expr in truncate_error_cases {
-        let parsed = parser().parse(expr).unwrap();
+        let parsed = parser().parse(expr).into_result().unwrap();
         let result = evaluate(&parsed, &context, None);
         assert!(result.is_err(), "Expected error for expression: {}", expr);
     }
@@ -243,7 +243,7 @@ fn test_patient_active_type() {
 
     // Test 1
     println!("\nTest 1: Patient.active.type().namespace = 'FHIR'");
-    let expr = parser().parse("Patient.active").unwrap();
+    let expr = parser().parse("Patient.active").into_result().unwrap();
     let result = evaluate(&expr, &context, None).unwrap();
     println!("- Patient.active evaluates to: {:?}", result);
 

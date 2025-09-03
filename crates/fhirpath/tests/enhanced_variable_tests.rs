@@ -8,7 +8,7 @@ use std::collections::HashMap;
 
 // Helper function to parse and evaluate
 fn eval(input: &str, context: &EvaluationContext) -> Result<EvaluationResult, EvaluationError> {
-    let expr = parser().parse(input).unwrap_or_else(|e| {
+    let expr = parser().parse(input).into_result().unwrap_or_else(|e| {
         panic!("Parser error for input '{}': {:?}", input, e);
     });
     // Pass the original context and None for current_item for top-level evaluation

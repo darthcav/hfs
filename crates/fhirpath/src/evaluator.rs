@@ -654,7 +654,7 @@ fn apply_decimal_multiplicative(
 /// let context = EvaluationContext::new_empty_with_default_version();
 ///
 /// // Parse and evaluate a simple literal
-/// let expr = parser().parse("5").unwrap();
+/// let expr = parser().parse("5").into_result().unwrap();
 /// let result = evaluate(&expr, &context, None);
 /// assert!(matches!(result, Ok(EvaluationResult::Integer(5, _))));
 /// ```

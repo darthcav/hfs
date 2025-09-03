@@ -198,7 +198,7 @@ mod tests {
         let context = EvaluationContext::new_empty_with_default_version();
 
         // Parse a simple projection expression
-        let parsed = parser().parse("name").unwrap();
+        let parsed = parser().parse("name").into_result().unwrap();
 
         // Apply repeat function
         let result = repeat_function(&empty, &parsed, &context).unwrap();
@@ -269,7 +269,7 @@ mod tests {
         context.this = Some(root.clone());
 
         // Test repeat with next projection (should handle the circular references)
-        let parsed = parser().parse("next").unwrap();
+        let parsed = parser().parse("next").into_result().unwrap();
         let result = repeat_function(&root, &parsed, &context).unwrap();
 
         // Verify we get only the two distinct objects, not infinite repetitions

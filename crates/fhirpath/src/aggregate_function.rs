@@ -179,7 +179,10 @@ mod tests {
         };
 
         // This expression uses $this + $total to sum values
-        let expr = crate::parser::parser().parse("$this + $total").unwrap();
+        let expr = crate::parser::parser()
+            .parse("$this + $total")
+            .into_result()
+            .unwrap();
 
         // Initialize with 0
         let init = EvaluationResult::integer(0);
@@ -344,7 +347,10 @@ mod tests {
         let collection = EvaluationResult::Empty;
 
         // Parse simple expression
-        let expr = crate::parser::parser().parse("$this + $total").unwrap();
+        let expr = crate::parser::parser()
+            .parse("$this + $total")
+            .into_result()
+            .unwrap();
 
         // Create empty context with required variables
         let mut context = EvaluationContext::new_empty_with_default_version();

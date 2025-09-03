@@ -116,7 +116,10 @@ fn test_trace_with_context_full_expression() {
 
     // Parse and evaluate with context
     use chumsky::Parser;
-    let parsed = helios_fhirpath::parser::parser().parse(expression).unwrap();
+    let parsed = helios_fhirpath::parser::parser()
+        .parse(expression)
+        .into_result()
+        .unwrap();
 
     // Get the name items
     let name_items = match context_result {
@@ -177,7 +180,10 @@ fn test_trace_with_context_simple() {
 
     // Parse and evaluate with context
     use chumsky::Parser;
-    let parsed = helios_fhirpath::parser::parser().parse(expression).unwrap();
+    let parsed = helios_fhirpath::parser::parser()
+        .parse(expression)
+        .into_result()
+        .unwrap();
 
     // Get the first name as context
     let name_items = match context_result {
