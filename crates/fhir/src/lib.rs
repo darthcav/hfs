@@ -52,6 +52,7 @@ use serde::{
 use std::cmp::Ordering;
 use std::fmt;
 use std::marker::PhantomData;
+use std::sync::Arc;
 
 /// Custom deserializer that is more forgiving of null values in JSON.
 ///
@@ -114,7 +115,7 @@ pub struct PreciseDecimal {
     /// The parsed decimal value, `None` if parsing failed (e.g., out of range)
     value: Option<Decimal>,
     /// The original string representation preserving format and precision
-    original_string: String,
+    original_string: Arc<str>,
 }
 
 /// Implements equality comparison based on the parsed decimal value.
@@ -199,7 +200,7 @@ impl PreciseDecimal {
     pub fn from_parts(value: Option<Decimal>, original_string: String) -> Self {
         Self {
             value,
-            original_string,
+            original_string: Arc::from(original_string.as_str()),
         }
     }
 
@@ -314,7 +315,7 @@ impl PreciseDecimal {
 impl From<Decimal> for PreciseDecimal {
     fn from(value: Decimal) -> Self {
         // Generate string representation from the decimal value
-        let original_string = value.to_string();
+        let original_string = Arc::from(value.to_string());
         Self {
             value: Some(value),
             original_string,
@@ -355,7 +356,7 @@ impl Serialize for PreciseDecimal {
         S: Serializer,
     {
         // Use RawValue to preserve exact string format in JSON
-        match serde_json::value::RawValue::from_string(self.original_string.clone()) {
+        match serde_json::value::RawValue::from_string(self.original_string.to_string()) {
             Ok(raw_value) => raw_value.serialize(serializer),
             Err(e) => Err(serde::ser::Error::custom(format!(
                 "Failed to serialize PreciseDecimal '{}': {}",
@@ -544,7 +545,7 @@ pub struct PrecisionDate {
     /// Precision level of this date
     precision: DatePrecision,
     /// Original string representation
-    original_string: String,
+    original_string: Arc<str>,
 }
 
 impl PrecisionDate {
@@ -555,7 +556,7 @@ impl PrecisionDate {
             month: None,
             day: None,
             precision: DatePrecision::Year,
-            original_string: format!("{:04}", year),
+            original_string: Arc::from(format!("{:04}", year)),
         }
     }
 
@@ -566,7 +567,7 @@ impl PrecisionDate {
             month: Some(month),
             day: None,
             precision: DatePrecision::YearMonth,
-            original_string: format!("{:04}-{:02}", year, month),
+            original_string: Arc::from(format!("{:04}-{:02}", year, month)),
         }
     }
 
@@ -577,7 +578,7 @@ impl PrecisionDate {
             month: Some(month),
             day: Some(day),
             precision: DatePrecision::Full,
-            original_string: format!("{:04}-{:02}-{:02}", year, month, day),
+            original_string: Arc::from(format!("{:04}-{:02}-{:02}", year, month, day)),
         }
     }
 
@@ -596,7 +597,7 @@ impl PrecisionDate {
                     month: None,
                     day: None,
                     precision: DatePrecision::Year,
-                    original_string: s.to_string(),
+                    original_string: Arc::from(s),
                 })
             }
             2 => {
@@ -611,7 +612,7 @@ impl PrecisionDate {
                     month: Some(month),
                     day: None,
                     precision: DatePrecision::YearMonth,
-                    original_string: s.to_string(),
+                    original_string: Arc::from(s),
                 })
             }
             3 => {
@@ -627,7 +628,7 @@ impl PrecisionDate {
                     month: Some(month),
                     day: Some(day),
                     precision: DatePrecision::Full,
-                    original_string: s.to_string(),
+                    original_string: Arc::from(s),
                 })
             }
             _ => None,
@@ -748,7 +749,7 @@ pub struct PrecisionTime {
     /// Precision level of this time
     precision: TimePrecision,
     /// Original string representation
-    original_string: String,
+    original_string: Arc<str>,
 }
 
 impl PrecisionTime {
@@ -760,7 +761,7 @@ impl PrecisionTime {
             second: None,
             millisecond: None,
             precision: TimePrecision::Hour,
-            original_string: format!("{:02}", hour),
+            original_string: Arc::from(format!("{:02}", hour)),
         }
     }
 
@@ -772,7 +773,7 @@ impl PrecisionTime {
             second: None,
             millisecond: None,
             precision: TimePrecision::HourMinute,
-            original_string: format!("{:02}:{:02}", hour, minute),
+            original_string: Arc::from(format!("{:02}:{:02}", hour, minute)),
         }
     }
 
@@ -784,7 +785,7 @@ impl PrecisionTime {
             second: Some(second),
             millisecond: None,
             precision: TimePrecision::HourMinuteSecond,
-            original_string: format!("{:02}:{:02}:{:02}", hour, minute, second),
+            original_string: Arc::from(format!("{:02}:{:02}:{:02}", hour, minute, second)),
         }
     }
 
@@ -796,7 +797,7 @@ impl PrecisionTime {
             second: Some(second),
             millisecond: Some(millisecond),
             precision: TimePrecision::Millisecond,
-            original_string: format!("{:02}:{:02}:{:02}.{:03}", hour, minute, second, millisecond),
+            original_string: Arc::from(format!("{:02}:{:02}:{:02}.{:03}", hour, minute, second, millisecond)),
         }
     }
 
@@ -825,7 +826,7 @@ impl PrecisionTime {
                     second: None,
                     millisecond: None,
                     precision: TimePrecision::Hour,
-                    original_string: s.to_string(),
+                    original_string: Arc::from(s),
                 })
             }
             2 => {
@@ -841,7 +842,7 @@ impl PrecisionTime {
                     second: None,
                     millisecond: None,
                     precision: TimePrecision::HourMinute,
-                    original_string: s.to_string(),
+                    original_string: Arc::from(s),
                 })
             }
             3 => {
@@ -882,7 +883,7 @@ impl PrecisionTime {
                     second: Some(second),
                     millisecond,
                     precision,
-                    original_string: s.to_string(),
+                    original_string: Arc::from(s),
                 })
             }
             _ => None,
@@ -990,7 +991,7 @@ pub struct PrecisionDateTime {
     /// Precision level of this datetime
     precision: DateTimePrecision,
     /// Original string representation
-    original_string: String,
+    original_string: Arc<str>,
 }
 
 impl PrecisionDateTime {
@@ -1087,7 +1088,7 @@ impl PrecisionDateTime {
                 time,
                 timezone_offset,
                 precision,
-                original_string: s.to_string(),
+                original_string: Arc::from(s),
             })
         } else {
             // No 'T' separator, just a date
@@ -1099,7 +1100,7 @@ impl PrecisionDateTime {
             };
             
             Some(Self {
-                original_string: s.to_string(),
+                original_string: Arc::from(s),
                 date,
                 time: None,
                 timezone_offset: None,
@@ -1375,19 +1376,19 @@ impl<'de> Deserialize<'de> for PrecisionInstant {
 
 impl IntoEvaluationResult for PrecisionDate {
     fn to_evaluation_result(&self) -> EvaluationResult {
-        EvaluationResult::date(self.original_string.clone())
+        EvaluationResult::date(self.original_string.to_string())
     }
 }
 
 impl IntoEvaluationResult for PrecisionTime {
     fn to_evaluation_result(&self) -> EvaluationResult {
-        EvaluationResult::time(self.original_string.clone())
+        EvaluationResult::time(self.original_string.to_string())
     }
 }
 
 impl IntoEvaluationResult for PrecisionDateTime {
     fn to_evaluation_result(&self) -> EvaluationResult {
-        EvaluationResult::datetime(self.original_string.clone())
+        EvaluationResult::datetime(self.original_string.to_string())
     }
 }
 
@@ -1395,7 +1396,7 @@ impl IntoEvaluationResult for PrecisionInstant {
     fn to_evaluation_result(&self) -> EvaluationResult {
         // Return as datetime with instant type info
         EvaluationResult::DateTime(
-            self.inner.original_string.clone(),
+            self.inner.original_string.to_string(),
             Some(TypeInfoResult::new("FHIR", "instant"))
         )
     }
