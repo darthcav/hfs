@@ -522,7 +522,7 @@ impl Default for PrecisionDate {
 /// # Examples
 /// ```rust
 /// use helios_fhir::{PrecisionDate, DatePrecision};
-/// 
+///
 /// // Create a year-only date
 /// let year_date = PrecisionDate::from_year(2023);
 /// assert_eq!(year_date.precision(), DatePrecision::Year);
@@ -585,7 +585,7 @@ impl PrecisionDate {
     pub fn parse(s: &str) -> Option<Self> {
         // Remove @ prefix if present
         let s = s.strip_prefix('@').unwrap_or(s);
-        
+
         let parts: Vec<&str> = s.split('-').collect();
         match parts.len() {
             1 => {
@@ -603,7 +603,7 @@ impl PrecisionDate {
                 // Year-month
                 let year = parts[0].parse::<i32>().ok()?;
                 let month = parts[1].parse::<u32>().ok()?;
-                if month < 1 || month > 12 {
+                if !(1..=12).contains(&month) {
                     return None;
                 }
                 Some(Self {
@@ -619,7 +619,7 @@ impl PrecisionDate {
                 let year = parts[0].parse::<i32>().ok()?;
                 let month = parts[1].parse::<u32>().ok()?;
                 let day = parts[2].parse::<u32>().ok()?;
-                if month < 1 || month > 12 || day < 1 || day > 31 {
+                if !(1..=12).contains(&month) || !(1..=31).contains(&day) {
                     return None;
                 }
                 Some(Self {
@@ -661,11 +661,8 @@ impl PrecisionDate {
 
     /// Converts to a NaiveDate, using defaults for missing components.
     pub fn to_naive_date(&self) -> NaiveDate {
-        NaiveDate::from_ymd_opt(
-            self.year,
-            self.month.unwrap_or(1),
-            self.day.unwrap_or(1),
-        ).expect("Valid date components")
+        NaiveDate::from_ymd_opt(self.year, self.month.unwrap_or(1), self.day.unwrap_or(1))
+            .expect("Valid date components")
     }
 
     /// Compares two dates considering precision.
@@ -724,7 +721,7 @@ impl Default for PrecisionTime {
 /// # Examples
 /// ```rust
 /// use helios_fhir::{PrecisionTime, TimePrecision};
-/// 
+///
 /// // Create an hour-only time
 /// let hour_time = PrecisionTime::from_hour(14);
 /// assert_eq!(hour_time.precision(), TimePrecision::Hour);
@@ -805,7 +802,7 @@ impl PrecisionTime {
         // Remove @ and T prefixes if present
         let s = s.strip_prefix('@').unwrap_or(s);
         let s = s.strip_prefix('T').unwrap_or(s);
-        
+
         // Check for timezone (not allowed in FHIR time)
         if s.contains('+') || s.contains('-') || s.ends_with('Z') {
             return None;
@@ -848,7 +845,7 @@ impl PrecisionTime {
                 // Hour:minute:second[.millisecond]
                 let hour = parts[0].parse::<u32>().ok()?;
                 let minute = parts[1].parse::<u32>().ok()?;
-                
+
                 // Check for milliseconds
                 let (second, millisecond, precision) = if parts[2].contains('.') {
                     let sec_parts: Vec<&str> = parts[2].split('.').collect();
@@ -871,11 +868,11 @@ impl PrecisionTime {
                     let second = parts[2].parse::<u32>().ok()?;
                     (second, None, TimePrecision::HourMinuteSecond)
                 };
-                
+
                 if hour > 23 || minute > 59 || second > 59 {
                     return None;
                 }
-                
+
                 Some(Self {
                     hour,
                     minute: Some(minute),
@@ -908,7 +905,8 @@ impl PrecisionTime {
             self.minute.unwrap_or(0),
             self.second.unwrap_or(0),
             micro,
-        ).expect("Valid time components")
+        )
+        .expect("Valid time components")
     }
 
     /// Compares two times considering precision.
@@ -925,7 +923,7 @@ impl PrecisionTime {
                                 (None, None) => Some(Ordering::Equal),
                                 (None, Some(_)) | (Some(_), None) => None,
                                 (Some(s1), Some(s2)) => {
-                                    // Per FHIRPath spec: second and millisecond precisions are 
+                                    // Per FHIRPath spec: second and millisecond precisions are
                                     // considered a single precision using decimal comparison
                                     let ms1 = self.millisecond.unwrap_or(0);
                                     let ms2 = other.millisecond.unwrap_or(0);
@@ -969,7 +967,7 @@ impl Default for PrecisionDateTime {
 /// # Examples
 /// ```rust
 /// use helios_fhir::{PrecisionDateTime, DateTimePrecision};
-/// 
+///
 /// // Create a date-only datetime
 /// let date_dt = PrecisionDateTime::from_date(2023, 3, 15);
 /// assert_eq!(date_dt.precision(), DateTimePrecision::Date);
@@ -1034,18 +1032,18 @@ impl PrecisionDateTime {
     pub fn parse(s: &str) -> Option<Self> {
         // Remove @ prefix if present
         let s = s.strip_prefix('@').unwrap_or(s);
-        
+
         // Check for 'T' separator to determine if time is present
         if let Some(t_pos) = s.find('T') {
             let date_part = &s[..t_pos];
             let time_and_tz = &s[t_pos + 1..];
-            
+
             // Parse date part
             let date = PrecisionDate::parse(date_part)?;
-            
+
             // Check for timezone at the end
-            let (time_part, timezone_offset) = if time_and_tz.ends_with('Z') {
-                (&time_and_tz[..time_and_tz.len() - 1], Some(0))
+            let (time_part, timezone_offset) = if let Some(stripped) = time_and_tz.strip_suffix('Z') {
+                (stripped, Some(0))
             } else if let Some(plus_pos) = time_and_tz.rfind('+') {
                 let tz_str = &time_and_tz[plus_pos + 1..];
                 let offset = Self::parse_timezone_offset(tz_str)?;
@@ -1062,15 +1060,18 @@ impl PrecisionDateTime {
             } else {
                 (time_and_tz, None)
             };
-            
+
             // Parse time part if not empty
             let (time, precision) = if time_part.is_empty() {
                 // Just "T" with no time components (partial datetime)
-                (None, match date.precision {
-                    DatePrecision::Full => DateTimePrecision::Date,
-                    DatePrecision::YearMonth => DateTimePrecision::YearMonth,
-                    DatePrecision::Year => DateTimePrecision::Year,
-                })
+                (
+                    None,
+                    match date.precision {
+                        DatePrecision::Full => DateTimePrecision::Date,
+                        DatePrecision::YearMonth => DateTimePrecision::YearMonth,
+                        DatePrecision::Year => DateTimePrecision::Year,
+                    },
+                )
             } else {
                 let time = PrecisionTime::parse(time_part)?;
                 let precision = match time.precision {
@@ -1081,7 +1082,7 @@ impl PrecisionDateTime {
                 };
                 (Some(time), precision)
             };
-            
+
             Some(Self {
                 date,
                 time,
@@ -1097,7 +1098,7 @@ impl PrecisionDateTime {
                 DatePrecision::YearMonth => DateTimePrecision::YearMonth,
                 DatePrecision::Full => DateTimePrecision::Date,
             };
-            
+
             Some(Self {
                 original_string: s.to_string(),
                 date,
@@ -1156,11 +1157,14 @@ impl PrecisionDateTime {
     /// Converts to a chrono DateTime<Utc>, using defaults for missing components.
     pub fn to_chrono_datetime(&self) -> ChronoDateTime<Utc> {
         let naive_date = self.date.to_naive_date();
-        let naive_time = self.time.as_ref().map(|t| t.to_naive_time())
+        let naive_time = self
+            .time
+            .as_ref()
+            .map(|t| t.to_naive_time())
             .unwrap_or_else(|| NaiveTime::from_hms_opt(0, 0, 0).unwrap());
-        
+
         let naive_dt = naive_date.and_time(naive_time);
-        
+
         // Apply timezone offset if present
         if let Some(offset_minutes) = self.timezone_offset {
             // The datetime is in local time with the given offset
@@ -1185,7 +1189,7 @@ impl PrecisionDateTime {
             DateTimePrecision::Full => DateTimePrecision::DateHourMinuteSecond,
             p => p,
         };
-        
+
         // If precisions don't match (except for seconds/milliseconds), return None
         if self_precision_normalized != other_precision_normalized {
             // Special handling for date vs datetime with time components
@@ -1193,16 +1197,17 @@ impl PrecisionDateTime {
                 return None;
             }
         }
-        
+
         // If both have sufficient precision and timezone info, compare as full datetimes
-        if self.precision >= DateTimePrecision::DateHour 
-            && other.precision >= DateTimePrecision::DateHour 
-            && self.timezone_offset.is_some() 
-            && other.timezone_offset.is_some() {
+        if self.precision >= DateTimePrecision::DateHour
+            && other.precision >= DateTimePrecision::DateHour
+            && self.timezone_offset.is_some()
+            && other.timezone_offset.is_some()
+        {
             // Convert to UTC and compare
             return Some(self.to_chrono_datetime().cmp(&other.to_chrono_datetime()));
         }
-        
+
         // Otherwise, compare components with precision awareness
         match self.date.compare(&other.date) {
             Some(Ordering::Equal) => {
@@ -1306,7 +1311,7 @@ impl<'de> Deserialize<'de> for PrecisionDateTime {
 // === PrecisionInstant Implementation ===
 
 /// A FHIR instant value that preserves the original string representation and precision.
-/// 
+///
 /// Instants in FHIR must be complete date-time values with timezone information,
 /// representing a specific moment in time. This type wraps PrecisionDateTime but
 /// enforces instant-specific constraints.
@@ -1321,23 +1326,23 @@ impl PrecisionInstant {
     pub fn parse(s: &str) -> Option<Self> {
         // Parse as PrecisionDateTime first
         let dt = PrecisionDateTime::parse(s)?;
-        
+
         // For now, accept any valid datetime as an instant
         // In strict mode, we could require timezone, but many FHIR resources
         // use instant fields without explicit timezones
         Some(PrecisionInstant { inner: dt })
     }
-    
+
     /// Returns the original string representation
     pub fn original_string(&self) -> &str {
         self.inner.original_string()
     }
-    
+
     /// Get the inner PrecisionDateTime
     pub fn as_datetime(&self) -> &PrecisionDateTime {
         &self.inner
     }
-    
+
     /// Convert to chrono DateTime<Utc>
     pub fn to_chrono_datetime(&self) -> ChronoDateTime<Utc> {
         // PrecisionDateTime::to_chrono_datetime returns ChronoDateTime<Utc>
@@ -1396,7 +1401,7 @@ impl IntoEvaluationResult for PrecisionInstant {
         // Return as datetime with instant type info
         EvaluationResult::DateTime(
             self.inner.original_string.clone(),
-            Some(TypeInfoResult::new("FHIR", "instant"))
+            Some(TypeInfoResult::new("FHIR", "instant")),
         )
     }
 }

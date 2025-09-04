@@ -613,9 +613,7 @@ fn extract_inner_element_type(type_name: &str) -> &str {
         "Decimal" => "rust_decimal::Decimal", // Use the actual Decimal type
         "Integer64" => "std::primitive::i64",
         "String" | "Code" | "Base64Binary" | "Canonical" | "Id" | "Oid" | "Uri" | "Url"
-        | "Uuid" | "Markdown" | "Xhtml" => {
-            "std::string::String"
-        }
+        | "Uuid" | "Markdown" | "Xhtml" => "std::string::String",
         "Date" => "crate::PrecisionDate",
         "DateTime" => "crate::PrecisionDateTime",
         "Instant" => "crate::PrecisionInstant",

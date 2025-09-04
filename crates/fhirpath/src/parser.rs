@@ -673,7 +673,7 @@ pub fn parser<'src>()
             } else {
                 format!("{}T{}", date_str, time_str)
             };
-            
+
             helios_fhir::PrecisionDateTime::parse(&full_str)
                 .ok_or_else(|| Rich::custom(span, format!("Invalid datetime format: {}", full_str)))
                 .map(Literal::DateTime)
@@ -686,7 +686,12 @@ pub fn parser<'src>()
         .try_map(|date_str, span| {
             let full_str = format!("{}T", date_str);
             helios_fhir::PrecisionDateTime::parse(&full_str)
-                .ok_or_else(|| Rich::custom(span, format!("Invalid partial datetime format: {}", full_str)))
+                .ok_or_else(|| {
+                    Rich::custom(
+                        span,
+                        format!("Invalid partial datetime format: {}", full_str),
+                    )
+                })
                 .map(Literal::DateTime)
         });
 
