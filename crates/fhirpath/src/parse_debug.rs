@@ -252,22 +252,15 @@ fn literal_to_debug_tree(literal: &Literal) -> Value {
         Literal::Date(d) => {
             json!({
                 "ExpressionType": "ConstantExpression",
-                "Name": format!("@{}", d),
+                "Name": format!("@{}", d.original_string()),
                 "ReturnType": "system.Date"
             })
         }
 
-        Literal::DateTime(date, time_opt) => {
-            let value = match time_opt {
-                Some((time, tz_opt)) => match tz_opt {
-                    Some(tz) => format!("@{}T{}{}", date, time, tz),
-                    None => format!("@{}T{}", date, time),
-                },
-                None => format!("@{}", date),
-            };
+        Literal::DateTime(dt) => {
             json!({
                 "ExpressionType": "ConstantExpression",
-                "Name": value,
+                "Name": format!("@{}", dt.original_string()),
                 "ReturnType": "system.DateTime"
             })
         }
@@ -275,7 +268,7 @@ fn literal_to_debug_tree(literal: &Literal) -> Value {
         Literal::Time(t) => {
             json!({
                 "ExpressionType": "ConstantExpression",
-                "Name": format!("@T{}", t),
+                "Name": format!("@T{}", t.original_string()),
                 "ReturnType": "system.Time"
             })
         }

@@ -18,7 +18,7 @@ fn test_datetime_type_info() {
 
     // Create a DateTime value
     let datetime = helios_fhir::r4::DateTime {
-        value: Some("2016-11-12".to_string()),
+        value: Some(helios_fhir::PrecisionDateTime::parse("2016-11-12").unwrap()),
         id: None,
         extension: None,
     };

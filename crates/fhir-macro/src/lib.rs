@@ -613,9 +613,13 @@ fn extract_inner_element_type(type_name: &str) -> &str {
         "Decimal" => "rust_decimal::Decimal", // Use the actual Decimal type
         "Integer64" => "std::primitive::i64",
         "String" | "Code" | "Base64Binary" | "Canonical" | "Id" | "Oid" | "Uri" | "Url"
-        | "Uuid" | "Markdown" | "Xhtml" | "Date" | "DateTime" | "Instant" | "Time" => {
+        | "Uuid" | "Markdown" | "Xhtml" => {
             "std::string::String"
         }
+        "Date" => "crate::PrecisionDate",
+        "DateTime" => "crate::PrecisionDateTime",
+        "Instant" => "crate::PrecisionInstant",
+        "Time" => "crate::PrecisionTime",
         _ => "std::string::String", // Default or consider panic/error
     }
 }
@@ -2883,15 +2887,12 @@ fn generate_fhirpath_enum_impl(
                             resource.meta.as_ref()
                                 .and_then(|m| m.last_updated.as_ref())
                                 .and_then(|lu| {
-                                    // Handle both Element<String> (which has .value) and Option<String>
-                                    let timestamp_str = if let Some(value) = lu.value.as_ref() {
-                                        value
-                                    } else {
-                                        return None;
-                                    };
-                                    ::chrono::DateTime::parse_from_rfc3339(timestamp_str).ok()
+                                    // Handle Element<PrecisionDateTime> - get the value and convert to chrono
+                                    lu.value.as_ref().map(|precision_dt| {
+                                        // PrecisionDateTime has a to_chrono_datetime() method
+                                        precision_dt.to_chrono_datetime()
+                                    })
                                 })
-                                .map(|dt| dt.with_timezone(&::chrono::Utc))
                         }
                     }
                 }

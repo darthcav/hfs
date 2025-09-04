@@ -1,6 +1,7 @@
 use helios_fhir::DecimalElement;
 use helios_fhir::Element;
 use helios_fhir::PreciseDecimal;
+use helios_fhir::PrecisionDate;
 use helios_fhir::r4::*;
 use rust_decimal_macros::dec;
 use serde::Deserialize;
@@ -858,7 +859,7 @@ fn test_helios_fhir_serde_serialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -915,7 +916,7 @@ fn test_helios_fhir_serde_serialize() {
         birth_date1: Date {
             id: Some("bd-id-3".to_string()),
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: Boolean {
@@ -947,7 +948,7 @@ fn test_helios_fhir_serde_serialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: Boolean {
@@ -988,7 +989,7 @@ fn test_helios_fhir_serde_serialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1016,7 +1017,7 @@ fn test_helios_fhir_serde_serialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1059,7 +1060,7 @@ fn test_helios_fhir_serde_serialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1126,7 +1127,7 @@ fn test_helios_fhir_serde_serialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1184,7 +1185,7 @@ fn test_helios_fhir_serde_serialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1230,7 +1231,7 @@ fn test_helios_fhir_serde_serialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1276,7 +1277,7 @@ fn test_helios_fhir_serde_serialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1385,7 +1386,7 @@ fn test_helios_fhir_serde_deserialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1457,7 +1458,7 @@ fn test_helios_fhir_serde_deserialize() {
                     value: Some("some-ext-val".to_string()),
                 })),
             }]),
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: Boolean {
@@ -1488,7 +1489,7 @@ fn test_helios_fhir_serde_deserialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: Boolean {
@@ -1569,7 +1570,7 @@ fn test_helios_fhir_serde_deserialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1611,7 +1612,7 @@ fn test_helios_fhir_serde_deserialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1664,7 +1665,7 @@ fn test_helios_fhir_serde_deserialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1713,7 +1714,7 @@ fn test_helios_fhir_serde_deserialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1752,7 +1753,7 @@ fn test_helios_fhir_serde_deserialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),
@@ -1783,7 +1784,7 @@ fn test_helios_fhir_serde_deserialize() {
         birth_date1: Date {
             id: None,
             extension: None,
-            value: Some("1970-03-30".to_string()),
+            value: Some(PrecisionDate::parse("1970-03-30").unwrap()),
         },
         birth_date2: None,
         is_active1: true.into(),

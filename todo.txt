@@ -25,8 +25,6 @@
 
 - Modify fhir_gen to add Rust docs to r4.rs, others.
 
-- Temporarily using strings for Date, DateTime, etc.  After we can prove parsing works, we will go back and code these as proper types.
-
 - Manually added ViewDefinition Structure Definition to profiles-resources.json (deleting integer64) for generating r4.rs.  Need to also add it to the others except for r6 (anticipating a ViewDefinition resource to be added to r6) (and adding back in integer64)
 
 - Added fhirVersion to constant_types.json

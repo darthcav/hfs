@@ -5,7 +5,7 @@ use helios_fhirpath_support::IntoEvaluationResult;
 fn test_enum_conversion() {
     // Create an instant value
     let instant = Instant {
-        value: Some("2015-02-07T13:28:17.239+02:00".to_string()),
+        value: Some(helios_fhir::PrecisionInstant::parse("2015-02-07T13:28:17.239+02:00").unwrap()),
         id: None,
         extension: None,
     };

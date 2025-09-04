@@ -31,12 +31,11 @@ pub enum Literal {
     /// Integer numbers (without a decimal point)
     Integer(i64),
     /// Date literals, starting with @, such as @2022-01-01
-    Date(String),
+    Date(helios_fhir::PrecisionDate),
     /// DateTime literals with optional time and timezone parts
-    /// First String is the date part, Option contains time and optional timezone
-    DateTime(String, Option<(String, Option<String>)>),
+    DateTime(helios_fhir::PrecisionDateTime),
     /// Time literals, starting with @T, such as @T12:00:00
-    Time(String),
+    Time(helios_fhir::PrecisionTime),
     /// Quantity values with a numeric value and a unit, such as 5 'mg'
     Quantity(Decimal, String),
 }
@@ -213,18 +212,9 @@ impl fmt::Display for Literal {
             Literal::String(s) => write!(f, "'{}'", s),
             Literal::Number(d) => write!(f, "{}", d), // Use Decimal's Display
             Literal::Integer(n) => write!(f, "{}", n),
-            Literal::Date(d) => write!(f, "@{}", d),
-            Literal::DateTime(date, time_part) => {
-                write!(f, "@{}T", date)?;
-                if let Some((time, timezone)) = time_part {
-                    write!(f, "{}", time)?;
-                    if let Some(tz) = timezone {
-                        write!(f, "{}", tz)?;
-                    }
-                }
-                Ok(())
-            }
-            Literal::Time(t) => write!(f, "@T{}", t),
+            Literal::Date(d) => write!(f, "@{}", d.original_string()),
+            Literal::DateTime(dt) => write!(f, "@{}", dt.original_string()),
+            Literal::Time(t) => write!(f, "@T{}", t.original_string()),
             Literal::Quantity(d, u) => write!(f, "{} '{}'", d, u), // Use Decimal's Display and unit string
         }
     }
@@ -677,16 +667,27 @@ pub fn parser<'src>()
         .then_ignore(just('T'))
         .then(time_format)
         .then(timezone_format.clone().or_not())
-        .map(|((date_str, time_str), tz_opt)| {
-            Literal::DateTime(date_str, Some((time_str, tz_opt)))
+        .try_map(|((date_str, time_str), tz_opt), span| {
+            let full_str = if let Some(tz) = tz_opt {
+                format!("{}T{}{}", date_str, time_str, tz)
+            } else {
+                format!("{}T{}", date_str, time_str)
+            };
+            
+            helios_fhir::PrecisionDateTime::parse(&full_str)
+                .ok_or_else(|| Rich::custom(span, format!("Invalid datetime format: {}", full_str)))
+                .map(Literal::DateTime)
         });
 
     // Parser for Partial DateTime: @Date T
     let partial_datetime_literal = just('@')
         .ignore_then(date_format_str.clone())
         .then_ignore(just('T'))
-        .map(|date_str| {
-            Literal::DateTime(date_str, None) // No time numbers, no timezone
+        .try_map(|date_str, span| {
+            let full_str = format!("{}T", date_str);
+            helios_fhir::PrecisionDateTime::parse(&full_str)
+                .ok_or_else(|| Rich::custom(span, format!("Invalid partial datetime format: {}", full_str)))
+                .map(Literal::DateTime)
         });
 
     // Parser for Time: @ T Time (strictly no timezone)
@@ -705,14 +706,20 @@ pub fn parser<'src>()
                     "Time literal cannot have a timezone offset",
                 ))
             } else {
-                Ok(Literal::Time(time_str))
+                helios_fhir::PrecisionTime::parse(&time_str)
+                    .ok_or_else(|| Rich::custom(span, format!("Invalid time format: {}", time_str)))
+                    .map(Literal::Time)
             }
         });
 
     // Parser for Date: @ Date
     let date_literal = just('@')
         .ignore_then(date_format_str.clone())
-        .map(Literal::Date);
+        .try_map(|date_str, span| {
+            helios_fhir::PrecisionDate::parse(&date_str)
+                .ok_or_else(|| Rich::custom(span, format!("Invalid date format: {}", date_str)))
+                .map(Literal::Date)
+        });
 
     // Order matters: try quantity before plain number/integer.
     // Specific date/time formats should be tried before more general ones if there's ambiguity,

@@ -466,15 +466,15 @@ mod r4_impl {
                         }
                     }
                     ViewDefinitionConstantValue::Date(d) => {
-                        EvaluationResult::Date(d.value.clone().unwrap_or_default(), None)
+                        EvaluationResult::Date(d.value.clone().unwrap_or_default().to_string(), None)
                     }
                     ViewDefinitionConstantValue::DateTime(dt) => {
-                        let value = dt.value.clone().unwrap_or_default();
+                        let value_str = dt.value.clone().unwrap_or_default().to_string();
                         // Ensure DateTime values have the "@" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@") {
-                            value
+                        let prefixed = if value_str.starts_with("@") {
+                            value_str
                         } else {
-                            format!("@{}", value)
+                            format!("@{}", value_str)
                         };
                         EvaluationResult::DateTime(
                             prefixed,
@@ -482,12 +482,12 @@ mod r4_impl {
                         )
                     }
                     ViewDefinitionConstantValue::Time(t) => {
-                        let value = t.value.clone().unwrap_or_default();
+                        let value_str = t.value.clone().unwrap_or_default().to_string();
                         // Ensure Time values have the "@T" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@T") {
-                            value
+                        let prefixed = if value_str.starts_with("@T") {
+                            value_str
                         } else {
-                            format!("@T{}", value)
+                            format!("@T{}", value_str)
                         };
                         EvaluationResult::Time(prefixed, None)
                     }
@@ -501,12 +501,12 @@ mod r4_impl {
                         EvaluationResult::String(i.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::Instant(i) => {
-                        let value = i.value.clone().unwrap_or_default();
+                        let value_str = i.value.clone().unwrap_or_default().to_string();
                         // Ensure Instant values have the "@" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@") {
-                            value
+                        let prefixed = if value_str.starts_with("@") {
+                            value_str
                         } else {
-                            format!("@{}", value)
+                            format!("@{}", value_str)
                         };
                         EvaluationResult::DateTime(
                             prefixed,
@@ -684,15 +684,15 @@ mod r4b_impl {
                         }
                     }
                     ViewDefinitionConstantValue::Date(d) => {
-                        EvaluationResult::Date(d.value.clone().unwrap_or_default(), None)
+                        EvaluationResult::Date(d.value.clone().unwrap_or_default().to_string(), None)
                     }
                     ViewDefinitionConstantValue::DateTime(dt) => {
-                        let value = dt.value.clone().unwrap_or_default();
+                        let value_str = dt.value.clone().unwrap_or_default().to_string();
                         // Ensure DateTime values have the "@" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@") {
-                            value
+                        let prefixed = if value_str.starts_with("@") {
+                            value_str
                         } else {
-                            format!("@{}", value)
+                            format!("@{}", value_str)
                         };
                         EvaluationResult::DateTime(
                             prefixed,
@@ -700,12 +700,12 @@ mod r4b_impl {
                         )
                     }
                     ViewDefinitionConstantValue::Time(t) => {
-                        let value = t.value.clone().unwrap_or_default();
+                        let value_str = t.value.clone().unwrap_or_default().to_string();
                         // Ensure Time values have the "@T" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@T") {
-                            value
+                        let prefixed = if value_str.starts_with("@T") {
+                            value_str
                         } else {
-                            format!("@T{}", value)
+                            format!("@T{}", value_str)
                         };
                         EvaluationResult::Time(prefixed, None)
                     }
@@ -719,12 +719,12 @@ mod r4b_impl {
                         EvaluationResult::String(i.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::Instant(i) => {
-                        let value = i.value.clone().unwrap_or_default();
+                        let value_str = i.value.clone().unwrap_or_default().to_string();
                         // Ensure Instant values have the "@" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@") {
-                            value
+                        let prefixed = if value_str.starts_with("@") {
+                            value_str
                         } else {
-                            format!("@{}", value)
+                            format!("@{}", value_str)
                         };
                         EvaluationResult::DateTime(
                             prefixed,
@@ -904,15 +904,15 @@ mod r5_impl {
                         }
                     }
                     ViewDefinitionConstantValue::Date(d) => {
-                        EvaluationResult::Date(d.value.clone().unwrap_or_default(), None)
+                        EvaluationResult::Date(d.value.clone().unwrap_or_default().to_string(), None)
                     }
                     ViewDefinitionConstantValue::DateTime(dt) => {
-                        let value = dt.value.clone().unwrap_or_default();
+                        let value_str = dt.value.clone().unwrap_or_default().to_string();
                         // Ensure DateTime values have the "@" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@") {
-                            value
+                        let prefixed = if value_str.starts_with("@") {
+                            value_str
                         } else {
-                            format!("@{}", value)
+                            format!("@{}", value_str)
                         };
                         EvaluationResult::DateTime(
                             prefixed,
@@ -920,12 +920,12 @@ mod r5_impl {
                         )
                     }
                     ViewDefinitionConstantValue::Time(t) => {
-                        let value = t.value.clone().unwrap_or_default();
+                        let value_str = t.value.clone().unwrap_or_default().to_string();
                         // Ensure Time values have the "@T" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@T") {
-                            value
+                        let prefixed = if value_str.starts_with("@T") {
+                            value_str
                         } else {
-                            format!("@T{}", value)
+                            format!("@T{}", value_str)
                         };
                         EvaluationResult::Time(prefixed, None)
                     }
@@ -939,12 +939,12 @@ mod r5_impl {
                         EvaluationResult::String(i.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::Instant(i) => {
-                        let value = i.value.clone().unwrap_or_default();
+                        let value_str = i.value.clone().unwrap_or_default().to_string();
                         // Ensure Instant values have the "@" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@") {
-                            value
+                        let prefixed = if value_str.starts_with("@") {
+                            value_str
                         } else {
-                            format!("@{}", value)
+                            format!("@{}", value_str)
                         };
                         EvaluationResult::DateTime(
                             prefixed,
@@ -1132,15 +1132,15 @@ mod r6_impl {
                         }
                     }
                     ViewDefinitionConstantValue::Date(d) => {
-                        EvaluationResult::Date(d.value.clone().unwrap_or_default(), None)
+                        EvaluationResult::Date(d.value.clone().unwrap_or_default().to_string(), None)
                     }
                     ViewDefinitionConstantValue::DateTime(dt) => {
-                        let value = dt.value.clone().unwrap_or_default();
+                        let value_str = dt.value.clone().unwrap_or_default().to_string();
                         // Ensure DateTime values have the "@" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@") {
-                            value
+                        let prefixed = if value_str.starts_with("@") {
+                            value_str
                         } else {
-                            format!("@{}", value)
+                            format!("@{}", value_str)
                         };
                         EvaluationResult::DateTime(
                             prefixed,
@@ -1148,12 +1148,12 @@ mod r6_impl {
                         )
                     }
                     ViewDefinitionConstantValue::Time(t) => {
-                        let value = t.value.clone().unwrap_or_default();
+                        let value_str = t.value.clone().unwrap_or_default().to_string();
                         // Ensure Time values have the "@T" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@T") {
-                            value
+                        let prefixed = if value_str.starts_with("@T") {
+                            value_str
                         } else {
-                            format!("@T{}", value)
+                            format!("@T{}", value_str)
                         };
                         EvaluationResult::Time(prefixed, None)
                     }
@@ -1167,12 +1167,12 @@ mod r6_impl {
                         EvaluationResult::String(i.value.clone().unwrap_or_default(), None)
                     }
                     ViewDefinitionConstantValue::Instant(i) => {
-                        let value = i.value.clone().unwrap_or_default();
+                        let value_str = i.value.clone().unwrap_or_default().to_string();
                         // Ensure Instant values have the "@" prefix for FHIRPath
-                        let prefixed = if value.starts_with("@") {
-                            value
+                        let prefixed = if value_str.starts_with("@") {
+                            value_str
                         } else {
-                            format!("@{}", value)
+                            format!("@{}", value_str)
                         };
                         EvaluationResult::DateTime(
                             prefixed,

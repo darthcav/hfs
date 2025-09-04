@@ -3764,7 +3764,7 @@ fn patient_context() -> EvaluationContext {
             // Use imported Date
             // Element with value and extension
             id: Some("birthdate-id".to_string()), // Element ID
-            value: Some("1980-05-15".to_string()),
+            value: Some(helios_fhir::PrecisionDate::parse("1980-05-15").unwrap()),
             extension: Some(vec![Extension {
                 // Use imported Extension, wrap in Some()
                 url: "http://example.com/precision".to_string().into(), // Remove Some(), url is not Option
@@ -3797,10 +3797,10 @@ fn test_resource_simple_field_access() {
         eval("active", &context).unwrap(),
         EvaluationResult::boolean(true)
     ); // Add unwrap
-    // Accessing 'birthDate' should now return the primitive string directly
+    // Accessing 'birthDate' should now return the primitive date directly
     assert_eq!(
         eval("birthDate", &context).unwrap(), // Add unwrap
-        EvaluationResult::string("1980-05-15".to_string())
+        EvaluationResult::date("1980-05-15".to_string())
     );
     let context_result = eval("%context", &context).unwrap(); // Add unwrap
     if let EvaluationResult::Object {

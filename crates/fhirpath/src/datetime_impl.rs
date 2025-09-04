@@ -1,4 +1,5 @@
 use chrono::{DateTime, NaiveDate, NaiveDateTime, NaiveTime, Utc};
+use helios_fhir::{PrecisionDate, PrecisionDateTime, PrecisionTime};
 use helios_fhirpath_support::EvaluationResult;
 use std::cmp::Ordering;
 
@@ -90,9 +91,12 @@ pub fn compare_dates(date1: &str, date2: &str) -> Option<Ordering> {
     let date1 = date1.strip_prefix('@').unwrap_or(date1);
     let date2 = date2.strip_prefix('@').unwrap_or(date2);
 
-    let d1 = parse_date(date1)?;
-    let d2 = parse_date(date2)?;
-    Some(d1.cmp(&d2))
+    // Try to parse as precision-aware dates
+    let pd1 = PrecisionDate::parse(date1)?;
+    let pd2 = PrecisionDate::parse(date2)?;
+    
+    // Use precision-aware comparison
+    pd1.compare(&pd2)
 }
 
 /// Compares two time values
@@ -109,9 +113,12 @@ pub fn compare_times(time1: &str, time2: &str) -> Option<Ordering> {
         .strip_prefix('T')
         .unwrap_or(time2);
 
-    let t1 = parse_time(time1)?;
-    let t2 = parse_time(time2)?;
-    Some(t1.cmp(&t2))
+    // Try to parse as precision-aware times
+    let pt1 = PrecisionTime::parse(time1)?;
+    let pt2 = PrecisionTime::parse(time2)?;
+    
+    // Use precision-aware comparison
+    pt1.compare(&pt2)
 }
 
 /// Compares two datetime values
@@ -120,9 +127,12 @@ pub fn compare_datetimes(dt1: &str, dt2: &str) -> Option<Ordering> {
     let dt1 = dt1.strip_prefix('@').unwrap_or(dt1);
     let dt2 = dt2.strip_prefix('@').unwrap_or(dt2);
 
-    let d1 = parse_datetime(dt1)?;
-    let d2 = parse_datetime(dt2)?;
-    Some(d1.cmp(&d2))
+    // Try to parse as precision-aware datetimes
+    let pdt1 = PrecisionDateTime::parse(dt1)?;
+    let pdt2 = PrecisionDateTime::parse(dt2)?;
+    
+    // Use precision-aware comparison
+    pdt1.compare(&pdt2)
 }
 
 /// Compare two date/time values regardless of their specific types
@@ -141,17 +151,20 @@ pub fn compare_date_time_values(
         }
 
         // Date vs DateTime comparison
+        // Per FHIRPath spec: When comparing dates to datetimes, compare at the date precision
         (EvaluationResult::Date(d, _), EvaluationResult::DateTime(dt, _)) => {
-            // Convert date to datetime with time 00:00:00 for comparison
-            let d_normalized = normalize_date(d);
-            let d_as_dt = format!("{}T00:00:00", d_normalized);
-            compare_datetimes(&d_as_dt, dt)
+            let pd = PrecisionDate::parse(d)?;
+            let pdt = PrecisionDateTime::parse(dt)?;
+            
+            // Compare just the date portions
+            pd.compare(&pdt.date)
         }
         (EvaluationResult::DateTime(dt, _), EvaluationResult::Date(d, _)) => {
-            // Convert date to datetime with time 00:00:00 for comparison
-            let d_normalized = normalize_date(d);
-            let d_as_dt = format!("{}T00:00:00", d_normalized);
-            compare_datetimes(dt, &d_as_dt)
+            let pdt = PrecisionDateTime::parse(dt)?;
+            let pd = PrecisionDate::parse(d)?;
+            
+            // Compare just the date portions
+            pdt.date.compare(&pd)
         }
 
         // Handle string-based date/time formats
@@ -377,11 +390,9 @@ mod tests {
             compare_dates("2015-01-02", "2015-01-01"),
             Some(Ordering::Greater)
         );
-        assert_eq!(compare_dates("2015", "2015-01-01"), Some(Ordering::Equal));
-        assert_eq!(
-            compare_dates("2015-01", "2015-01-01"),
-            Some(Ordering::Equal)
-        );
+        // Different precisions return None (indeterminate)
+        assert_eq!(compare_dates("2015", "2015-01-01"), None);
+        assert_eq!(compare_dates("2015-01", "2015-01-01"), None);
     }
 
     #[test]
@@ -392,8 +403,9 @@ mod tests {
             compare_times("14:30:01", "14:30:00"),
             Some(Ordering::Greater)
         );
-        assert_eq!(compare_times("14", "14:00:00"), Some(Ordering::Equal));
-        assert_eq!(compare_times("14:30", "14:30:00"), Some(Ordering::Equal));
+        // Different precisions return None (indeterminate)
+        assert_eq!(compare_times("14", "14:00:00"), None);
+        assert_eq!(compare_times("14:30", "14:30:00"), None);
     }
 
     #[test]

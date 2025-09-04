@@ -777,7 +777,7 @@ fn structure_definition_to_rust(
 /// - `integer` → `Element<i32, Extension>`
 /// - `decimal` → `DecimalElement<Extension>` (special handling for precision)
 /// - `string`/`code`/`uri` → `Element<String, Extension>`
-/// - Date/time types → `Element<String, Extension>` (ISO format strings)
+/// - Date/time types → `Element<PrecisionDate/DateTime/Time, Extension>` (precision-aware types)
 ///
 /// # Note
 ///
@@ -804,8 +804,10 @@ fn generate_primitive_type(sd: &StructureDefinition) -> String {
         "uuid" => "std::string::String",
         "markdown" => "std::string::String",
         "xhtml" => "std::string::String",
-        "date" => "std::string::String",
-        "dateTime" | "instant" | "time" => "std::string::String",
+        "date" => "crate::PrecisionDate",
+        "dateTime" => "crate::PrecisionDateTime",
+        "instant" => "crate::PrecisionInstant",
+        "time" => "crate::PrecisionTime",
         _ => "std::string::String",
     };
 

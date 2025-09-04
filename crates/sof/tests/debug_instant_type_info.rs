@@ -18,7 +18,7 @@ fn test_instant_type_info() {
 
     // Create an instant value
     let instant = helios_fhir::r4::Instant {
-        value: Some("2015-02-07T13:28:17.239+02:00".to_string()),
+        value: Some(helios_fhir::PrecisionInstant::parse("2015-02-07T13:28:17.239+02:00").unwrap()),
         id: None,
         extension: None,
     };

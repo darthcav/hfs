@@ -1831,26 +1831,9 @@ fn evaluate_literal(literal: &Literal) -> EvaluationResult {
         Literal::String(s) => EvaluationResult::string(s.clone()),
         Literal::Number(d) => EvaluationResult::decimal(*d), // Decimal literal
         Literal::Integer(n) => EvaluationResult::integer(*n), // Integer literal
-        Literal::Date(d) => EvaluationResult::date(d.clone()),
-        Literal::DateTime(d, t) => {
-            // Include timezone in the result string if present
-            if let Some((time, timezone_opt)) = t {
-                let mut dt_string = format!("{}T{}", d, time);
-                if let Some(tz) = timezone_opt {
-                    dt_string.push_str(tz);
-                }
-                EvaluationResult::datetime(dt_string)
-            } else {
-                // Handle date-only DateTime literals (e.g., @2023T) if necessary,
-                // though the parser might prevent this specific case.
-                // For now, assume if 't' is None, it's just a date.
-                // However, the Literal::Date variant should handle this.
-                // If we reach here with t=None, it might indicate a parser issue
-                // or an unexpected Literal variant. Let's treat it as just the date part for now.
-                EvaluationResult::datetime(d.clone()) // Or potentially return Date(d.clone()) or Empty
-            }
-        }
-        Literal::Time(t) => EvaluationResult::time(t.clone()),
+        Literal::Date(d) => EvaluationResult::date(d.original_string().to_string()),
+        Literal::DateTime(dt) => EvaluationResult::datetime(dt.original_string().to_string()),
+        Literal::Time(t) => EvaluationResult::time(t.original_string().to_string()),
         Literal::Quantity(value, unit) => {
             // Normalize the unit to canonical form for consistency
             let normalized_unit = normalize_unit_for_equality(unit);
@@ -7940,6 +7923,11 @@ fn compare_equality(
                         EvaluationResult::boolean(false)
                     }
                 }
+                // Date vs DateTime are never equal (must come before generic datetime comparison)
+                (EvaluationResult::Date(_, _), EvaluationResult::DateTime(_, _))
+                | (EvaluationResult::DateTime(_, _), EvaluationResult::Date(_, _)) => {
+                    EvaluationResult::boolean(false)
+                }
                 // Attempt date/time comparison first if either operand could be date/time related
                 _ if (matches!(
                     l_cmp, // Use l_cmp
@@ -8322,6 +8310,11 @@ fn compare_equality(
                     let l_decimal = Decimal::from(*l);
                     let diff = (l_decimal - *r).abs();
                     EvaluationResult::boolean(diff <= tolerance)
+                }
+                // Date vs DateTime equivalence - they are not equivalent as they have different types
+                (EvaluationResult::Date(_, _), EvaluationResult::DateTime(_, _))
+                | (EvaluationResult::DateTime(_, _), EvaluationResult::Date(_, _)) => {
+                    EvaluationResult::boolean(false)
                 }
                 // Primitive equivalence falls back to strict equality ('=') for other types
                 // Use original left/right for recursive call to ensure consistent behavior

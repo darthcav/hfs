@@ -204,7 +204,7 @@ fn infer_literal_type(literal: &Literal) -> Option<InferredType> {
         Literal::Integer(_) => Some(InferredType::system("Integer")),
         Literal::Number(_) => Some(InferredType::system("Decimal")),
         Literal::Date(_) => Some(InferredType::system("Date")),
-        Literal::DateTime(_, _) => Some(InferredType::system("DateTime")),
+        Literal::DateTime(_) => Some(InferredType::system("DateTime")),
         Literal::Time(_) => Some(InferredType::system("Time")),
         Literal::Quantity(_, _) => Some(InferredType::system("Quantity")),
     }
