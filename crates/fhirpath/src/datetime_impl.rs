@@ -94,7 +94,7 @@ pub fn compare_dates(date1: &str, date2: &str) -> Option<Ordering> {
     // Try to parse as precision-aware dates
     let pd1 = PrecisionDate::parse(date1)?;
     let pd2 = PrecisionDate::parse(date2)?;
-    
+
     // Use precision-aware comparison
     pd1.compare(&pd2)
 }
@@ -116,7 +116,7 @@ pub fn compare_times(time1: &str, time2: &str) -> Option<Ordering> {
     // Try to parse as precision-aware times
     let pt1 = PrecisionTime::parse(time1)?;
     let pt2 = PrecisionTime::parse(time2)?;
-    
+
     // Use precision-aware comparison
     pt1.compare(&pt2)
 }
@@ -130,7 +130,7 @@ pub fn compare_datetimes(dt1: &str, dt2: &str) -> Option<Ordering> {
     // Try to parse as precision-aware datetimes
     let pdt1 = PrecisionDateTime::parse(dt1)?;
     let pdt2 = PrecisionDateTime::parse(dt2)?;
-    
+
     // Use precision-aware comparison
     pdt1.compare(&pdt2)
 }
@@ -155,14 +155,14 @@ pub fn compare_date_time_values(
         (EvaluationResult::Date(d, _), EvaluationResult::DateTime(dt, _)) => {
             let pd = PrecisionDate::parse(d)?;
             let pdt = PrecisionDateTime::parse(dt)?;
-            
+
             // Compare just the date portions
             pd.compare(&pdt.date)
         }
         (EvaluationResult::DateTime(dt, _), EvaluationResult::Date(d, _)) => {
             let pdt = PrecisionDateTime::parse(dt)?;
             let pd = PrecisionDate::parse(d)?;
-            
+
             // Compare just the date portions
             pdt.date.compare(&pd)
         }

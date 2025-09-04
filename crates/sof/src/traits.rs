@@ -465,9 +465,10 @@ mod r4_impl {
                             EvaluationResult::Decimal("0".parse().unwrap(), None)
                         }
                     }
-                    ViewDefinitionConstantValue::Date(d) => {
-                        EvaluationResult::Date(d.value.clone().unwrap_or_default().to_string(), None)
-                    }
+                    ViewDefinitionConstantValue::Date(d) => EvaluationResult::Date(
+                        d.value.clone().unwrap_or_default().to_string(),
+                        None,
+                    ),
                     ViewDefinitionConstantValue::DateTime(dt) => {
                         let value_str = dt.value.clone().unwrap_or_default().to_string();
                         // Ensure DateTime values have the "@" prefix for FHIRPath
@@ -683,9 +684,10 @@ mod r4b_impl {
                             EvaluationResult::Decimal("0".parse().unwrap(), None)
                         }
                     }
-                    ViewDefinitionConstantValue::Date(d) => {
-                        EvaluationResult::Date(d.value.clone().unwrap_or_default().to_string(), None)
-                    }
+                    ViewDefinitionConstantValue::Date(d) => EvaluationResult::Date(
+                        d.value.clone().unwrap_or_default().to_string(),
+                        None,
+                    ),
                     ViewDefinitionConstantValue::DateTime(dt) => {
                         let value_str = dt.value.clone().unwrap_or_default().to_string();
                         // Ensure DateTime values have the "@" prefix for FHIRPath
@@ -903,9 +905,10 @@ mod r5_impl {
                             EvaluationResult::Decimal("0".parse().unwrap(), None)
                         }
                     }
-                    ViewDefinitionConstantValue::Date(d) => {
-                        EvaluationResult::Date(d.value.clone().unwrap_or_default().to_string(), None)
-                    }
+                    ViewDefinitionConstantValue::Date(d) => EvaluationResult::Date(
+                        d.value.clone().unwrap_or_default().to_string(),
+                        None,
+                    ),
                     ViewDefinitionConstantValue::DateTime(dt) => {
                         let value_str = dt.value.clone().unwrap_or_default().to_string();
                         // Ensure DateTime values have the "@" prefix for FHIRPath
@@ -1131,9 +1134,10 @@ mod r6_impl {
                             EvaluationResult::Decimal("0".parse().unwrap(), None)
                         }
                     }
-                    ViewDefinitionConstantValue::Date(d) => {
-                        EvaluationResult::Date(d.value.clone().unwrap_or_default().to_string(), None)
-                    }
+                    ViewDefinitionConstantValue::Date(d) => EvaluationResult::Date(
+                        d.value.clone().unwrap_or_default().to_string(),
+                        None,
+                    ),
                     ViewDefinitionConstantValue::DateTime(dt) => {
                         let value_str = dt.value.clone().unwrap_or_default().to_string();
                         // Ensure DateTime values have the "@" prefix for FHIRPath
