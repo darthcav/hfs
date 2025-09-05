@@ -164,14 +164,14 @@ jobs:
             runner: [self-hosted, Linux]
             target: x86_64-unknown-linux-gnu
             archive_ext: tar.gz
+          - os: Windows 
+            runner: [self-hosted, Windows]
+            target: x86_64-pc-windows-msvc
+            archive_ext: zip
         #      - os: macOS
           #        runner: [self-hosted, macOS, aarch64]
           #        target: aarch64-apple-darwin
           #        archive_ext: tar.gz
-        #      - os: Windows 
-          #        runner: [self-hosted, Windows]
-          #        target: x86_64-pc-windows-msvc
-          #        archive_ext: zip
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
