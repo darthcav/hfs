@@ -6,7 +6,7 @@
 
 use std::collections::HashMap;
 use std::sync::Arc;
-use tokio::runtime::Runtime;
+use tokio::runtime::{Handle, Runtime};
 
 use serde_json::Value;
 
@@ -18,6 +18,27 @@ lazy_static::lazy_static! {
     /// Lazy static for async runtime
     /// Used to execute async terminology operations in sync context
     static ref RUNTIME: Runtime = Runtime::new().expect("Failed to create tokio runtime");
+}
+
+/// Helper function to execute async operations in both sync and async contexts
+fn block_on_async<F, T>(future: F) -> T
+where
+    F: std::future::Future<Output = T> + Send + 'static,
+    T: Send + 'static,
+{
+    // Check if we're already in an async runtime context
+    if Handle::try_current().is_ok() {
+        // We're in an async context, use block_in_place to handle the blocking operation
+        // This temporarily removes the current task from the async runtime to avoid blocking
+        tokio::task::block_in_place(move || {
+            // Create a new single-threaded runtime for this blocking operation
+            let rt = Runtime::new().expect("Failed to create runtime for terminology operation");
+            rt.block_on(future)
+        })
+    } else {
+        // Not in async context, safe to use the static runtime directly
+        RUNTIME.block_on(future)
+    }
 }
 
 /// Terminology functions accessible via %terminologies
@@ -59,8 +80,7 @@ impl TerminologyFunctions {
 
         // Execute async operation in blocking context
         let client = self.client.clone();
-        let result =
-            RUNTIME.block_on(async move { client.expand(&value_set_url, params_map).await });
+        let result = block_on_async(async move { client.expand(&value_set_url, params_map).await });
 
         match result {
             Ok(value) => json_to_evaluation_result(value),
@@ -87,8 +107,7 @@ impl TerminologyFunctions {
 
         // Execute async operation
         let client = self.client.clone();
-        let result =
-            RUNTIME.block_on(async move { client.lookup(&system, &code, params_map).await });
+        let result = block_on_async(async move { client.lookup(&system, &code, params_map).await });
 
         match result {
             Ok(value) => json_to_evaluation_result(value),
@@ -129,13 +148,14 @@ impl TerminologyFunctions {
         let system_opt = if system.is_empty() {
             None
         } else {
-            Some(system.as_str())
+            Some(system.clone())
         };
-        let display_opt = display.as_deref();
 
-        let result = RUNTIME.block_on(async move {
+        let result = block_on_async(async move {
+            let system_ref = system_opt.as_deref();
+            let display_ref = display.as_deref();
             client
-                .validate_vs(&value_set_url, system_opt, &code, display_opt, params_map)
+                .validate_vs(&value_set_url, system_ref, &code, display_ref, params_map)
                 .await
         });
 
@@ -175,11 +195,11 @@ impl TerminologyFunctions {
 
         // Execute async operation
         let client = self.client.clone();
-        let display_opt = display.as_deref();
 
-        let result = RUNTIME.block_on(async move {
+        let result = block_on_async(async move {
+            let display_ref = display.as_deref();
             client
-                .validate_cs(&code_system_url, &code, display_opt, params_map)
+                .validate_cs(&code_system_url, &code, display_ref, params_map)
                 .await
         });
 
@@ -221,7 +241,7 @@ impl TerminologyFunctions {
 
         // Execute async operation
         let client = self.client.clone();
-        let result = RUNTIME.block_on(async move {
+        let result = block_on_async(async move {
             client
                 .subsumes(&system_url, &code1, &code2, params_map)
                 .await
@@ -278,9 +298,9 @@ impl TerminologyFunctions {
 
         // Execute async operation
         let client = self.client.clone();
-        let target_system_ref = target_system.as_deref();
 
-        let result = RUNTIME.block_on(async move {
+        let result = block_on_async(async move {
+            let target_system_ref = target_system.as_deref();
             client
                 .translate(
                     &concept_map_url,
