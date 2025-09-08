@@ -201,7 +201,7 @@ jobs:
             console.log('FhirPath Validator download completed');
 
       - name: Download FHIR Test Cases
-        shell: pwsh
+        shell: powershell
         run: |
           Write-Host "Downloading FHIR R5 test cases..."
           Invoke-WebRequest -Uri "https://raw.githubusercontent.com/FHIR/fhir-test-cases/master/r5/fhirpath/tests-fhir-r5.xml" -OutFile "tests-fhir-r5.xml"
@@ -216,7 +216,7 @@ jobs:
           Get-ChildItem tests-fhir-r5.xml
 
       - name: Extract and Setup FhirPath Validator
-        shell: pwsh
+        shell: powershell
         run: |
           # Extract the validator
           New-Item -ItemType Directory -Force -Path "tools/fhirpath-validator"
@@ -244,7 +244,7 @@ jobs:
           }
 
       - name: Run FhirPath Validation with FHIR Test Cases
-        shell: pwsh
+        shell: powershell
         run: |
           Write-Host "Running FhirPath validation with FHIR R5 test cases..."
 
