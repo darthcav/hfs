@@ -201,19 +201,17 @@ jobs:
             console.log('FhirPath Validator download completed');
 
       - name: Download FHIR Test Cases
-        shell: powershell
         run: |
-          Write-Host "Downloading FHIR R5 test cases..."
-          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/FHIR/fhir-test-cases/master/r5/fhirpath/tests-fhir-r5.xml" -OutFile "tests-fhir-r5.xml"
+          echo "Downloading FHIR R5 test cases..."
+          curl -L -o tests-fhir-r5.xml "https://raw.githubusercontent.com/FHIR/fhir-test-cases/master/r5/fhirpath/tests-fhir-r5.xml"
 
-          # Verify the file was downloaded
-          if (-not (Test-Path "tests-fhir-r5.xml")) {
-            Write-Host "Failed to download FHIR test cases"
-            exit 1
-          }
+          if not exist "tests-fhir-r5.xml" (
+            echo "Failed to download FHIR test cases"
+            exit /b 1
+          )
 
-          Write-Host "FHIR test cases downloaded successfully"
-          Get-ChildItem tests-fhir-r5.xml
+          echo "FHIR test cases downloaded successfully"
+          dir tests-fhir-r5.xml
 
       - name: Extract and Setup FhirPath Validator
         shell: powershell
@@ -256,15 +254,15 @@ jobs:
           $VALIDATOR_EXIT_CODE = $LASTEXITCODE
 
           if ($VALIDATOR_EXIT_CODE -eq 0) {
-            Write-Host "✅ All FhirPath validation tests passed"
+            Write-Host " All FhirPath validation tests passed"
           } elseif ($VALIDATOR_EXIT_CODE -eq 1) {
-            Write-Host "❌ Some FhirPath validation tests failed"
+            Write-Host " Some FhirPath validation tests failed"
             exit 1
           } elseif ($VALIDATOR_EXIT_CODE -eq 2) {
-            Write-Host "💥 Fatal error occurred during FhirPath validation"
+            Write-Host " Fatal error occurred during FhirPath validation"
             exit 1
           } else {
-            Write-Host "⚠️ Unexpected exit code: $VALIDATOR_EXIT_CODE"
+            Write-Host " Unexpected exit code: $VALIDATOR_EXIT_CODE"
             exit 1
           }
 
