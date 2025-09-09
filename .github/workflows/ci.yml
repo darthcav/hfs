@@ -25,10 +25,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@v1
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ matrix.rust }}
           components: rustfmt, clippy
+          override: true
 
       - name: Configure Rust to use LLD
         run: |
@@ -75,10 +76,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@v1
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           components: rustfmt, clippy
+          override: true
 
       - name: Cache cargo registry
         uses: actions/cache@v3
@@ -104,9 +106,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@v1
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+          override: true
 
       - name: Install cargo-audit
         run: cargo install cargo-audit
@@ -123,10 +126,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@v1
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           components: llvm-tools-preview
+          override: true
 
       - name: Configure Rust to use LLD
         run: |
@@ -269,9 +273,10 @@ jobs:
             }
 
       - name: Install Rust toolchain (for fhirpath-server)
-        uses: dtolnay/rust-toolchain@v1
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+          override: true
 
       - name: Build fhirpath-server (R5)
         run: cargo build -p helios-fhirpath --features R5 --bin fhirpath-server
@@ -329,18 +334,18 @@ jobs:
                 encoding: 'utf8'
               });
               
-              console.log('✅ All FhirPath validation tests passed (excluding known failures)');
+              console.log(' All FhirPath validation tests passed (excluding known failures)');
             } catch (error) {
               const exitCode = error.status;
               
               if (exitCode === 1) {
-                console.log('❌ Some FhirPath validation tests failed');
+                console.log(' Some FhirPath validation tests failed');
                 process.exit(1);
               } else if (exitCode === 2) {
-                console.log('💥 Fatal error occurred during FhirPath validation');
+                console.log(' Fatal error occurred during FhirPath validation');
                 process.exit(1);
               } else {
-                console.log(`⚠️ Unexpected exit code: ${exitCode}`);
+                console.log(` Unexpected exit code: ${exitCode}`);
                 process.exit(1);
               }
             }
@@ -382,9 +387,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@v1
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+          override: true
 
       # TODO - need to add all of the target types
       - name: Configure Rust to use LLD
