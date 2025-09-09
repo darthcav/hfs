@@ -272,6 +272,18 @@ jobs:
               throw new Error('Validator executable not found');
             }
 
+      - name: Configure Rust to use LLD
+        shell: powershell
+        run: |
+          if (!(Test-Path "$env:USERPROFILE\.cargo")) {
+            New-Item -ItemType Directory -Path "$env:USERPROFILE\.cargo" -Force
+          }
+          $configPath = "$env:USERPROFILE\.cargo\config.toml"
+          if (!(Test-Path $configPath) -or !(Select-String -Path $configPath -Pattern "lld-link" -Quiet)) {
+            Add-Content -Path $configPath -Value "[target.x86_64-pc-windows-msvc]"
+            Add-Content -Path $configPath -Value 'linker = "lld-link.exe"'
+          }
+
       - name: Build fhirpath-server (R5)
         shell: cmd
         run: cargo build -p helios-fhirpath --features R5 --bin fhirpath-server
