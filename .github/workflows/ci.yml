@@ -268,6 +268,37 @@ jobs:
               throw new Error('Validator executable not found');
             }
 
+      - name: Install Rust toolchain (for fhirpath-server)
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Build fhirpath-server (R5)
+        run: cargo build -p helios-fhirpath --features R5 --bin fhirpath-server
+
+      - name: Start fhirpath-server (Windows)
+        shell: pwsh
+        run: |
+          $exe = Join-Path (Resolve-Path "target\debug").Path "fhirpath-server.exe"
+          Write-Host "Starting server: $exe"
+          $p = Start-Process -FilePath $exe -ArgumentList "--port 3000 --host 127.0.0.1" -PassThru
+          $pidFile = "$env:RUNNER_TEMP\fhirpath_server.pid"
+          $p.Id | Out-File -FilePath $pidFile -Encoding ascii
+          Write-Host "fhirpath-server PID: $($p.Id)"
+
+      - name: Wait for fhirpath-server to be ready (Windows)
+        shell: pwsh
+        run: |
+          $deadline = (Get-Date).AddSeconds(30)
+          do {
+            try {
+              $resp = Invoke-RestMethod -Uri http://127.0.0.1:3000/health -UseBasicParsing -TimeoutSec 2
+              if ($resp.status -eq 'ok') { Write-Host 'FHIRPath server is ready'; exit 0 }
+            } catch { }
+            Start-Sleep -Seconds 1
+          } while ((Get-Date) -lt $deadline)
+          Write-Warning 'FHIRPath server did not become ready in time'
+
       - name: Run FhirPath Validation with FHIR Test Cases
         uses: actions/github-script@v7
         with:
@@ -281,14 +312,16 @@ jobs:
             const testFilePath = path.resolve('fhir-test-cases/r5/fhirpath/tests-fhir-r5.xml');
             const basePath = path.resolve('fhir-test-cases/r5');
             const knownFailuresPath = path.resolve('crates/fhirpath/tests/data/r5/known-test-failures.json');
+            const url = 'http://127.0.0.1:3000/r5';
 
             console.log(`Test file path: ${testFilePath}`);
             console.log(`Base path: ${basePath}`);
             console.log(`Known failures file: ${knownFailuresPath}`);
+            console.log(`Server URL: ${url}`);
 
             try {
               // Run the validator as a console application with CLI arguments
-              const command = `fhirpath-validator.exe --fhir-test-file "${testFilePath}" --fhir-test-base-path "${basePath}" --known-failures "${knownFailuresPath}"`;
+              const command = `fhirpath-validator.exe --fhir-test-file "${testFilePath}" --fhir-test-base-path "${basePath}" --known-failures "${knownFailuresPath}" --url "${url}"`;
               console.log(`Executing: ${command}`);
               
               const result = execSync(command, { 
@@ -312,14 +345,17 @@ jobs:
               }
             }
 
-      # - name: Upload Test Results
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: fhirpath-test-results
-      #     path: |
-      #       tests-fhir-r5.xml
-      #       *.log
-      #     retention-days: 7
+      - name: Cleanup fhirpath-server (Windows)
+        if: always()
+        shell: pwsh
+        run: |
+          $pidFile = "$env:RUNNER_TEMP\fhirpath_server.pid"
+          if (Test-Path $pidFile) {
+            $pid = Get-Content $pidFile | Select-Object -First 1
+            Write-Host "Stopping fhirpath-server PID $pid"
+            Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+            Remove-Item $pidFile -Force -ErrorAction SilentlyContinue
+          }
 
   build:
     name: Build Release
