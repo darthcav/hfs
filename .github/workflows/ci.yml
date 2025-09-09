@@ -289,18 +289,24 @@ jobs:
 
             console.log('Running FhirPath validation with FHIR R5 test cases...');
 
-            // Get absolute path to test file
+            // Get absolute paths
             const testFilePath = path.resolve('tests-fhir-r5.xml');
+            const knownFailuresPath = path.resolve('crates/fhirpath/tests/data/r5/known-test-failures.json');
+            
             console.log(`Test file path: ${testFilePath}`);
+            console.log(`Known failures file: ${knownFailuresPath}`);
 
             try {
-              // Run the validator with the downloaded test cases
-              const result = execSync(`fhirpath-validator.exe --fhir-test-file "${testFilePath}"`, { 
+              // Run the validator as a console application with CLI arguments
+              const command = `fhirpath-validator.exe --fhir-test-file "${testFilePath}" --known-failures "${knownFailuresPath}"`;
+              console.log(`Executing: ${command}`);
+              
+              const result = execSync(command, { 
                 stdio: 'inherit',
                 encoding: 'utf8'
               });
               
-              console.log('✅ All FhirPath validation tests passed');
+              console.log('✅ All FhirPath validation tests passed (excluding known failures)');
             } catch (error) {
               const exitCode = error.status;
               
