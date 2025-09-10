@@ -7633,39 +7633,10 @@ fn compare_inequality(
             );
             if is_date_time_left && is_date_time_right {
                 // Both are date/time types but comparison returned None
-                // Special handling for Date vs DateTime ordering comparisons
-                match (left, right) {
-                    (EvaluationResult::Date(d, _), EvaluationResult::DateTime(dt, _)) => {
-                        // Extract date portion from datetime and compare
-                        let dt_date = dt.split('T').next().unwrap_or(dt);
-                        if let Some(ordering) = crate::datetime_impl::compare_dates(d, dt_date) {
-                            let result = match op {
-                                "<" => ordering.is_lt(),
-                                "<=" => ordering.is_le(),
-                                ">" => ordering.is_gt(),
-                                ">=" => ordering.is_ge(),
-                                _ => false,
-                            };
-                            return Ok(EvaluationResult::boolean(result));
-                        }
-                    }
-                    (EvaluationResult::DateTime(dt, _), EvaluationResult::Date(d, _)) => {
-                        // Extract date portion from datetime and compare
-                        let dt_date = dt.split('T').next().unwrap_or(dt);
-                        if let Some(ordering) = crate::datetime_impl::compare_dates(dt_date, d) {
-                            let result = match op {
-                                "<" => ordering.is_lt(),
-                                "<=" => ordering.is_le(),
-                                ">" => ordering.is_gt(),
-                                ">=" => ordering.is_ge(),
-                                _ => false,
-                            };
-                            return Ok(EvaluationResult::boolean(result));
-                        }
-                    }
-                    _ => {}
-                }
-                // Other indeterminate comparisons return Empty
+                // This means the comparison is indeterminate (e.g., different precisions)
+                // According to FHIRPath spec: "If one value is specified to a different level of 
+                // precision than the other, the result is empty ({ }) to indicate that the result 
+                // of the comparison is unknown."
                 return Ok(EvaluationResult::Empty);
             }
             // Also check if we have String vs DateTime/Date/Time combinations
