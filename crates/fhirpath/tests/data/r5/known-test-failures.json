@@ -43,16 +43,6 @@
       "reason": "Still working on this one - needs spec definition"
     },
     {
-      "groupName": "testLiterals",
-      "testName": "testDateTimeGreaterThanDate1",
-      "reason": "now() > Patient.birthDate - expects true but should be empty - https://chat.fhir.org/#narrow/channel/179266-fhirpath/topic/now.28.29.20.3E.20today.28.29/with/538680992"
-    },
-    {
-      "groupName": "testNow",
-      "testName": "testNow1",
-      "reason": "Patient.birthDate < now() - expects true but should be empty - https://chat.fhir.org/#narrow/channel/179266-fhirpath/topic/now.28.29.20.3E.20today.28.29/with/538680992"
-    },
-    {
       "groupName": "testInheritance",
       "testName": "testFHIRPathAsFunction11",
       "reason": "Contested"
