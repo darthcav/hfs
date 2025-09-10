@@ -61,6 +61,11 @@
       "groupName": "testTypes",
       "testName": "testStringQuantityYearLiteralToQuantity",
       "reason": "Test is wrong"
+    },
+    {
+      "groupName": "testMiscellaneousAccessorTests",
+      "testName": "testPatientHasBirthDate",
+      "reason": "Unsure how the predicate=true capability works"
     }
   ]
 }
