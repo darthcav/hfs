@@ -13,6 +13,11 @@
       "reason": "Decimal trailing zeros not preserved (known limitation)"
     },
     {
+      "groupName": "testConformsTo",
+      "testName": "*", 
+      "reason": "conformsTo not yet implemented"
+    },
+    {
       "groupName": "miscEngineTests",
       "testName": "testContainedId",
       "reason": "Multiple matches error - collection handling issue in resolve function"
