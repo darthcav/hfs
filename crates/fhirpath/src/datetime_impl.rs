@@ -171,51 +171,51 @@ pub fn compare_date_time_values(
             let dt_year = dt_precision.date.year();
 
             match date_year.cmp(&dt_year) {
-                Ordering::Less => return Some(Ordering::Less),
-                Ordering::Greater => return Some(Ordering::Greater),
+                Ordering::Less => Some(Ordering::Less),
+                Ordering::Greater => Some(Ordering::Greater),
                 Ordering::Equal => {
                     // Years are equal, check if date has month precision
                     if let Some(date_month) = date_precision.month() {
                         if let Some(dt_month) = dt_precision.date.month() {
                             match date_month.cmp(&dt_month) {
-                                Ordering::Less => return Some(Ordering::Less),
-                                Ordering::Greater => return Some(Ordering::Greater),
+                                Ordering::Less => Some(Ordering::Less),
+                                Ordering::Greater => Some(Ordering::Greater),
                                 Ordering::Equal => {
                                     // Months are equal, check if date has day precision
                                     if let Some(date_day) = date_precision.day() {
                                         if let Some(dt_day) = dt_precision.date.day() {
                                             match date_day.cmp(&dt_day) {
-                                                Ordering::Less => return Some(Ordering::Less),
+                                                Ordering::Less => Some(Ordering::Less),
                                                 Ordering::Greater => {
-                                                    return Some(Ordering::Greater);
+                                                    Some(Ordering::Greater)
                                                 }
                                                 Ordering::Equal => {
                                                     // Date and DateTime are equal up to the date's precision
                                                     // Since DateTime has more precision (time), the comparison is indeterminate
-                                                    return None;
+                                                    None
                                                 }
                                             }
                                         } else {
                                             // DateTime has no day component, which shouldn't happen
                                             // but if it does, we can't compare
-                                            return None;
+                                            None
                                         }
                                     } else {
                                         // Date has no day precision, but year and month are equal
                                         // We've run out of precision without determining the result
-                                        return None;
+                                        None
                                     }
                                 }
                             }
                         } else {
                             // DateTime has no month component, which shouldn't happen
                             // but if it does, we can't compare
-                            return None;
+                            None
                         }
                     } else {
                         // Date has no month precision (year-only), but DateTime might have month
                         // We've run out of precision on the date side
-                        return None;
+                        None
                     }
                 }
             }
