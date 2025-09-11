@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pysof"
+version = "0.1.0"
+description = "Python wrapper for the Helios SOF (SQL on FHIR) toolkit."
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+keywords = ["SQL on FHIR", "FHIR", "healthcare", "sof", "helios"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved",
+  "Operating System :: OS Independent",
+]
+dependencies = []
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pysof"]
+
+
