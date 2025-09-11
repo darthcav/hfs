@@ -4,7 +4,7 @@ This crate provides a complete implementation of the SQL-on-FHIR specification f
 
 ## Overview
 
-The `sof` crate implements the [HL7 FHIR SQL-on-FHIR Implementation Guide](https://build.fhir.org/ig/HL7/sql-on-fhir-v2/), providing:
+The `sof` crate implements the [HL7 FHIR SQL-on-FHIR Implementation Guide](https://build.fhir.org/ig/FHIR/sql-on-fhir-v2), providing:
 
 - **ViewDefinition Processing** - Transform FHIR resources into tabular data using declarative configuration
 - **Multi-Version Support** - Works seamlessly with R4, R4B, R5, and R6 FHIR specifications
