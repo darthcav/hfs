@@ -131,12 +131,10 @@ fn py_run_view_definition(
                 serde_json::from_value(bundle_json).map_err(json_error_to_py_err)?;
             Ok((SofViewDefinition::R6(view_def), SofBundle::R6(bundle)))
         }
-        _ => {
-            Err(PyUnsupportedContentTypeError::new_err(format!(
-                "Unsupported FHIR version: {}",
-                fhir_version
-            )))
-        }
+        _ => Err(PyUnsupportedContentTypeError::new_err(format!(
+            "Unsupported FHIR version: {}",
+            fhir_version
+        ))),
     };
 
     let (sof_view_def, sof_bundle) = parsed?;
@@ -295,12 +293,10 @@ fn py_validate_view_definition(
                 serde_json::from_value(view_def_json).map_err(json_error_to_py_err)?;
             Ok(true)
         }
-        _ => {
-            Err(PyUnsupportedContentTypeError::new_err(format!(
-                "Unsupported FHIR version: {}",
-                fhir_version
-            )))
-        }
+        _ => Err(PyUnsupportedContentTypeError::new_err(format!(
+            "Unsupported FHIR version: {}",
+            fhir_version
+        ))),
     }
 }
 
@@ -346,12 +342,10 @@ fn py_validate_bundle(bundle: &Bound<'_, PyAny>, fhir_version: &str) -> PyResult
                 serde_json::from_value(bundle_json).map_err(json_error_to_py_err)?;
             Ok(true)
         }
-        _ => {
-            Err(PyUnsupportedContentTypeError::new_err(format!(
-                "Unsupported FHIR version: {}",
-                fhir_version
-            )))
-        }
+        _ => Err(PyUnsupportedContentTypeError::new_err(format!(
+            "Unsupported FHIR version: {}",
+            fhir_version
+        ))),
     }
 }
 
