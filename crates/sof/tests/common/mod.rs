@@ -143,11 +143,8 @@ async fn run_view_definition_handler(
                     );
                 }
                 Some("source") => {
-                    // source is not implemented
-                    return error_response(
-                        axum::http::StatusCode::NOT_IMPLEMENTED,
-                        "The source parameter is not yet implemented.",
-                    );
+                    // Source parameter is now handled but not in test common module
+                    // Tests should validate source handling at the full server level
                 }
                 Some("resource") => {
                     if let Some(resource) = param["resource"].as_object() {

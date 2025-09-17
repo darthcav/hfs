@@ -261,6 +261,13 @@ fn parse_args() -> ServerConfig {
 }
 
 /// Create the axum application with all routes and configuration
+/// Create the application router with default configuration
+/// This is used for testing and can be used for custom server implementations
+pub fn create_app() -> Router {
+    let config = ServerConfig::default();
+    create_app_with_config(&config)
+}
+
 fn create_app_with_config(config: &ServerConfig) -> Router {
     use axum::extract::DefaultBodyLimit;
     use std::time::Duration;
