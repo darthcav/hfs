@@ -11,9 +11,9 @@ use axum::{
 };
 use chrono::{DateTime, Utc};
 use helios_sof::{
-    ContentType, SofBundle, SofViewDefinition, get_fhir_version_string,
-    get_newest_enabled_fhir_version, run_view_definition,
+    ContentType, SofBundle, SofViewDefinition,
     data_source::{DataSource, UniversalDataSource},
+    get_fhir_version_string, get_newest_enabled_fhir_version, run_view_definition,
 };
 use tracing::{debug, info};
 
@@ -192,12 +192,12 @@ pub async fn run_view_definition_handler(
         info!("Loading data from source: {}", source);
         let data_source = UniversalDataSource::new();
         let mut loaded_bundle = data_source.load(source).await?;
-        
+
         // Apply filters to source bundle if needed
         if patient_filter.is_some() || group_filter.is_some() || validated_params.since.is_some() {
             // Extract resources from source bundle for filtering
             let mut source_resources = extract_resources_from_bundle(&loaded_bundle)?;
-            
+
             // Apply filters
             if patient_filter.is_some() || group_filter.is_some() {
                 source_resources = filter_resources_by_patient_and_group(
@@ -206,15 +206,15 @@ pub async fn run_view_definition_handler(
                     group_filter.as_deref(),
                 )?;
             }
-            
+
             if let Some(since) = validated_params.since {
                 source_resources = filter_resources_by_since(source_resources, since)?;
             }
-            
+
             // Recreate bundle with filtered resources
             loaded_bundle = create_bundle_from_resources(source_resources)?;
         }
-        
+
         source_bundle = Some(loaded_bundle);
     }
 
