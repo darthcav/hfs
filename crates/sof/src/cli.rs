@@ -79,10 +79,10 @@
 //! ```bash
 //! # Load data from a local file
 //! sof-cli -v view_definition.json -s file:///path/to/fhir-data.json
-//! 
+//!
 //! # Load data from HTTP URL
 //! sof-cli -v view_definition.json -s https://example.com/fhir/Bundle/123
-//! 
+//!
 //! # Combine source with bundle (merges both data sources)
 //! sof-cli -v view_definition.json -s file:///external-data.json -b local-bundle.json
 //! ```
@@ -117,8 +117,9 @@ use chrono::{DateTime, Utc};
 use clap::Parser;
 use helios_fhir::FhirVersion;
 use helios_sof::{
-    ContentType, RunOptions, SofBundle, SofViewDefinition, run_view_definition_with_options,
+    ContentType, RunOptions, SofBundle, SofViewDefinition,
     data_source::{DataSource, UniversalDataSource},
+    run_view_definition_with_options,
 };
 use std::fs;
 use std::io::{self, Read};
@@ -137,7 +138,11 @@ struct Args {
     bundle: Option<PathBuf>,
 
     /// URL or path to FHIR data source (file://, http://, https://)
-    #[arg(long, short = 's', help = "URL or path to FHIR data source. Supports file://, http://, and https:// protocols. Can be a Bundle, single resource, or array of resources.")]
+    #[arg(
+        long,
+        short = 's',
+        help = "URL or path to FHIR data source. Supports file://, http://, and https:// protocols. Can be a Bundle, single resource, or array of resources."
+    )]
     source: Option<String>,
 
     /// Output format (csv, json, ndjson, parquet)
@@ -204,12 +209,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Check that we have at least a view definition
     if args.view.is_none() {
-        return Err("ViewDefinition is required. Please provide a path to ViewDefinition JSON file.".into());
+        return Err(
+            "ViewDefinition is required. Please provide a path to ViewDefinition JSON file.".into(),
+        );
     }
 
     // Check that we have either bundle or source for data
     if args.bundle.is_none() && args.source.is_none() {
-        return Err("No data source provided. Please provide either --bundle or --source parameter.".into());
+        return Err(
+            "No data source provided. Please provide either --bundle or --source parameter.".into(),
+        );
     }
 
     // Read ViewDefinition
@@ -265,7 +274,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let bundle: SofBundle = match (source_bundle, file_bundle) {
         // Only source provided
         (Some(bundle), None) => bundle,
-        
+
         // Only file bundle provided
         (None, Some(bundle_path)) => {
             let bundle_content = fs::read_to_string(bundle_path)?;
@@ -292,11 +301,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         }
-        
+
         // Both source and file provided - merge them
         (Some(source_bundle), Some(bundle_path)) => {
             let bundle_content = fs::read_to_string(bundle_path)?;
-            
+
             // Parse the file bundle
             let file_bundle = match args.fhir_version {
                 #[cfg(feature = "R4")]
@@ -320,11 +329,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     SofBundle::R6(b)
                 }
             };
-            
+
             // Merge the bundles - source data comes first
             merge_bundles(source_bundle, file_bundle)?
         }
-        
+
         // This shouldn't happen due to validation above
         (None, None) => unreachable!("No data source provided"),
     };
