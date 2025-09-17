@@ -16,6 +16,7 @@
 //! ```text
 //! -v, --view <VIEW>              Path to ViewDefinition JSON file (or use stdin if not provided)
 //! -b, --bundle <BUNDLE>          Path to FHIR Bundle JSON file (or use stdin if not provided)
+//! -s, --source <SOURCE>          URL or path to FHIR data source (file://, http://, https://)
 //! -f, --format <FORMAT>          Output format (csv, json, ndjson, parquet) [default: csv]
 //!     --no-headers               Exclude CSV headers (only for CSV format)
 //! -o, --output <OUTPUT>          Output file path (defaults to stdout)
@@ -74,10 +75,25 @@
 //! sof-cli -v view_definition.json -b patient_bundle.json --since 2024-01-01T00:00:00Z --limit 50
 //! ```
 //!
+//! ### Using source parameter for external data
+//! ```bash
+//! # Load data from a local file
+//! sof-cli -v view_definition.json -s file:///path/to/fhir-data.json
+//! 
+//! # Load data from HTTP URL
+//! sof-cli -v view_definition.json -s https://example.com/fhir/Bundle/123
+//! 
+//! # Combine source with bundle (merges both data sources)
+//! sof-cli -v view_definition.json -s file:///external-data.json -b local-bundle.json
+//! ```
+//!
 //! ## Input Requirements
 //!
 //! - **ViewDefinition**: A FHIR ViewDefinition resource that defines the SQL transformation
-//! - **Bundle**: A FHIR Bundle resource containing the resources to be transformed
+//! - **Data Source**: Either:
+//!   - **Bundle**: A FHIR Bundle resource containing the resources to be transformed
+//!   - **Source**: A URL or file path to FHIR data (can be Bundle, single resource, or array)
+//!   - Both Bundle and Source can be provided (data will be merged)
 //! - At least one of ViewDefinition or Bundle must be provided as a file path (not both from stdin)
 //!
 //! ## Supported Output Formats
@@ -102,6 +118,7 @@ use clap::Parser;
 use helios_fhir::FhirVersion;
 use helios_sof::{
     ContentType, RunOptions, SofBundle, SofViewDefinition, run_view_definition_with_options,
+    data_source::{DataSource, UniversalDataSource},
 };
 use std::fs;
 use std::io::{self, Read};
@@ -118,6 +135,10 @@ struct Args {
     /// Path to FHIR Bundle JSON file (or use stdin if not provided)
     #[arg(long, short = 'b')]
     bundle: Option<PathBuf>,
+
+    /// URL or path to FHIR data source (file://, http://, https://)
+    #[arg(long, short = 's', help = "URL or path to FHIR data source. Supports file://, http://, and https:// protocols. Can be a Bundle, single resource, or array of resources.")]
+    source: Option<String>,
 
     /// Output format (csv, json, ndjson, parquet)
     #[arg(
@@ -177,12 +198,18 @@ struct Args {
 /// - The FHIR version feature is not enabled for the specified version
 /// - The transformation fails due to invalid ViewDefinition or Bundle content
 /// - Output cannot be written to the specified location
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
 
-    // Check that we don't try to read both from stdin
-    if args.view.is_none() && args.bundle.is_none() {
-        return Err("Cannot read both ViewDefinition and Bundle from stdin. Please provide at least one file path.".into());
+    // Check that we have at least a view definition
+    if args.view.is_none() {
+        return Err("ViewDefinition is required. Please provide a path to ViewDefinition JSON file.".into());
+    }
+
+    // Check that we have either bundle or source for data
+    if args.bundle.is_none() && args.source.is_none() {
+        return Err("No data source provided. Please provide either --bundle or --source parameter.".into());
     }
 
     // Read ViewDefinition
@@ -195,14 +222,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
-    // Read Bundle
-    let bundle_content = match &args.bundle {
-        Some(path) => fs::read_to_string(path)?,
-        None => {
-            let mut buffer = String::new();
-            io::stdin().read_to_string(&mut buffer)?;
-            buffer
-        }
+    // Load data from source if provided
+    let source_bundle = if let Some(source) = &args.source {
+        let data_source = UniversalDataSource::new();
+        Some(data_source.load(source).await?)
+    } else {
+        None
+    };
+
+    // Read Bundle from file if provided
+    let file_bundle = if let Some(bundle_path) = &args.bundle {
+        Some(bundle_path)
+    } else {
+        None
     };
 
     // Parse ViewDefinition based on specified FHIR version
@@ -229,28 +261,72 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
-    // Parse Bundle based on specified FHIR version
-    let bundle: SofBundle = match args.fhir_version {
-        #[cfg(feature = "R4")]
-        FhirVersion::R4 => {
-            let b: helios_fhir::r4::Bundle = serde_json::from_str(&bundle_content)?;
-            SofBundle::R4(b)
+    // Determine the final bundle based on available sources
+    let bundle: SofBundle = match (source_bundle, file_bundle) {
+        // Only source provided
+        (Some(bundle), None) => bundle,
+        
+        // Only file bundle provided
+        (None, Some(bundle_path)) => {
+            let bundle_content = fs::read_to_string(bundle_path)?;
+            match args.fhir_version {
+                #[cfg(feature = "R4")]
+                FhirVersion::R4 => {
+                    let b: helios_fhir::r4::Bundle = serde_json::from_str(&bundle_content)?;
+                    SofBundle::R4(b)
+                }
+                #[cfg(feature = "R4B")]
+                FhirVersion::R4B => {
+                    let b: helios_fhir::r4b::Bundle = serde_json::from_str(&bundle_content)?;
+                    SofBundle::R4B(b)
+                }
+                #[cfg(feature = "R5")]
+                FhirVersion::R5 => {
+                    let b: helios_fhir::r5::Bundle = serde_json::from_str(&bundle_content)?;
+                    SofBundle::R5(b)
+                }
+                #[cfg(feature = "R6")]
+                FhirVersion::R6 => {
+                    let b: helios_fhir::r6::Bundle = serde_json::from_str(&bundle_content)?;
+                    SofBundle::R6(b)
+                }
+            }
         }
-        #[cfg(feature = "R4B")]
-        FhirVersion::R4B => {
-            let b: helios_fhir::r4b::Bundle = serde_json::from_str(&bundle_content)?;
-            SofBundle::R4B(b)
+        
+        // Both source and file provided - merge them
+        (Some(source_bundle), Some(bundle_path)) => {
+            let bundle_content = fs::read_to_string(bundle_path)?;
+            
+            // Parse the file bundle
+            let file_bundle = match args.fhir_version {
+                #[cfg(feature = "R4")]
+                FhirVersion::R4 => {
+                    let b: helios_fhir::r4::Bundle = serde_json::from_str(&bundle_content)?;
+                    SofBundle::R4(b)
+                }
+                #[cfg(feature = "R4B")]
+                FhirVersion::R4B => {
+                    let b: helios_fhir::r4b::Bundle = serde_json::from_str(&bundle_content)?;
+                    SofBundle::R4B(b)
+                }
+                #[cfg(feature = "R5")]
+                FhirVersion::R5 => {
+                    let b: helios_fhir::r5::Bundle = serde_json::from_str(&bundle_content)?;
+                    SofBundle::R5(b)
+                }
+                #[cfg(feature = "R6")]
+                FhirVersion::R6 => {
+                    let b: helios_fhir::r6::Bundle = serde_json::from_str(&bundle_content)?;
+                    SofBundle::R6(b)
+                }
+            };
+            
+            // Merge the bundles - source data comes first
+            merge_bundles(source_bundle, file_bundle)?
         }
-        #[cfg(feature = "R5")]
-        FhirVersion::R5 => {
-            let b: helios_fhir::r5::Bundle = serde_json::from_str(&bundle_content)?;
-            SofBundle::R5(b)
-        }
-        #[cfg(feature = "R6")]
-        FhirVersion::R6 => {
-            let b: helios_fhir::r6::Bundle = serde_json::from_str(&bundle_content)?;
-            SofBundle::R6(b)
-        }
+        
+        // This shouldn't happen due to validation above
+        (None, None) => unreachable!("No data source provided"),
     };
 
     // Determine content type
@@ -313,4 +389,153 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     Ok(())
+}
+
+/// Merge two bundles by extracting and combining their resources
+fn merge_bundles(
+    source_bundle: SofBundle,
+    file_bundle: SofBundle,
+) -> Result<SofBundle, Box<dyn std::error::Error>> {
+    // Extract all resources from both bundles
+    let mut all_resources = Vec::new();
+
+    // Extract from source bundle first (takes precedence)
+    match source_bundle {
+        #[cfg(feature = "R4")]
+        SofBundle::R4(bundle) => {
+            if let Some(entries) = bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = entry.resource {
+                        all_resources.push(serde_json::to_value(&resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R4B")]
+        SofBundle::R4B(bundle) => {
+            if let Some(entries) = bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = entry.resource {
+                        all_resources.push(serde_json::to_value(&resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R5")]
+        SofBundle::R5(bundle) => {
+            if let Some(entries) = bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = entry.resource {
+                        all_resources.push(serde_json::to_value(&resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R6")]
+        SofBundle::R6(bundle) => {
+            if let Some(entries) = bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = entry.resource {
+                        all_resources.push(serde_json::to_value(&resource)?);
+                    }
+                }
+            }
+        }
+    }
+
+    // Extract from file bundle
+    match &file_bundle {
+        #[cfg(feature = "R4")]
+        SofBundle::R4(bundle) => {
+            if let Some(entries) = &bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = &entry.resource {
+                        all_resources.push(serde_json::to_value(resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R4B")]
+        SofBundle::R4B(bundle) => {
+            if let Some(entries) = &bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = &entry.resource {
+                        all_resources.push(serde_json::to_value(resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R5")]
+        SofBundle::R5(bundle) => {
+            if let Some(entries) = &bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = &entry.resource {
+                        all_resources.push(serde_json::to_value(resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R6")]
+        SofBundle::R6(bundle) => {
+            if let Some(entries) = &bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = &entry.resource {
+                        all_resources.push(serde_json::to_value(resource)?);
+                    }
+                }
+            }
+        }
+    }
+
+    // Create a new bundle with all resources, matching the file bundle's version
+    match file_bundle {
+        #[cfg(feature = "R4")]
+        SofBundle::R4(_) => {
+            let bundle_json = serde_json::json!({
+                "resourceType": "Bundle",
+                "type": "collection",
+                "entry": all_resources.into_iter().map(|r| {
+                    serde_json::json!({"resource": r})
+                }).collect::<Vec<_>>()
+            });
+            let bundle = serde_json::from_value(bundle_json)?;
+            Ok(SofBundle::R4(bundle))
+        }
+        #[cfg(feature = "R4B")]
+        SofBundle::R4B(_) => {
+            let bundle_json = serde_json::json!({
+                "resourceType": "Bundle",
+                "type": "collection",
+                "entry": all_resources.into_iter().map(|r| {
+                    serde_json::json!({"resource": r})
+                }).collect::<Vec<_>>()
+            });
+            let bundle = serde_json::from_value(bundle_json)?;
+            Ok(SofBundle::R4B(bundle))
+        }
+        #[cfg(feature = "R5")]
+        SofBundle::R5(_) => {
+            let bundle_json = serde_json::json!({
+                "resourceType": "Bundle",
+                "type": "collection",
+                "entry": all_resources.into_iter().map(|r| {
+                    serde_json::json!({"resource": r})
+                }).collect::<Vec<_>>()
+            });
+            let bundle = serde_json::from_value(bundle_json)?;
+            Ok(SofBundle::R5(bundle))
+        }
+        #[cfg(feature = "R6")]
+        SofBundle::R6(_) => {
+            let bundle_json = serde_json::json!({
+                "resourceType": "Bundle",
+                "type": "collection",
+                "entry": all_resources.into_iter().map(|r| {
+                    serde_json::json!({"resource": r})
+                }).collect::<Vec<_>>()
+            });
+            let bundle = serde_json::from_value(bundle_json)?;
+            Ok(SofBundle::R6(bundle))
+        }
+    }
 }

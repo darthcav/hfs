@@ -178,6 +178,7 @@
 //! - `R6`: FHIR 6.0.0 support
 
 pub mod traits;
+pub mod data_source;
 
 use chrono::{DateTime, Utc};
 use helios_fhirpath::{EvaluationContext, EvaluationResult, evaluate_expression};
@@ -509,6 +510,42 @@ pub enum SofError {
     /// that prevents successful output generation.
     #[error("CSV writer error: {0}")]
     CsvWriterError(String),
+
+    /// Invalid source parameter value.
+    ///
+    /// This error occurs when the source parameter contains an invalid URL or path.
+    #[error("Invalid source: {0}")]
+    InvalidSource(String),
+
+    /// Source not found.
+    ///
+    /// This error occurs when the specified source file or URL cannot be found.
+    #[error("Source not found: {0}")]
+    SourceNotFound(String),
+
+    /// Failed to fetch data from source.
+    ///
+    /// This error occurs when fetching data from a remote source fails.
+    #[error("Failed to fetch source: {0}")]
+    SourceFetchError(String),
+
+    /// Failed to read source data.
+    ///
+    /// This error occurs when reading data from the source fails.
+    #[error("Failed to read source: {0}")]
+    SourceReadError(String),
+
+    /// Invalid content in source.
+    ///
+    /// This error occurs when the source content is not valid FHIR data.
+    #[error("Invalid source content: {0}")]
+    InvalidSourceContent(String),
+
+    /// Unsupported source protocol.
+    ///
+    /// This error occurs when the source URL uses an unsupported protocol.
+    #[error("Unsupported source protocol: {0}")]
+    UnsupportedSourceProtocol(String),
 }
 
 /// Supported output content types for ViewDefinition transformations.

@@ -13,6 +13,7 @@ use chrono::{DateTime, Utc};
 use helios_sof::{
     ContentType, SofBundle, SofViewDefinition, get_fhir_version_string,
     get_newest_enabled_fhir_version, run_view_definition,
+    data_source::{DataSource, UniversalDataSource},
 };
 use tracing::{debug, info};
 
@@ -60,7 +61,7 @@ pub async fn capability_statement() -> ServerResult<impl IntoResponse> {
 /// | viewResource | ViewDefinition | in | type | 0 | * | ViewDefinition(s) to be used for data transformation. |
 /// | patient | Reference | in | type, instance | 0 | * | Filter resources by patient. |
 /// | group | Reference | in | type, instance | 0 | * | Filter resources by group. (not yet supported) |
-/// | source | string | in | type, instance | 0 | 1 | If provided, the source of FHIR data to be transformed into a tabular projection. (not yet supported) |
+/// | source | string | in | type, instance | 0 | 1 | If provided, the source of FHIR data to be transformed into a tabular projection. Supports file:// and http(s):// URLs. |
 /// | _limit | integer | in | type, instance | 0 | 1 | Limits the number of results. (1-10000) |
 /// | _since | instant | in | type, instance | 0 | 1 | Return resources that have been modified after the supplied time. (RFC3339 format, validates format only) |
 /// | resource | Resource | in | type, instance | 0 | * | Collection of FHIR resources to be transformed into a tabular projection. |
@@ -103,11 +104,7 @@ pub async fn run_view_definition_handler(
         ));
     }
 
-    if extracted_params.source.is_some() {
-        return Err(ServerError::NotImplemented(
-            "The source parameter is not yet implemented.".to_string(),
-        ));
-    }
+    // Source parameter is now handled below
 
     // For backward compatibility, extract the legacy tuple format
     let view_def_json = extracted_params.view_definition;
@@ -189,14 +186,39 @@ pub async fn run_view_definition_handler(
         }
     }
 
-    // Handle source parameter - in a stateless server, we can't load from external sources
-    if let Some(source) = source_param {
-        debug!("Source parameter provided: {}", source);
-        return Err(ServerError::NotImplemented(
-            "The source parameter is not supported in this stateless implementation. Please provide resources in the request body.".to_string()
-        ));
+    // Handle source parameter - load data from external source if provided
+    let mut source_bundle = None;
+    if let Some(source) = &source_param {
+        info!("Loading data from source: {}", source);
+        let data_source = UniversalDataSource::new();
+        let mut loaded_bundle = data_source.load(source).await?;
+        
+        // Apply filters to source bundle if needed
+        if patient_filter.is_some() || group_filter.is_some() || validated_params.since.is_some() {
+            // Extract resources from source bundle for filtering
+            let mut source_resources = extract_resources_from_bundle(&loaded_bundle)?;
+            
+            // Apply filters
+            if patient_filter.is_some() || group_filter.is_some() {
+                source_resources = filter_resources_by_patient_and_group(
+                    source_resources,
+                    patient_filter.as_deref(),
+                    group_filter.as_deref(),
+                )?;
+            }
+            
+            if let Some(since) = validated_params.since {
+                source_resources = filter_resources_by_since(source_resources, since)?;
+            }
+            
+            // Recreate bundle with filtered resources
+            loaded_bundle = create_bundle_from_resources(source_resources)?;
+        }
+        
+        source_bundle = Some(loaded_bundle);
     }
 
+    // Apply filters to provided resources
     if patient_filter.is_some() || group_filter.is_some() {
         filtered_resources = filter_resources_by_patient_and_group(
             filtered_resources,
@@ -210,8 +232,20 @@ pub async fn run_view_definition_handler(
         filtered_resources = filter_resources_by_since(filtered_resources, since)?;
     }
 
-    // Create Bundle from resources
-    let bundle = create_bundle_from_resources(filtered_resources)?;
+    // Create Bundle from resources, merging source bundle if provided
+    let bundle = if let Some(source_bundle) = source_bundle {
+        // If we have a source bundle, merge it with any resources from the request
+        if filtered_resources.is_empty() {
+            // Only source data, use it directly
+            source_bundle
+        } else {
+            // Merge source bundle with provided resources
+            merge_bundles(source_bundle, filtered_resources)?
+        }
+    } else {
+        // No source, create bundle from provided resources
+        create_bundle_from_resources(filtered_resources)?
+    };
 
     // Execute the ViewDefinition
     info!(
@@ -455,6 +489,114 @@ fn create_bundle_from_resources(resources: Vec<serde_json::Value>) -> ServerResu
             Ok(SofBundle::R6(bundle))
         }
     }
+}
+
+/// Extract resources from a bundle as JSON values
+fn extract_resources_from_bundle(bundle: &SofBundle) -> ServerResult<Vec<serde_json::Value>> {
+    let mut resources = Vec::new();
+
+    match bundle {
+        #[cfg(feature = "R4")]
+        SofBundle::R4(bundle) => {
+            if let Some(entries) = &bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = &entry.resource {
+                        resources.push(serde_json::to_value(resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R4B")]
+        SofBundle::R4B(bundle) => {
+            if let Some(entries) = &bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = &entry.resource {
+                        resources.push(serde_json::to_value(resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R5")]
+        SofBundle::R5(bundle) => {
+            if let Some(entries) = &bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = &entry.resource {
+                        resources.push(serde_json::to_value(resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R6")]
+        SofBundle::R6(bundle) => {
+            if let Some(entries) = &bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = &entry.resource {
+                        resources.push(serde_json::to_value(resource)?);
+                    }
+                }
+            }
+        }
+    }
+
+    Ok(resources)
+}
+
+/// Merge a source bundle with additional resources
+fn merge_bundles(
+    source_bundle: SofBundle,
+    additional_resources: Vec<serde_json::Value>,
+) -> ServerResult<SofBundle> {
+    // First, extract all resources from the source bundle
+    let mut all_resources = Vec::new();
+
+    match source_bundle {
+        #[cfg(feature = "R4")]
+        SofBundle::R4(bundle) => {
+            if let Some(entries) = bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = entry.resource {
+                        all_resources.push(serde_json::to_value(&resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R4B")]
+        SofBundle::R4B(bundle) => {
+            if let Some(entries) = bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = entry.resource {
+                        all_resources.push(serde_json::to_value(&resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R5")]
+        SofBundle::R5(bundle) => {
+            if let Some(entries) = bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = entry.resource {
+                        all_resources.push(serde_json::to_value(&resource)?);
+                    }
+                }
+            }
+        }
+        #[cfg(feature = "R6")]
+        SofBundle::R6(bundle) => {
+            if let Some(entries) = bundle.entry {
+                for entry in entries {
+                    if let Some(resource) = entry.resource {
+                        all_resources.push(serde_json::to_value(&resource)?);
+                    }
+                }
+            }
+        }
+    }
+
+    // Add the additional resources
+    all_resources.extend(additional_resources);
+
+    // Create a new bundle with all resources
+    create_bundle_from_resources(all_resources)
 }
 
 /// Filter resources by patient and/or group reference
