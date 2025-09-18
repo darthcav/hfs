@@ -18,14 +18,6 @@ pub struct UniversalDataSource {
     client: reqwest::Client,
 }
 
-impl Default for UniversalDataSource {
-    fn default() -> Self {
-        Self {
-            client: reqwest::Client::new(),
-        }
-    }
-}
-
 impl UniversalDataSource {
     pub fn new() -> Self {
         Self {
