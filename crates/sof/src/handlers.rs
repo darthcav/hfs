@@ -61,7 +61,7 @@ pub async fn capability_statement() -> ServerResult<impl IntoResponse> {
 /// | viewResource | ViewDefinition | in | type | 0 | * | ViewDefinition(s) to be used for data transformation. |
 /// | patient | Reference | in | type, instance | 0 | * | Filter resources by patient. |
 /// | group | Reference | in | type, instance | 0 | * | Filter resources by group. (not yet supported) |
-/// | source | string | in | type, instance | 0 | 1 | If provided, the source of FHIR data to be transformed into a tabular projection. Supports file:// and http(s):// URLs. |
+/// | source | string | in | type, instance | 0 | 1 | If provided, the source of FHIR data to be transformed into a tabular projection. Supports file://, http(s)://, s3://, gs://, and azure:// URLs. |
 /// | _limit | integer | in | type, instance | 0 | 1 | Limits the number of results. (1-10000) |
 /// | _since | instant | in | type, instance | 0 | 1 | Return resources that have been modified after the supplied time. (RFC3339 format, validates format only) |
 /// | resource | Resource | in | type, instance | 0 | * | Collection of FHIR resources to be transformed into a tabular projection. |

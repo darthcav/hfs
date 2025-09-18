@@ -137,11 +137,11 @@ struct Args {
     #[arg(long, short = 'b')]
     bundle: Option<PathBuf>,
 
-    /// URL or path to FHIR data source (file://, http://, https://)
+    /// URL or path to FHIR data source (file://, http://, https://, s3://, gs://, azure://)
     #[arg(
         long,
         short = 's',
-        help = "URL or path to FHIR data source. Supports file://, http://, and https:// protocols. Can be a Bundle, single resource, or array of resources."
+        help = "URL or path to FHIR data source. Supports:\n  - file:// for local files\n  - http(s):// for web resources\n  - s3:// for AWS S3 (e.g., s3://bucket/path/to/bundle.json)\n  - gs:// for Google Cloud Storage (e.g., gs://bucket/path/to/bundle.json)\n  - azure:// for Azure Blob Storage (e.g., azure://container/path/to/bundle.json)\nCan be a Bundle, single resource, or array of resources.\n\nCloud storage authentication:\n  - AWS S3: Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION\n  - GCS: Set GOOGLE_SERVICE_ACCOUNT or use Application Default Credentials\n  - Azure: Set AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY or use managed identity"
     )]
     source: Option<String>,
 
