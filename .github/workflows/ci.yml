@@ -24,13 +24,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Rust toolchain
+      - name: Install Rust toolchain (Linux/macOS)
+        if: runner.os != 'Windows'
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: ${{ matrix.rust }}
-          components: rustfmt, clippy
+          toolchain: stable
 
-      - name: Configure Rust to use LLD
+      - name: Configure Rust to use LLD (Linux/MacOS)
+        if: runner.os != 'Windows'
         run: |
           mkdir -p ~/.cargo
           if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
@@ -38,6 +39,22 @@ jobs:
             echo 'linker = "clang"' >> ~/.cargo/config.toml
             echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
           fi
+
+      - name: Configure Rust to use LLD (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          if not exist "%USERPROFILE%\.cargo" mkdir "%USERPROFILE%\.cargo"
+          set "configPath=%USERPROFILE%\.cargo\config.toml"
+          if not exist "%configPath%" (
+            echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+            echo linker = "lld-link.exe" >> "%configPath%"
+          ) else (
+            findstr /C:"lld-link" "%configPath%" >nul || (
+              echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+              echo linker = "lld-link.exe" >> "%configPath%"
+            )
+          )
 
       - name: Cache cargo registry
         uses: actions/cache@v4
@@ -74,11 +91,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Rust toolchain
+      - name: Install Rust toolchain (Linux/macOS)
+        if: runner.os != 'Windows'
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-          components: rustfmt, clippy
+
+      - name: Configure Rust to use LLD (Linux/MacOS)
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p ~/.cargo
+          if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
+            echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+            echo 'linker = "clang"' >> ~/.cargo/config.toml
+            echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
+          fi
+
+      - name: Configure Rust to use LLD (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          if not exist "%USERPROFILE%\.cargo" mkdir "%USERPROFILE%\.cargo"
+          set "configPath=%USERPROFILE%\.cargo\config.toml"
+          if not exist "%configPath%" (
+            echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+            echo linker = "lld-link.exe" >> "%configPath%"
+          ) else (
+            findstr /C:"lld-link" "%configPath%" >nul || (
+              echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+              echo linker = "lld-link.exe" >> "%configPath%"
+            )
+          )
 
       - name: Cache cargo registry
         uses: actions/cache@v3
@@ -103,10 +146,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Rust toolchain
+      - name: Install Rust toolchain (Linux/macOS)
+        if: runner.os != 'Windows'
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
+
+      - name: Configure Rust to use LLD (Linux/MacOS)
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p ~/.cargo
+          if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
+            echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+            echo 'linker = "clang"' >> ~/.cargo/config.toml
+            echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
+          fi
+
+      - name: Configure Rust to use LLD (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          if not exist "%USERPROFILE%\.cargo" mkdir "%USERPROFILE%\.cargo"
+          set "configPath=%USERPROFILE%\.cargo\config.toml"
+          if not exist "%configPath%" (
+            echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+            echo linker = "lld-link.exe" >> "%configPath%"
+          ) else (
+            findstr /C:"lld-link" "%configPath%" >nul || (
+              echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+              echo linker = "lld-link.exe" >> "%configPath%"
+            )
+          )
 
       - name: Install cargo-audit
         run: cargo install cargo-audit
@@ -122,13 +192,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Rust toolchain
+      - name: Install Rust toolchain (Linux/macOS)
+        if: runner.os != 'Windows'
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-          components: llvm-tools-preview
 
-      - name: Configure Rust to use LLD
+      - name: Configure Rust to use LLD (Linux/MacOS)
+        if: runner.os != 'Windows'
         run: |
           mkdir -p ~/.cargo
           if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
@@ -136,6 +207,22 @@ jobs:
             echo 'linker = "clang"' >> ~/.cargo/config.toml
             echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
           fi
+
+      - name: Configure Rust to use LLD (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          if not exist "%USERPROFILE%\.cargo" mkdir "%USERPROFILE%\.cargo"
+          set "configPath=%USERPROFILE%\.cargo\config.toml"
+          if not exist "%configPath%" (
+            echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+            echo linker = "lld-link.exe" >> "%configPath%"
+          ) else (
+            findstr /C:"lld-link" "%configPath%" >nul || (
+              echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+              echo linker = "lld-link.exe" >> "%configPath%"
+            )
+          )
 
       # Needed to pre-install this on the agent using: cargo install cargo-llvm-cov
       #- name: Install cargo-llvm-cov
@@ -422,7 +509,6 @@ jobs:
         with:
           toolchain: stable
 
-      # TODO - need to add all of the target types
       - name: Configure Rust to use LLD (Linux/MacOS)
         if: runner.os != 'Windows'
         run: |
