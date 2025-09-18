@@ -100,7 +100,7 @@ jobs:
 
   security:
     name: Security Audit
-    runs-on: [self-hosted]
+    runs-on: [self-hosted, Linux] # Problems running this on Windows for some reason
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

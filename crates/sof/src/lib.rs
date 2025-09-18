@@ -177,8 +177,8 @@
 //! - `R5`: FHIR 5.0.0 support
 //! - `R6`: FHIR 6.0.0 support
 
-pub mod traits;
 pub mod data_source;
+pub mod traits;
 
 use chrono::{DateTime, Utc};
 use helios_fhirpath::{EvaluationContext, EvaluationResult, evaluate_expression};

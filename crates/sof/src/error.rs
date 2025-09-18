@@ -60,12 +60,12 @@ impl From<SofError> for ServerError {
             SofError::UnsupportedContentType(_) => {
                 ServerError::UnsupportedMediaType(err.to_string())
             }
-            SofError::InvalidSource(_) | SofError::SourceNotFound(_) | SofError::UnsupportedSourceProtocol(_) => {
-                ServerError::BadRequest(err.to_string())
-            }
-            SofError::SourceFetchError(_) | SofError::SourceReadError(_) | SofError::InvalidSourceContent(_) => {
-                ServerError::ProcessingError(err)
-            }
+            SofError::InvalidSource(_)
+            | SofError::SourceNotFound(_)
+            | SofError::UnsupportedSourceProtocol(_) => ServerError::BadRequest(err.to_string()),
+            SofError::SourceFetchError(_)
+            | SofError::SourceReadError(_)
+            | SofError::InvalidSourceContent(_) => ServerError::ProcessingError(err),
             _ => ServerError::ProcessingError(err),
         }
     }

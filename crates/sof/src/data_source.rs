@@ -1,6 +1,6 @@
-use crate::{SofError, SofBundle};
-use helios_fhir::Element;
+use crate::{SofBundle, SofError};
 use async_trait::async_trait;
+use helios_fhir::Element;
 use reqwest;
 use serde_json;
 use tokio::fs;
@@ -26,6 +26,12 @@ impl UniversalDataSource {
                 .build()
                 .unwrap_or_else(|_| reqwest::Client::new()),
         }
+    }
+}
+
+impl Default for UniversalDataSource {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -94,9 +100,10 @@ async fn load_from_http(client: &reqwest::Client, url: &Url) -> Result<SofBundle
     }
 
     // Get content
-    let contents = response.text().await.map_err(|e| {
-        SofError::SourceReadError(format!("Failed to read response body: {}", e))
-    })?;
+    let contents = response
+        .text()
+        .await
+        .map_err(|e| SofError::SourceReadError(format!("Failed to read response body: {}", e)))?;
 
     // Parse and convert to bundle
     parse_fhir_content(&contents, url.as_str())
@@ -137,7 +144,7 @@ fn parse_fhir_content(contents: &str, source_name: &str) -> Result<SofBundle, So
                 source_name
             )));
         }
-        
+
         // It's a single resource - wrap it in a Bundle
         return wrap_resource_in_bundle(value, source_name);
     }
@@ -174,7 +181,7 @@ fn wrap_resource_in_bundle(
         }]);
         return Ok(SofBundle::R4(bundle));
     }
-    
+
     // R4B
     #[cfg(feature = "R4B")]
     if let Ok(res) = serde_json::from_value::<helios_fhir::r4b::Resource>(resource.clone()) {
@@ -190,7 +197,7 @@ fn wrap_resource_in_bundle(
         }]);
         return Ok(SofBundle::R4B(bundle));
     }
-    
+
     // R5
     #[cfg(feature = "R5")]
     if let Ok(res) = serde_json::from_value::<helios_fhir::r5::Resource>(resource.clone()) {
@@ -201,12 +208,12 @@ fn wrap_resource_in_bundle(
             value: Some("collection".to_string()),
         };
         bundle.entry = Some(vec![helios_fhir::r5::BundleEntry {
-            resource: Some(res),
+            resource: Some(Box::new(res)),
             ..Default::default()
         }]);
         return Ok(SofBundle::R5(bundle));
     }
-    
+
     // R6
     #[cfg(feature = "R6")]
     if let Ok(res) = serde_json::from_value::<helios_fhir::r6::Resource>(resource.clone()) {
@@ -217,7 +224,7 @@ fn wrap_resource_in_bundle(
             value: Some("collection".to_string()),
         };
         bundle.entry = Some(vec![helios_fhir::r6::BundleEntry {
-            resource: Some(res),
+            resource: Some(Box::new(res)),
             ..Default::default()
         }]);
         return Ok(SofBundle::R6(bundle));
@@ -247,7 +254,7 @@ fn wrap_resources_in_bundle(
 
     // Try to parse the first resource to determine version
     let first = &arr[0];
-    
+
     // Try R4
     #[cfg(feature = "R4")]
     if serde_json::from_value::<helios_fhir::r4::Resource>(first.clone()).is_ok() {
@@ -258,7 +265,7 @@ fn wrap_resources_in_bundle(
             value: Some("collection".to_string()),
         };
         let mut entries = Vec::new();
-        
+
         for resource in arr {
             let res = serde_json::from_value::<helios_fhir::r4::Resource>(resource.clone())
                 .map_err(|e| {
@@ -272,11 +279,11 @@ fn wrap_resources_in_bundle(
                 ..Default::default()
             });
         }
-        
+
         bundle.entry = Some(entries);
         return Ok(SofBundle::R4(bundle));
     }
-    
+
     // Try R4B
     #[cfg(feature = "R4B")]
     if serde_json::from_value::<helios_fhir::r4b::Resource>(first.clone()).is_ok() {
@@ -287,7 +294,7 @@ fn wrap_resources_in_bundle(
             value: Some("collection".to_string()),
         };
         let mut entries = Vec::new();
-        
+
         for resource in arr {
             let res = serde_json::from_value::<helios_fhir::r4b::Resource>(resource.clone())
                 .map_err(|e| {
@@ -301,11 +308,11 @@ fn wrap_resources_in_bundle(
                 ..Default::default()
             });
         }
-        
+
         bundle.entry = Some(entries);
         return Ok(SofBundle::R4B(bundle));
     }
-    
+
     // Try R5
     #[cfg(feature = "R5")]
     if serde_json::from_value::<helios_fhir::r5::Resource>(first.clone()).is_ok() {
@@ -316,7 +323,7 @@ fn wrap_resources_in_bundle(
             value: Some("collection".to_string()),
         };
         let mut entries = Vec::new();
-        
+
         for resource in arr {
             let res = serde_json::from_value::<helios_fhir::r5::Resource>(resource.clone())
                 .map_err(|e| {
@@ -326,15 +333,15 @@ fn wrap_resources_in_bundle(
                     ))
                 })?;
             entries.push(helios_fhir::r5::BundleEntry {
-                resource: Some(res),
+                resource: Some(Box::new(res)),
                 ..Default::default()
             });
         }
-        
+
         bundle.entry = Some(entries);
         return Ok(SofBundle::R5(bundle));
     }
-    
+
     // Try R6
     #[cfg(feature = "R6")]
     if serde_json::from_value::<helios_fhir::r6::Resource>(first.clone()).is_ok() {
@@ -345,7 +352,7 @@ fn wrap_resources_in_bundle(
             value: Some("collection".to_string()),
         };
         let mut entries = Vec::new();
-        
+
         for resource in arr {
             let res = serde_json::from_value::<helios_fhir::r6::Resource>(resource.clone())
                 .map_err(|e| {
@@ -355,11 +362,11 @@ fn wrap_resources_in_bundle(
                     ))
                 })?;
             entries.push(helios_fhir::r6::BundleEntry {
-                resource: Some(res),
+                resource: Some(Box::new(res)),
                 ..Default::default()
             });
         }
-        
+
         bundle.entry = Some(entries);
         return Ok(SofBundle::R6(bundle));
     }
