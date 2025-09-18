@@ -80,7 +80,6 @@ jobs:
 
       - name: Run tests with all features
         run: |
-          echo "Running tests with all features..."
           #cargo test --all-features 
           cargo test --features R4,R4B,R5
 
