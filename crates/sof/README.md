@@ -41,6 +41,13 @@ cat view-definition.json | sof-cli --bundle patient-data.json --format csv
 # Read Bundle from stdin, ViewDefinition from file
 cat patient-bundle.json | sof-cli --view view-definition.json --format json
 
+# Load data using --source parameter (supports multiple protocols)
+sof-cli -v view-definition.json -s file:///path/to/bundle.json -f csv
+sof-cli -v view-definition.json -s https://example.com/fhir/bundle.json -f json
+sof-cli -v view-definition.json -s s3://my-bucket/fhir-data/bundle.json -f csv
+sof-cli -v view-definition.json -s gs://my-bucket/fhir-data/bundle.json -f json
+sof-cli -v view-definition.json -s azure://my-container/fhir-data/bundle.json -f ndjson
+
 # Filter resources modified after a specific date
 sof-cli -v view-definition.json -b patient-data.json --since 2024-01-01T00:00:00Z -f csv
 
@@ -53,10 +60,14 @@ sof-cli -v view-definition.json -b patient-data.json --since 2024-01-01T00:00:00
 
 #### CLI Features
 
-- **Flexible Input**: Read ViewDefinitions and Bundles from files or stdin (but not both from stdin)
+- **Flexible Input**:
+  - Read ViewDefinitions from file (`-v`) or stdin
+  - Read Bundles from file (`-b`), stdin, or external sources (`-s`)
+  - Use `-s/--source` to load from URLs: `file://`, `http(s)://`, `s3://`, `gs://`, `azure://`
+  - Cannot read both ViewDefinition and Bundle from stdin simultaneously
 - **Output Formats**: CSV (with/without headers), JSON (pretty-printed array), NDJSON (newline-delimited), Parquet (planned)
 - **Output Options**: Write to stdout (default) or specified file with `-o`
-- **Result Filtering**: 
+- **Result Filtering**:
   - Filter resources by modification time with `--since` (RFC3339 format)
   - Limit number of results with `--limit` (1-10000)
 - **FHIR Version Support**: R4 by default; other versions (R4B, R5, R6) require compilation with feature flags
@@ -67,6 +78,7 @@ sof-cli -v view-definition.json -b patient-data.json --since 2024-01-01T00:00:00
 ```
 -v, --view <VIEW>              Path to ViewDefinition JSON file (or use stdin if not provided)
 -b, --bundle <BUNDLE>          Path to FHIR Bundle JSON file (or use stdin if not provided)
+-s, --source <SOURCE>          URL or path to FHIR data source (see Data Sources below)
 -f, --format <FORMAT>          Output format (csv, json, ndjson, parquet) [default: csv]
     --no-headers               Exclude CSV headers (only for CSV format)
 -o, --output <OUTPUT>          Output file path (defaults to stdout)
@@ -77,6 +89,69 @@ sof-cli -v view-definition.json -b patient-data.json --since 2024-01-01T00:00:00
 
 * Additional FHIR versions (R4B, R5, R6) available when compiled with corresponding features
 ```
+
+#### Data Sources
+
+The CLI provides two ways to specify FHIR data:
+- `-b/--bundle`: Direct path to a local file (simple, no protocol prefix needed)
+- `-s/--source`: URL-based loading with protocol support (more flexible)
+
+The `--source` parameter supports loading FHIR data from various sources:
+
+##### Local Files
+```bash
+# Using --bundle (simpler for local files)
+sof-cli -v view.json -b /path/to/bundle.json
+
+# Using --source with file:// protocol
+sof-cli -v view.json -s file:///path/to/bundle.json
+```
+
+##### HTTP/HTTPS URLs
+```bash
+sof-cli -v view.json -s https://example.com/fhir/bundle.json
+```
+
+##### AWS S3
+```bash
+# Set AWS credentials
+export AWS_ACCESS_KEY_ID=your_access_key
+export AWS_SECRET_ACCESS_KEY=your_secret_key
+export AWS_REGION=us-east-1
+
+# Load from S3 bucket
+sof-cli -v view.json -s s3://my-bucket/fhir-data/bundle.json -f csv
+```
+
+##### Google Cloud Storage
+```bash
+# Option 1: Service account credentials
+export GOOGLE_SERVICE_ACCOUNT=/path/to/service-account.json
+
+# Option 2: Application Default Credentials
+gcloud auth application-default login
+
+# Load from GCS bucket
+sof-cli -v view.json -s gs://my-bucket/fhir-data/bundle.json -f json
+```
+
+##### Azure Blob Storage
+```bash
+# Option 1: Storage account credentials
+export AZURE_STORAGE_ACCOUNT=myaccount
+export AZURE_STORAGE_ACCESS_KEY=mykey
+
+# Option 2: Azure managed identity (when running in Azure)
+# No environment variables needed
+
+# Load from Azure container
+sof-cli -v view.json -s azure://my-container/fhir-data/bundle.json -f ndjson
+```
+
+The source can contain:
+- A FHIR Bundle
+- A single FHIR resource (will be wrapped in a Bundle)
+- An array of FHIR resources (will be wrapped in a Bundle)
 
 #### Output Formats
 
@@ -183,6 +258,40 @@ sof-server --enable-cors false
 
 # Show all configuration options
 sof-server --help
+```
+
+##### Cloud Storage Configuration
+
+When using the `source` parameter with cloud storage URLs, ensure the appropriate credentials are configured:
+
+**AWS S3** (`s3://` URLs):
+```bash
+export AWS_ACCESS_KEY_ID=your_access_key
+export AWS_SECRET_ACCESS_KEY=your_secret_key
+export AWS_REGION=us-east-1
+sof-server
+```
+
+**Google Cloud Storage** (`gs://` URLs):
+```bash
+# Option 1: Service account
+export GOOGLE_SERVICE_ACCOUNT=/path/to/service-account.json
+sof-server
+
+# Option 2: Application Default Credentials
+gcloud auth application-default login
+sof-server
+```
+
+**Azure Blob Storage** (`azure://` URLs):
+```bash
+# Option 1: Storage account credentials
+export AZURE_STORAGE_ACCOUNT=myaccount
+export AZURE_STORAGE_ACCESS_KEY=mykey
+sof-server
+
+# Option 2: Use managed identity when running in Azure
+sof-server
 ```
 
 ##### CORS Configuration
@@ -305,7 +414,7 @@ Parameter table:
 | viewResource | ViewDefinition | in | type | 0 | 1 | ViewDefinition to be used for data transformation. |
 | patient | Reference | in | type, instance | 0 | * | Filter resources by patient. |
 | group | Reference | in | type, instance | 0 | * | Filter resources by group. (not yet supported) |
-| source | string | in | type, instance | 0 | 1 | If provided, the source of FHIR data to be transformed into a tabular projection. (not yet supported) |
+| source | string | in | type, instance | 0 | 1 | URL or path to FHIR data source. Supports file://, http(s)://, s3://, gs://, and azure:// protocols. |
 | _limit | integer | in | type, instance | 0 | 1 | Limits the number of results. (1-10000) |
 | _since | instant | in | type, instance | 0 | 1 | Return resources that have been modified after the supplied time. (RFC3339 format, validates format only) |
 | resource | Resource | in | type, instance | 0 | * | Collection of FHIR resources to be transformed into a tabular projection. |
@@ -322,7 +431,7 @@ All parameters except `viewReference`, `viewResource`, `patient`, `group`, and `
 - **header**: Control CSV headers (only applies to CSV format)
   - `true` - Include headers (default for CSV)
   - `false` - Exclude headers
-- **source**: A String (not yet supported)
+- **source**: URL to FHIR data (file://, http://, s3://, gs://, azure://)
 - **_limit**: Limit results (1-10000)
 - **_since**: Filter by modification time (RFC3339 format)
 
@@ -336,7 +445,7 @@ For POST requests, parameters can be provided in a FHIR Parameters resource:
 - **viewResource**: As resource (inline ViewDefinition)
 - **patient**: As valueReference
 - **group**: As valueReference (not yet supported)
-- **source**: As valueString (not yet supported)
+- **source**: As valueString (URL to external FHIR data)
 - **_limit**: As valueInteger
 - **_since**: As valueInstant
 - **resource**: As resource (can be repeated)
@@ -377,6 +486,22 @@ curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=text/csv" \
 
 # Filter by modification time (requires resources with lastUpdated metadata)
 curl -X POST "http://localhost:8080/ViewDefinition/$run?_since=2024-01-01T00:00:00Z" \
+  -H "Content-Type: application/json" \
+  -d '{...}'
+
+# Load data from S3 bucket
+curl -X POST "http://localhost:8080/ViewDefinition/$run?source=s3://my-bucket/bundle.json" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "resourceType": "Parameters",
+    "parameter": [{
+      "name": "viewResource",
+      "resource": {...}
+    }]
+  }'
+
+# Load data from Azure with filtering
+curl -X POST "http://localhost:8080/ViewDefinition/$run?source=azure://container/data.json&_limit=100" \
   -H "Content-Type: application/json" \
   -d '{...}'
 ```
@@ -526,6 +651,45 @@ let ndjson = run_view_definition(view, bundle, ContentType::NdJson)?;
 // Apache Parquet (planned)
 let parquet = run_view_definition(view, bundle, ContentType::Parquet)?;
 ```
+
+## Performance
+
+### Multi-Threading
+
+The SQL-on-FHIR implementation leverages multi-core processors for optimal performance through parallel resource processing:
+
+- **Automatic Parallelization**: FHIR resources in bundles are processed in parallel using `rayon`
+- **5-7x Performance Improvement**: Benchmarks show 5-7x speedup for typical workloads on multi-core systems
+- **Zero Configuration**: Parallel processing is always enabled with intelligent work distribution
+- **Thread Pool Control**: Optionally control thread count via `RAYON_NUM_THREADS` environment variable
+
+```bash
+# Use all available CPU cores (default)
+sof-cli --view view.json --bundle large-bundle.json
+
+# Limit to 4 threads for resource-constrained environments
+RAYON_NUM_THREADS=4 sof-cli --view view.json --bundle large-bundle.json
+
+# Server with custom thread pool
+RAYON_NUM_THREADS=8 sof-server
+```
+
+#### Performance Benchmarks
+
+Typical performance improvements with multi-threading:
+
+| Bundle Size | Sequential Time | Parallel Time | Speedup |
+|-------------|----------------|---------------|---------|
+| 10 patients | 22.7ms | 8.3ms | 2.7x |
+| 50 patients | 113.8ms | 16.1ms | 7.1x |
+| 100 patients | 229.4ms | 35.7ms | 6.4x |
+| 500 patients | 1109ms | 152ms | 7.3x |
+
+The parallel processing ensures:
+- Each FHIR resource is processed independently on available threads
+- Column ordering is maintained consistently across parallel operations
+- Thread-safe evaluation contexts for FHIRPath expressions
+- Efficient load balancing through work-stealing algorithms
 
 ## Architecture
 
