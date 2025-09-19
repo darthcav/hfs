@@ -132,7 +132,7 @@ wheels = [
 ]
 
 [[package]]
-name = "pysof"
+name = "pysof-mult"
 version = "0.1.0"
 source = { editable = "." }
 
