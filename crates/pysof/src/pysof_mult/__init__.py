@@ -91,6 +91,7 @@ try:
         since: str | None = None,
         limit: int | None = None,
         page: int | None = None,
+        num_threads: int | None = None,
         fhir_version: str = "R4",
     ) -> bytes:
         """Transform FHIR Bundle data using a ViewDefinition with additional options.
@@ -102,6 +103,7 @@ try:
             since: Filter resources modified after this ISO8601 datetime
             limit: Limit the number of results returned
             page: Page number for pagination (1-based)
+            num_threads: Number of threads to use for parallel processing
             fhir_version: FHIR version to use ("R4", "R4B", "R5", "R6"). Defaults to "R4"
 
         Returns:
@@ -124,6 +126,7 @@ try:
                 since=since,
                 limit=limit,
                 page=page,
+                num_threads=num_threads,
                 fhir_version=fhir_version,
             ),
         )
@@ -277,6 +280,7 @@ except ImportError as e:
         since: str | None = None,
         limit: int | None = None,
         page: int | None = None,
+        num_threads: int | None = None,
         fhir_version: str = "R4",
     ) -> bytes:
         raise NotImplementedError("Rust extension module not available")
