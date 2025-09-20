@@ -198,6 +198,7 @@ fn py_run_view_definition(
 ///     since (str, optional): Filter resources modified after this ISO8601 datetime
 ///     limit (int, optional): Limit the number of results returned
 ///     page (int, optional): Page number for pagination (1-based)
+///     num_threads (int, optional): Number of threads to use for parallel processing
 ///     fhir_version (str, optional): FHIR version to use ("R4", "R4B", "R5", "R6"). Defaults to "R4"
 ///
 /// Returns:
@@ -211,7 +212,7 @@ fn py_run_view_definition(
 ///     CsvError: CSV generation failed
 ///     IoError: I/O operation failed
 #[pyfunction]
-#[pyo3(signature = (view_definition, bundle, format, *, since = None, limit = None, page = None, fhir_version = "R4"))]
+#[pyo3(signature = (view_definition, bundle, format, *, since = None, limit = None, page = None, num_threads = None, fhir_version = "R4"))]
 #[allow(clippy::too_many_arguments)]
 fn py_run_view_definition_with_options(
     py: Python<'_>,
@@ -221,6 +222,7 @@ fn py_run_view_definition_with_options(
     since: Option<&str>,
     limit: Option<usize>,
     page: Option<usize>,
+    num_threads: Option<usize>,
     fhir_version: &str,
 ) -> PyResult<Py<PyBytes>> {
     // Parse content type
@@ -282,6 +284,7 @@ fn py_run_view_definition_with_options(
 
     options.limit = limit;
     options.page = page;
+    options.num_threads = num_threads;
 
     // Execute transformation
     let result = run_view_definition_with_options(sof_view_def, sof_bundle, content_type, options)
