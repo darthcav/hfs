@@ -9,7 +9,7 @@ The `sof` crate implements the [HL7 FHIR SQL-on-FHIR Implementation Guide](https
 - **ViewDefinition Processing** - Transform FHIR resources into tabular data using declarative configuration
 - **Multi-Version Support** - Works seamlessly with R4, R4B, R5, and R6 FHIR specifications
 - **FHIRPath Integration** - Complex data extraction using FHIRPath expressions
-- **Multiple Output Formats** - CSV, JSON, NDJSON, and planned Parquet support
+- **Multiple Output Formats** - CSV, JSON, NDJSON, and Parquet support
 - **Command Line Interface** - Ready-to-use CLI tool for batch processing
 - **Server Implementation** - HTTP API for on-demand transformations (planned)
 
@@ -65,7 +65,7 @@ sof-cli -v view-definition.json -b patient-data.json --since 2024-01-01T00:00:00
   - Read Bundles from file (`-b`), stdin, or external sources (`-s`)
   - Use `-s/--source` to load from URLs: `file://`, `http(s)://`, `s3://`, `gs://`, `azure://`
   - Cannot read both ViewDefinition and Bundle from stdin simultaneously
-- **Output Formats**: CSV (with/without headers), JSON (pretty-printed array), NDJSON (newline-delimited), Parquet (planned)
+- **Output Formats**: CSV (with/without headers), JSON (pretty-printed array), NDJSON (newline-delimited), Parquet (columnar binary format)
 - **Output Options**: Write to stdout (default) or specified file with `-o`
 - **Result Filtering**:
   - Filter resources by modification time with `--since` (RFC3339 format)
@@ -173,8 +173,9 @@ The CLI supports multiple output formats via the `-f/--format` parameter:
   - Ideal for processing large datasets
   
 - **parquet** - Apache Parquet columnar format
-  - Efficient binary format (not yet implemented)
-  - Planned for future releases
+  - Efficient binary format for analytics workloads
+  - Automatic schema inference from data
+  - Snappy compression by default
 
 ### `sof-server` - HTTP Server
 
@@ -335,7 +336,7 @@ sof-server
 - **HTTP API**: RESTful endpoints for ViewDefinition execution
 - **CapabilityStatement**: Discovery endpoint for server capabilities  
 - **ViewDefinition Runner**: Synchronous execution of ViewDefinitions
-- **Multi-format Output**: Support for CSV, JSON, and NDJSON responses
+- **Multi-format Output**: Support for CSV, JSON, NDJSON, and Parquet responses
 - **FHIR Compliance**: Proper OperationOutcome error responses
 - **Configurable CORS**: Fine-grained control over cross-origin requests with support for specific origins, methods, and headers
 
@@ -648,8 +649,36 @@ let json = run_view_definition(view, bundle, ContentType::Json)?;
 // Newline-delimited JSON (streaming friendly)
 let ndjson = run_view_definition(view, bundle, ContentType::NdJson)?;
 
-// Apache Parquet (planned)
+// Apache Parquet (columnar binary format)
 let parquet = run_view_definition(view, bundle, ContentType::Parquet)?;
+```
+
+### Parquet Export
+
+The SOF implementation supports Apache Parquet format for efficient columnar data storage and analytics:
+
+- **Automatic Schema Inference**: Column types are automatically determined from the data
+- **FHIR Type Mapping**:
+  - `boolean` → BOOLEAN
+  - `string`/`code`/`uri` → UTF8
+  - `integer` → INT32
+  - `decimal` → FLOAT64
+  - `dateTime`/`date` → UTF8
+  - Arrays → List types with nullable elements
+- **Compression**: Snappy compression by default for optimal size/speed balance
+- **Null Handling**: All fields are OPTIONAL to accommodate FHIR's nullable nature
+- **Complex Types**: Objects and nested structures are serialized as JSON strings
+
+Example usage:
+```bash
+# CLI export to Parquet
+sof-cli --view view.json --bundle data.json --format parquet -o output.parquet
+
+# Server API
+curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=application/parquet" \
+  -H "Content-Type: application/json" \
+  -d '{"resourceType": "Parameters", ...}' \
+  --output result.parquet
 ```
 
 ## Performance

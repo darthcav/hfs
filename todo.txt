@@ -7,11 +7,8 @@
   - FHIRPath Lab Debugger support
 
 - SQL On FHIR
-  - source parameter - supporting both file path and AWS, and Google?
   - group parameter
-  - parquet file(s)
   - Chunked transfer encoding?
-  - Python Bindings
   - Submit here:  https://github.com/FHIR/sql-on-fhir-v2?tab=readme-ov-file#registering-your-implementation
 
 - Process on a pile of JSON

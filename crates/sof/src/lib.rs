@@ -178,6 +178,7 @@
 //! - `R6`: FHIR 6.0.0 support
 
 pub mod data_source;
+pub mod parquet_schema;
 pub mod traits;
 
 use chrono::{DateTime, Utc};
@@ -547,6 +548,12 @@ pub enum SofError {
     /// This error occurs when the source URL uses an unsupported protocol.
     #[error("Unsupported source protocol: {0}")]
     UnsupportedSourceProtocol(String),
+
+    /// Parquet conversion error.
+    ///
+    /// This error occurs when converting data to Parquet format fails.
+    #[error("Parquet conversion error: {0}")]
+    ParquetConversionError(String),
 }
 
 /// Supported output content types for ViewDefinition transformations.
@@ -1483,12 +1490,8 @@ where
         .map(|resource| {
             // Each thread gets its own local column vector
             let mut local_columns = Vec::new();
-            let resource_rows = generate_rows_for_resource(
-                *resource,
-                selects,
-                &mut local_columns,
-                variables
-            )?;
+            let resource_rows =
+                generate_rows_for_resource(*resource, selects, &mut local_columns, variables)?;
             Ok::<(Vec<String>, Vec<ProcessedRow>), SofError>((local_columns, resource_rows))
         })
         .collect();
@@ -2143,9 +2146,7 @@ fn format_output(result: ProcessedResult, content_type: ContentType) -> Result<V
         }
         ContentType::Json => format_json(result),
         ContentType::NdJson => format_ndjson(result),
-        ContentType::Parquet => Err(SofError::UnsupportedContentType(
-            "Parquet not yet implemented".to_string(),
-        )),
+        ContentType::Parquet => format_parquet(result),
     }
 }
 
@@ -2220,4 +2221,46 @@ fn format_ndjson(result: ProcessedResult) -> Result<Vec<u8>, SofError> {
     }
 
     Ok(output)
+}
+
+fn format_parquet(result: ProcessedResult) -> Result<Vec<u8>, SofError> {
+    use arrow::record_batch::RecordBatch;
+    use parquet::arrow::ArrowWriter;
+    use parquet::basic::Compression;
+    use parquet::file::properties::WriterProperties;
+    use std::io::Cursor;
+
+    // Create Arrow schema from columns and sample data
+    let schema = parquet_schema::create_arrow_schema(&result.columns, &result.rows)?;
+    let schema_ref = std::sync::Arc::new(schema.clone());
+
+    // Convert data to Arrow arrays
+    let arrays = parquet_schema::process_to_arrow_arrays(&schema, &result.columns, &result.rows)?;
+
+    // Create RecordBatch
+    let batch = RecordBatch::try_new(schema_ref.clone(), arrays).map_err(|e| {
+        SofError::ParquetConversionError(format!("Failed to create RecordBatch: {}", e))
+    })?;
+
+    // Set up writer properties with Snappy compression
+    let props = WriterProperties::builder()
+        .set_compression(Compression::SNAPPY)
+        .build();
+
+    // Write to memory buffer
+    let mut buffer = Vec::new();
+    let mut cursor = Cursor::new(&mut buffer);
+    let mut writer = ArrowWriter::try_new(&mut cursor, schema_ref, Some(props)).map_err(|e| {
+        SofError::ParquetConversionError(format!("Failed to create Parquet writer: {}", e))
+    })?;
+
+    writer.write(&batch).map_err(|e| {
+        SofError::ParquetConversionError(format!("Failed to write RecordBatch: {}", e))
+    })?;
+
+    writer.close().map_err(|e| {
+        SofError::ParquetConversionError(format!("Failed to close Parquet writer: {}", e))
+    })?;
+
+    Ok(buffer)
 }
