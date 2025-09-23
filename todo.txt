@@ -1,8 +1,6 @@
 - Make repo public
   - Add a CONTRIBUTING.md file
 
-- R6 build recently is not building - it worked on Sat the 16th
-
 - FHIRPath
   - FHIRPath Lab Debugger support
 
