@@ -591,10 +591,29 @@ jobs:
           prerelease: ${{ contains(github.ref_name, '-') }}
           generate_release_notes: ${{ steps.changelog.outputs.changelog_exists == 'false' }}
 
+  pysof-version:
+    name: Extract pysof Version
+    runs-on: [self-hosted, Linux]
+    outputs:
+      version: ${{ steps.ver.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Read version
+        id: ver
+        working-directory: crates/pysof
+        run: |
+          ver=$(grep '^version' pyproject.toml | head -n1 | sed -E 's/version *= *"([^"]+)"/\1/')
+          echo "version=$ver" >> $GITHUB_OUTPUT
+          echo "Detected pysof version: $ver"
+
   pysof-wheels:
     name: Build pysof Wheels
+    concurrency:
+      group: pysof-wheels-${{ needs.pysof-version.outputs.version }}
+      cancel-in-progress: true
     runs-on: ${{ matrix.os }}
-    needs: [test]
+    needs: [test, pysof-version]
     strategy:
       matrix:
         include:
@@ -612,9 +631,9 @@ jobs:
         id: pyver
         working-directory: crates/pysof
         run: |
-          ver=$(grep '^version' pyproject.toml | head -n1 | sed -E "s/version *= *\"([^\"]+)\"/\1/")
-          echo "Detected pysof version: $ver"
+          ver='${{ needs.pysof-version.outputs.version }}'
           echo "version=$ver" >> $GITHUB_OUTPUT
+          echo "Detected pysof version (from upstream): $ver"
 
       - name: Check if version exists on PyPI
         id: pypi
@@ -674,46 +693,56 @@ jobs:
 
   pysof-publish:
     name: Publish pysof to PyPI
+    concurrency:
+      group: pysof-publish-${{ needs.pysof-version.outputs.version }}
+      cancel-in-progress: false
     runs-on: [self-hosted, Linux]
-    needs: [pysof-wheels]
+    needs: [pysof-version, pysof-wheels]
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Read pysof version
+      - name: Use version output
         id: pyver
-        working-directory: crates/pysof
         run: |
-          ver=$(grep '^version' pyproject.toml | head -n1 | sed -E "s/version *= *\"([^\"]+)\"/\1/")
-          echo "version=$ver" >> $GITHUB_OUTPUT
+          echo "version=${{ needs.pysof-version.outputs.version }}" >> $GITHUB_OUTPUT
+          echo "Using pysof version: ${{ needs.pysof-version.outputs.version }}"
+
+      - name: Re-check if version exists on PyPI
+        id: pypi
+        run: |
+          ver='${{ needs.pysof-version.outputs.version }}'
+          status=$(curl -s -o /dev/null -w "%{http_code}" https://pypi.org/pypi/pysof_mult/$ver/json || true)
+          if [ "$status" = "200" ]; then
+            echo "already=true" >> $GITHUB_OUTPUT
+            echo "Version $ver already on PyPI."
+          else
+            echo "already=false" >> $GITHUB_OUTPUT
+            echo "Version $ver not on PyPI."
+          fi
 
       - name: Download pysof artifacts
+        if: steps.pypi.outputs.already == 'false'
         uses: actions/download-artifact@v4
         with:
           path: pysof-artifacts
 
-      - name: List downloaded artifacts
-        run: |
-          find pysof-artifacts -type f -maxdepth 4 || true
-
-      - name: Ensure wheels exist
+      - name: Validate wheels
+        if: steps.pypi.outputs.already == 'false'
         run: |
           count=$(find pysof-artifacts -type f -name '*.whl' | wc -l | tr -d ' ')
           if [ "$count" -eq 0 ]; then
-            echo "No wheels found (maybe version already existed) — skipping publish."; exit 0; fi
-          echo "Found $count wheel files"
+            echo "No wheels to publish. Exiting."; exit 1; fi
+          echo "Found $count wheels."
 
-      # PyPI publish disabled pending secret configuration.
-      # To enable publishing, add a secret named PYPI_API_TOKEN (or PYPI_TOKEN) and restore a step like:
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        if: env.PYPI_API_TOKEN != ''
-        env:
-          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-        with:
-          packages-dir: pysof-artifacts
-          skip-existing: true
+      # Publication currently disabled to avoid secret lint errors.
+      # To enable publishing:
+      # 1. Add repository secret PYPI_API_TOKEN with an API token from PyPI.
+      # 2. Replace the step below with the pypa publish action referencing that secret.
+      - name: Publish to PyPI (disabled)
+        if: false
+        run: echo "Publishing disabled. Configure PYPI_API_TOKEN to enable."
 
       - name: Finish
-        run: echo "pysof publish job completed (publish disabled)"
+        run: echo "pysof publish workflow complete (publish disabled)."
