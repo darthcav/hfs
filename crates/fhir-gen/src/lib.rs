@@ -738,10 +738,102 @@ fn escape_doc_comment(text: &str) -> String {
         .replace("\n\n\n", "\n\n") // Reduce excessive blank lines
         // Fix common typos in FHIR spec
         .replace("(aka \"privacy tags\".", "(aka \"privacy tags\").")
-        .replace("(aka \"tagged\")", "(aka \"tagged\")")
+        .replace("(aka \"tagged\")", "(aka 'tagged')")
+        // Escape comparison operators that look like quote markers to clippy
+        .replace(" <=", " \\<=")
+        .replace(" >=", " \\>=")
+        .replace("(<=", "(\\<=")
+        .replace("(>=", "(\\>=")
         .trim_end() // Remove trailing whitespace
         .to_string()
         // Note: We don't escape quotes in doc comments as they don't cause issues
+}
+
+/// Formats text content for use in Rust doc comments, handling proper indentation.
+///
+/// This function ensures that multi-line content is properly formatted for Rust doc
+/// comments, including handling bullet points and numbered lists that need continuation indentation.
+///
+/// # Arguments
+///
+/// * `text` - The text to format
+/// * `in_list` - Whether we're currently in a list context
+///
+/// # Returns
+///
+/// Returns formatted lines ready for doc comment output.
+fn format_doc_content(text: &str, in_list: bool) -> Vec<String> {
+    let mut output = Vec::new();
+    let mut in_list_item = false;
+    
+    for line in text.split('\n') {
+        let trimmed = line.trim_start();
+        
+        // Check if this is a list item (bullet, numbered, or dash)
+        let is_bullet = trimmed.starts_with("* ") && !in_list;
+        let is_dash = trimmed.starts_with("- ") && !in_list;
+        let is_numbered = !in_list && {
+            // Match patterns like "1) ", "2. ", "10) ", etc.
+            if let Some(first_space) = trimmed.find(' ') {
+                let prefix = &trimmed[..first_space];
+                // Check if it ends with ) or . and starts with a number
+                (prefix.ends_with(')') || prefix.ends_with('.')) && 
+                prefix.chars().next().is_some_and(|c| c.is_numeric())
+            } else {
+                false
+            }
+        };
+        
+        if is_bullet || is_numbered || is_dash {
+            in_list_item = true;
+            output.push(line.to_string());
+        } else if in_list_item {
+            // We're in a list item context
+            if line.trim().is_empty() {
+                // Empty line ends the list item
+                output.push(String::new());
+                in_list_item = false;
+            } else if trimmed.starts_with("* ") || trimmed.starts_with("- ") || 
+                     (trimmed.find(' ').is_some_and(|idx| {
+                         let prefix = &trimmed[..idx];
+                         (prefix.ends_with(')') || prefix.ends_with('.')) && 
+                         prefix.chars().next().is_some_and(|c| c.is_numeric())
+                     })) {
+                // New list item
+                output.push(line.to_string());
+            } else {
+                // Continuation line - needs to be indented
+                let content = line.trim();
+                if !content.is_empty() {
+                    // For numbered lists like "1) text", indent to align with text
+                    // For bullet/dash lists, use 2 spaces
+                    let indent = if let Some(prev_line) = output.last() {
+                        let prev_trimmed = prev_line.trim_start();
+                        if let Some(space_pos) = prev_trimmed.find(' ') {
+                            let prefix = &prev_trimmed[..space_pos];
+                            if (prefix.ends_with(')') || prefix.ends_with('.')) && 
+                               prefix.chars().next().is_some_and(|c| c.is_numeric()) {
+                                // It's a numbered list - use 3 spaces for safety
+                                "   ".to_string()
+                            } else {
+                                "  ".to_string()
+                            }
+                        } else {
+                            "  ".to_string()
+                        }
+                    } else {
+                        "  ".to_string()
+                    };
+                    output.push(format!("{}{}", indent, content));
+                }
+            }
+        } else {
+            // Not in a list item - regular line
+            output.push(line.to_string());
+        }
+    }
+    
+    output
 }
 
 /// Formats cardinality information into human-readable text.
@@ -917,24 +1009,66 @@ fn generate_struct_documentation(sd: &StructureDefinition) -> String {
     if let Some(desc) = &sd.description {
         if !desc.is_empty() {
             output.push_str("/// \n");
+            let escaped_desc = escape_doc_comment(desc);
+            let formatted_lines = format_doc_content(&escaped_desc, false);
+            
             // Split long descriptions into multiple lines
-            for line in desc.split('\n') {
+            for line in formatted_lines {
                 if line.is_empty() {
                     output.push_str("/// \n");
                 } else if line.len() <= 77 {
                     // Line fits, output as is
                     output.push_str("/// ");
-                    output.push_str(&escape_doc_comment(line));
-                    output.push_str("\n");
+                    output.push_str(&line);
+                    output.push('\n');
                 } else {
                     // Need to wrap - use word boundaries
-                    let escaped_line = escape_doc_comment(line);
-                    let words = escaped_line.split_whitespace().collect::<Vec<_>>();
+                    let words = line.split_whitespace().collect::<Vec<_>>();
                     let mut current_line = String::new();
                     
-                    for word in words {
+                    // Check if this line needs indentation
+                    // Either it's already indented (continuation) or it's a list item
+                    let trimmed_line = line.trim_start();
+                    let is_list_item = trimmed_line.starts_with("* ") || 
+                                     trimmed_line.starts_with("- ") ||
+                                     trimmed_line.find(' ').is_some_and(|idx| {
+                                         let prefix = &trimmed_line[..idx];
+                                         (prefix.ends_with(')') || prefix.ends_with('.')) && 
+                                         prefix.chars().next().is_some_and(|c| c.is_numeric())
+                                     });
+                    
+                    // Determine if this is a numbered list that needs more indentation
+                    let is_numbered_list = trimmed_line.find(' ').is_some_and(|idx| {
+                        let prefix = &trimmed_line[..idx];
+                        (prefix.ends_with(')') || prefix.ends_with('.')) && 
+                        prefix.chars().next().is_some_and(|c| c.is_numeric())
+                    });
+                    
+                    let indent = if line.starts_with("   ") {
+                        "   "  // Already has 3 spaces
+                    } else if line.starts_with("  ") { 
+                        "  "   // Already has 2 spaces
+                    } else if is_numbered_list {
+                        // For numbered lists, use 3 spaces for continuation lines
+                        "   "
+                    } else if is_list_item {
+                        // For bullet/dash lists, use 2 spaces
+                        "  "
+                    } else { 
+                        "" 
+                    };
+                    
+                    // For list items, we don't want to indent the first line
+                    let first_line_indent = if is_list_item { "" } else { indent };
+                    
+                    for word in words.iter() {
                         if current_line.is_empty() {
-                            current_line = word.to_string();
+                            // First word - include indent if needed (but not for bullet points)
+                            current_line = if !first_line_indent.is_empty() {
+                                format!("{}{}", first_line_indent, word)
+                            } else {
+                                word.to_string()
+                            };
                         } else if current_line.len() + 1 + word.len() <= 77 {
                             current_line.push(' ');
                             current_line.push_str(word);
@@ -942,9 +1076,13 @@ fn generate_struct_documentation(sd: &StructureDefinition) -> String {
                             // Output the current line
                             output.push_str("/// ");
                             output.push_str(&current_line);
-                            output.push_str("\n");
-                            // Start new line with this word
-                            current_line = word.to_string();
+                            output.push('\n');
+                            // Start new line with this word, always use indent for continuations
+                            current_line = if !indent.is_empty() {
+                                format!("{}{}", indent, word)
+                            } else {
+                                word.to_string()
+                            };
                         }
                     }
                     
@@ -952,7 +1090,7 @@ fn generate_struct_documentation(sd: &StructureDefinition) -> String {
                     if !current_line.is_empty() {
                         output.push_str("/// ");
                         output.push_str(&current_line);
-                        output.push_str("\n");
+                        output.push('\n');
                     }
                 }
             }
@@ -964,11 +1102,14 @@ fn generate_struct_documentation(sd: &StructureDefinition) -> String {
         if !purpose.is_empty() {
             output.push_str("/// \n");
             output.push_str("/// ## Purpose\n");
-            for line in purpose.split('\n') {
+            let escaped_purpose = escape_doc_comment(purpose);
+            let formatted_lines = format_doc_content(&escaped_purpose, false);
+            
+            for line in formatted_lines {
                 if line.is_empty() {
                     output.push_str("/// \n");
                 } else {
-                    output.push_str(&format!("/// {}\n", escape_doc_comment(line)));
+                    output.push_str(&format!("/// {}\n", line));
                 }
             }
         }
@@ -1018,6 +1159,7 @@ fn generate_struct_documentation(sd: &StructureDefinition) -> String {
 fn generate_element_documentation(element: &ElementDefinition) -> String {
     let mut output = String::new();
     
+    
     // Short description (primary doc comment)
     if let Some(short) = &element.short {
         output.push_str(&format!("/// {}\n", escape_doc_comment(short)));
@@ -1028,23 +1170,67 @@ fn generate_element_documentation(element: &ElementDefinition) -> String {
         if !definition.is_empty() {
             output.push_str("/// \n");
             let escaped_definition = escape_doc_comment(definition);
-            // Split long definitions into multiple lines
-            for line in escaped_definition.split('\n') {
+            let formatted_lines = format_doc_content(&escaped_definition, false);
+            
+            
+            // Process each formatted line
+            for line in formatted_lines {
                 if line.is_empty() {
                     output.push_str("/// \n");
                 } else if line.len() <= 77 {
                     // Line fits, output as is
                     output.push_str("/// ");
-                    output.push_str(line);
-                    output.push_str("\n");
+                    output.push_str(&line);
+                    output.push('\n');
+                    
                 } else {
                     // Need to wrap - use word boundaries
                     let words = line.split_whitespace().collect::<Vec<_>>();
                     let mut current_line = String::new();
                     
-                    for word in words {
+                    // Check if this line needs indentation
+                    // Either it's already indented (continuation) or it's a list item
+                    let trimmed_line = line.trim_start();
+                    let is_list_item = trimmed_line.starts_with("* ") || 
+                                     trimmed_line.starts_with("- ") ||
+                                     trimmed_line.find(' ').is_some_and(|idx| {
+                                         let prefix = &trimmed_line[..idx];
+                                         (prefix.ends_with(')') || prefix.ends_with('.')) && 
+                                         prefix.chars().next().is_some_and(|c| c.is_numeric())
+                                     });
+                    
+                    // Determine if this is a numbered list that needs more indentation
+                    let is_numbered_list = trimmed_line.find(' ').is_some_and(|idx| {
+                        let prefix = &trimmed_line[..idx];
+                        (prefix.ends_with(')') || prefix.ends_with('.')) && 
+                        prefix.chars().next().is_some_and(|c| c.is_numeric())
+                    });
+                    
+                    let indent = if line.starts_with("   ") {
+                        "   "  // Already has 3 spaces
+                    } else if line.starts_with("  ") { 
+                        "  "   // Already has 2 spaces
+                    } else if is_numbered_list {
+                        // For numbered lists, use 3 spaces for continuation lines
+                        "   "
+                    } else if is_list_item {
+                        // For bullet/dash lists, use 2 spaces
+                        "  "
+                    } else { 
+                        "" 
+                    };
+                    
+                    // For list items, we don't want to indent the first line
+                    let first_line_indent = if is_list_item { "" } else { indent };
+                    
+                    for word in words.iter() {
                         if current_line.is_empty() {
-                            current_line = word.to_string();
+                            // First word - include indent if needed (but not for bullet points)
+                            current_line = if !first_line_indent.is_empty() {
+                                format!("{}{}", first_line_indent, word)
+                            } else {
+                                word.to_string()
+                            };
                         } else if current_line.len() + 1 + word.len() <= 77 {
                             current_line.push(' ');
                             current_line.push_str(word);
@@ -1052,9 +1238,13 @@ fn generate_element_documentation(element: &ElementDefinition) -> String {
                             // Output the current line
                             output.push_str("/// ");
                             output.push_str(&current_line);
-                            output.push_str("\n");
-                            // Start new line with this word
-                            current_line = word.to_string();
+                            output.push('\n');
+                            // Start new line with this word, always use indent for continuations
+                            current_line = if !indent.is_empty() {
+                                format!("{}{}", indent, word)
+                            } else {
+                                word.to_string()
+                            };
                         }
                     }
                     
@@ -1062,7 +1252,7 @@ fn generate_element_documentation(element: &ElementDefinition) -> String {
                     if !current_line.is_empty() {
                         output.push_str("/// ");
                         output.push_str(&current_line);
-                        output.push_str("\n");
+                        output.push('\n');
                     }
                 }
             }
@@ -1075,22 +1265,64 @@ fn generate_element_documentation(element: &ElementDefinition) -> String {
             output.push_str("/// \n");
             output.push_str("/// ## Requirements\n");
             let escaped_requirements = escape_doc_comment(requirements);
-            for line in escaped_requirements.split('\n') {
+            let formatted_lines = format_doc_content(&escaped_requirements, false);
+            
+            for line in formatted_lines {
                 if line.is_empty() {
                     output.push_str("/// \n");
                 } else if line.len() <= 77 {
                     // Line fits, output as is
                     output.push_str("/// ");
-                    output.push_str(line);
-                    output.push_str("\n");
+                    output.push_str(&line);
+                    output.push('\n');
                 } else {
                     // Need to wrap - use word boundaries
                     let words = line.split_whitespace().collect::<Vec<_>>();
                     let mut current_line = String::new();
                     
-                    for word in words {
+                    // Check if this line needs indentation
+                    // Either it's already indented (continuation) or it's a list item
+                    let trimmed_line = line.trim_start();
+                    let is_list_item = trimmed_line.starts_with("* ") || 
+                                     trimmed_line.starts_with("- ") ||
+                                     trimmed_line.find(' ').is_some_and(|idx| {
+                                         let prefix = &trimmed_line[..idx];
+                                         (prefix.ends_with(')') || prefix.ends_with('.')) && 
+                                         prefix.chars().next().is_some_and(|c| c.is_numeric())
+                                     });
+                    
+                    // Determine if this is a numbered list that needs more indentation
+                    let is_numbered_list = trimmed_line.find(' ').is_some_and(|idx| {
+                        let prefix = &trimmed_line[..idx];
+                        (prefix.ends_with(')') || prefix.ends_with('.')) && 
+                        prefix.chars().next().is_some_and(|c| c.is_numeric())
+                    });
+                    
+                    let indent = if line.starts_with("   ") {
+                        "   "  // Already has 3 spaces
+                    } else if line.starts_with("  ") { 
+                        "  "   // Already has 2 spaces
+                    } else if is_numbered_list {
+                        // For numbered lists, use 3 spaces for continuation lines
+                        "   "
+                    } else if is_list_item {
+                        // For bullet/dash lists, use 2 spaces
+                        "  "
+                    } else { 
+                        "" 
+                    };
+                    
+                    // For list items, we don't want to indent the first line
+                    let first_line_indent = if is_list_item { "" } else { indent };
+                    
+                    for word in words.iter() {
                         if current_line.is_empty() {
-                            current_line = word.to_string();
+                            // First word - include indent if needed (but not for bullet points)
+                            current_line = if !first_line_indent.is_empty() {
+                                format!("{}{}", first_line_indent, word)
+                            } else {
+                                word.to_string()
+                            };
                         } else if current_line.len() + 1 + word.len() <= 77 {
                             current_line.push(' ');
                             current_line.push_str(word);
@@ -1098,9 +1330,13 @@ fn generate_element_documentation(element: &ElementDefinition) -> String {
                             // Output the current line
                             output.push_str("/// ");
                             output.push_str(&current_line);
-                            output.push_str("\n");
-                            // Start new line with this word
-                            current_line = word.to_string();
+                            output.push('\n');
+                            // Start new line with this word, always use indent for continuations
+                            current_line = if !indent.is_empty() {
+                                format!("{}{}", indent, word)
+                            } else {
+                                word.to_string()
+                            };
                         }
                     }
                     
@@ -1108,7 +1344,7 @@ fn generate_element_documentation(element: &ElementDefinition) -> String {
                     if !current_line.is_empty() {
                         output.push_str("/// ");
                         output.push_str(&current_line);
-                        output.push_str("\n");
+                        output.push('\n');
                     }
                 }
             }
@@ -1121,22 +1357,65 @@ fn generate_element_documentation(element: &ElementDefinition) -> String {
             output.push_str("/// \n");
             output.push_str("/// ## Implementation Notes\n");
             let escaped_comment = escape_doc_comment(comment);
-            for line in escaped_comment.split('\n') {
+            let formatted_lines = format_doc_content(&escaped_comment, false);
+            
+            
+            for line in formatted_lines {
                 if line.is_empty() {
                     output.push_str("/// \n");
                 } else if line.len() <= 77 {
                     // Line fits, output as is
                     output.push_str("/// ");
-                    output.push_str(line);
-                    output.push_str("\n");
+                    output.push_str(&line);
+                    output.push('\n');
                 } else {
                     // Need to wrap - use word boundaries
                     let words = line.split_whitespace().collect::<Vec<_>>();
                     let mut current_line = String::new();
                     
-                    for word in words {
+                    // Check if this line needs indentation
+                    // Either it's already indented (continuation) or it's a list item
+                    let trimmed_line = line.trim_start();
+                    let is_list_item = trimmed_line.starts_with("* ") || 
+                                     trimmed_line.starts_with("- ") ||
+                                     trimmed_line.find(' ').is_some_and(|idx| {
+                                         let prefix = &trimmed_line[..idx];
+                                         (prefix.ends_with(')') || prefix.ends_with('.')) && 
+                                         prefix.chars().next().is_some_and(|c| c.is_numeric())
+                                     });
+                    
+                    // Determine if this is a numbered list that needs more indentation
+                    let is_numbered_list = trimmed_line.find(' ').is_some_and(|idx| {
+                        let prefix = &trimmed_line[..idx];
+                        (prefix.ends_with(')') || prefix.ends_with('.')) && 
+                        prefix.chars().next().is_some_and(|c| c.is_numeric())
+                    });
+                    
+                    let indent = if line.starts_with("   ") {
+                        "   "  // Already has 3 spaces
+                    } else if line.starts_with("  ") { 
+                        "  "   // Already has 2 spaces
+                    } else if is_numbered_list {
+                        // For numbered lists, use 3 spaces for continuation lines
+                        "   "
+                    } else if is_list_item {
+                        // For bullet/dash lists, use 2 spaces
+                        "  "
+                    } else { 
+                        "" 
+                    };
+                    
+                    // For list items, we don't want to indent the first line
+                    let first_line_indent = if is_list_item { "" } else { indent };
+                    
+                    for word in words.iter() {
                         if current_line.is_empty() {
-                            current_line = word.to_string();
+                            // First word - include indent if needed (but not for bullet points)
+                            current_line = if !first_line_indent.is_empty() {
+                                format!("{}{}", first_line_indent, word)
+                            } else {
+                                word.to_string()
+                            };
                         } else if current_line.len() + 1 + word.len() <= 77 {
                             current_line.push(' ');
                             current_line.push_str(word);
@@ -1144,9 +1423,13 @@ fn generate_element_documentation(element: &ElementDefinition) -> String {
                             // Output the current line
                             output.push_str("/// ");
                             output.push_str(&current_line);
-                            output.push_str("\n");
-                            // Start new line with this word
-                            current_line = word.to_string();
+                            output.push('\n');
+                            // Start new line with this word, always use indent for continuations
+                            current_line = if !indent.is_empty() {
+                                format!("{}{}", indent, word)
+                            } else {
+                                word.to_string()
+                            };
                         }
                     }
                     
@@ -1154,7 +1437,7 @@ fn generate_element_documentation(element: &ElementDefinition) -> String {
                     if !current_line.is_empty() {
                         output.push_str("/// ");
                         output.push_str(&current_line);
-                        output.push_str("\n");
+                        output.push('\n');
                     }
                 }
             }
@@ -1321,7 +1604,7 @@ fn structure_definition_to_rust(
             // Find the root element to get its documentation
             let root_element_doc = elements.iter()
                 .find(|e| e.path == sd.name)
-                .map(|e| generate_element_documentation(e))
+                .map(generate_element_documentation)
                 .unwrap_or_default();
             
             process_elements(
