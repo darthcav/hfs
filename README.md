@@ -168,8 +168,7 @@ result = pysof.run_view_definition(
 
 **Distribution:**
 - Cross-platform wheel distribution for Linux, Windows, and macOS
-- Excluded from default workspace build (requires explicit `cargo build -p pysof`)
-- See [Wheel Building Documentation](crates/pysof/WHEEL_BUILDING.md) for build and distribution details
+- If building this project yourself, pysof is excluded from default workspace build (requires explicit `cargo build -p pysof`)
 
 ### 6. [`helios-fhir-macro`](crates/fhir-macro) - Procedural Macros
 Helper macros for code generation used by other components.
