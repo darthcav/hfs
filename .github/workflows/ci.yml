@@ -492,31 +492,27 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Configure Rust to use LLD (Linux/MacOS)
-        if: runner.os != 'Windows'
+      - name: Configure Rust to use LLD
         run: |
-          mkdir -p ~/.cargo
-          if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
-            echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
-            echo 'linker = "clang"' >> ~/.cargo/config.toml
-            echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            mkdir -p ~/.cargo
+            if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
+              echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+              echo 'linker = "clang"' >> ~/.cargo/config.toml
+              echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
+            fi
+          elif [ "$RUNNER_OS" = "macOS" ]; then
+            mkdir -p ~/.cargo
+            if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
+              echo "[target.aarch64-apple-darwin]" >> ~/.cargo/config.toml
+              echo 'linker = "clang"' >> ~/.cargo/config.toml
+              echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
+            fi
+          elif [ "$RUNNER_OS" = "Windows" ]; then
+            cmd.exe /c "if not exist \"%USERPROFILE%\.cargo\" mkdir \"%USERPROFILE%\.cargo\""
+            configPath="%USERPROFILE%\.cargo\config.toml"
+            cmd.exe /c "if not exist \"$configPath\" (echo [target.x86_64-pc-windows-msvc] >> \"$configPath\" && echo linker = \"lld-link.exe\" >> \"$configPath\") else (findstr /C:\"lld-link\" \"$configPath\" >nul || (echo [target.x86_64-pc-windows-msvc] >> \"$configPath\" && echo linker = \"lld-link.exe\" >> \"$configPath\"))"
           fi
-
-      - name: Configure Rust to use LLD (Windows)
-        if: runner.os == 'Windows'
-        shell: cmd
-        run: |
-          if not exist "%USERPROFILE%\.cargo" mkdir "%USERPROFILE%\.cargo"
-          set "configPath=%USERPROFILE%\.cargo\config.toml"
-          if not exist "%configPath%" (
-            echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
-            echo linker = "lld-link.exe" >> "%configPath%"
-          ) else (
-            findstr /C:"lld-link" "%configPath%" >nul || (
-              echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
-              echo linker = "lld-link.exe" >> "%configPath%"
-            )
-          )
 
       - name: Cache cargo registry
         uses: actions/cache@v4
@@ -552,6 +548,18 @@ jobs:
             !target/release/*.rlib
             !target/release/*.so
 
+      - name: Generate test_report.json file
+        if: runner.os == 'Linux'
+        run: cargo test -p helios-sof run_comprehensive_test_suite
+
+      - name: Upload test_report.json to GitHub
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test_report.json 
+          path: |
+            crates/sof/
+
       # Build pysof wheel (set up Python)
       - name: Set up Python ${{ env.PYTHON_VERSION }} for pysof
         working-directory: crates/pysof
@@ -566,17 +574,19 @@ jobs:
 
       - name: Install pysof build dependencies
         working-directory: crates/pysof
-        run: uv sync --group dev
-
-      - name: Build pysof wheel (and sdist on Linux)
-        if: runner.os != 'Windows'
-        working-directory: crates/pysof
         run: |
-          if [ "$RUNNER_OS" = "Linux" ]; then
-            uv run maturin build --release --sdist -o dist
-          else
-            uv run maturin build --release -o dist
-          fi
+          uv sync --group dev
+          uv pip install patchelf
+
+      - name: Build pysof wheel (Linux)
+        if: runner.os == 'Linux'
+        working-directory: crates/pysof
+        run: uv run maturin build --release -o dist
+
+      - name: Build pysof wheel (macOS)
+        if: runner.os == 'macOS'
+        working-directory: crates/pysof
+        run: uv run maturin build --release -o dist
 
       - name: Build pysof wheel (Windows)
         if: runner.os == 'Windows'
@@ -637,14 +647,14 @@ jobs:
         with:
           path: ./artifacts
 
-      - name: Aggregate pysof wheels
+      - name: Aggregate pysof wheels and test report
         run: |
           mkdir -p releases/wheels
           # Copy all pysof wheels and sdist (if any)
-          find artifacts -type f -name 'pysof_*whl' -exec cp {} releases/wheels/ \; || true
-          find artifacts -type f -name 'pysof_mult-*whl' -exec cp {} releases/wheels/ \; || true
-          find artifacts -type f -name 'pysof_mult-*.tar.gz' -exec cp {} releases/wheels/ \; || true
+          find artifacts -type f -name 'pysof-*whl' -exec cp {} releases/wheels/ \; || true
           ls -l releases/wheels || true
+          # Copy test_report.json if it exists
+          find artifacts -type f -name 'test_report.json' -exec cp {} releases/ \; || true
 
       - name: Create release archives
         run: |
