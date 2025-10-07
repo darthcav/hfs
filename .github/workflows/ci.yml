@@ -92,7 +92,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/uv
-          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-uv-
 
@@ -168,7 +168,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/uv
-          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-uv-
 
@@ -542,25 +542,29 @@ jobs:
           toolchain: stable
 
       - name: Configure Rust to use LLD
+        if: matrix.os == 'Windows'
+        shell: cmd
         run: |
-          if [ "$RUNNER_OS" = "Linux" ]; then
-            mkdir -p ~/.cargo
-            if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
-              echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
-              echo 'linker = "clang"' >> ~/.cargo/config.toml
-              echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
-            fi
-          elif [ "$RUNNER_OS" = "macOS" ]; then
-            mkdir -p ~/.cargo
-            if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
-              echo "[target.aarch64-apple-darwin]" >> ~/.cargo/config.toml
-              echo 'linker = "clang"' >> ~/.cargo/config.toml
-              echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
-            fi
-          elif [ "$RUNNER_OS" = "Windows" ]; then
-            cmd.exe /c "if not exist \"%USERPROFILE%\.cargo\" mkdir \"%USERPROFILE%\.cargo\""
-            configPath="%USERPROFILE%\.cargo\config.toml"
-            cmd.exe /c "if not exist \"$configPath\" (echo [target.x86_64-pc-windows-msvc] >> \"$configPath\" && echo linker = \"lld-link.exe\" >> \"$configPath\") else (findstr /C:\"lld-link\" \"$configPath\" >nul || (echo [target.x86_64-pc-windows-msvc] >> \"$configPath\" && echo linker = \"lld-link.exe\" >> \"$configPath\"))"
+          if not exist "%USERPROFILE%\.cargo" mkdir "%USERPROFILE%\.cargo"
+          set "configPath=%USERPROFILE%\.cargo\config.toml"
+          if not exist "%configPath%" (
+            echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+            echo linker = "lld-link.exe" >> "%configPath%"
+          ) else (
+            findstr /C:"lld-link" "%configPath%" >nul || (
+              echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+              echo linker = "lld-link.exe" >> "%configPath%"
+            )
+          )
+
+      - name: Configure Rust to use LLD (Linux/MacOS)
+        if: matrix.os != 'Windows'
+        run: |
+          mkdir -p ~/.cargo
+          if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
+            echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+            echo 'linker = "clang"' >> ~/.cargo/config.toml
+            echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
           fi
 
       - name: Cache cargo registry
@@ -579,7 +583,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/uv
-          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-uv-
 
