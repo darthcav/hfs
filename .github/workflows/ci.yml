@@ -86,6 +86,7 @@ jobs:
             echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
             echo 'linker = "clang"' >> ~/.cargo/config.toml
             echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
+          fi
 
       - name: Set up uv cache
         uses: actions/cache@v4
@@ -162,6 +163,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ github.job }}-cargo-
             ${{ runner.os }}-cargo-
+
+      - name: Set up uv cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-uv-
 
       - name: Check formatting
         run: cargo fmt --all -- --check
@@ -565,6 +574,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ github.job }}-cargo-
             ${{ runner.os }}-cargo-
+
+      - name: Set up uv cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-uv-
 
       - name: Build Release (Windows)
         if: matrix.os == 'Windows'
