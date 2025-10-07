@@ -15,8 +15,8 @@ env:
   PYTHON_VERSION: "3.11"
 
 jobs:
-  test:
-    name: Test Suite
+  test-rust:
+    name: Test Rust
     runs-on: [self-hosted, Unix]
     strategy:
       fail-fast: false
@@ -66,6 +66,46 @@ jobs:
       - name: Run tests with all features
         run: |
           cargo test --all-features
+
+  test-python:
+    name: Test Python
+    runs-on: [self-hosted, Unix]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain (Linux/macOS)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Configure Rust to use LLD (Linux/MacOS)
+        run: |
+          mkdir -p ~/.cargo
+          if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
+            echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+            echo 'linker = "clang"' >> ~/.cargo/config.toml
+            echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
+
+      - name: Set up uv cache
+        uses: actions/cache@v4
+        with:
+        path: ~/.cache/uv
+        key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-uv-
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-${{ github.job }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ github.job }}-cargo-
+            ${{ runner.os }}-cargo-
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         working-directory: crates/pysof
@@ -188,7 +228,7 @@ jobs:
   coverage:
     name: Code Coverage
     runs-on: [self-hosted, Unix]
-    needs: [test, lint, security]
+    needs: [lint, security]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -464,7 +504,7 @@ jobs:
   build:
     name: Build Release
     runs-on: ${{ matrix.os }}
-    needs: [test, lint, security]
+    needs: [test-rust, test-python, lint, security, fhirpath-validation]
     if: startsWith(github.ref, 'refs/tags/v')
     strategy:
       fail-fast: false
