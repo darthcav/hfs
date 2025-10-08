@@ -81,7 +81,7 @@ jobs:
           toolchain: stable
 
       - name: Configure Rust to use LLD (Windows)
-        if: matrix.os == 'Windows'
+        if: runner.os == 'Windows'
         shell: cmd
         run: |
           if not exist "%USERPROFILE%\.cargo" mkdir "%USERPROFILE%\.cargo"
@@ -97,7 +97,7 @@ jobs:
           )
 
       - name: Configure Rust to use LLD (Linux/MacOS)
-        if: matrix.os != 'Windows'
+        if: runner.os != 'Windows'
         run: |
           mkdir -p ~/.cargo
           if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then

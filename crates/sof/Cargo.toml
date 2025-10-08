@@ -65,3 +65,7 @@ criterion = { version = "0.5", features = ["html_reports"] }
 [[bench]]
 name = "parallel_processing_bench"
 harness = false
+
+[package.metadata.docs.rs]
+features = ["R4", "R4B", "R5", "R6"]
+rustdoc-args = ["--cfg", "docsrs"]

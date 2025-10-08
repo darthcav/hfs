@@ -77,3 +77,7 @@ harness = false
 name = "server_benches"
 harness = false
 
+[package.metadata.docs.rs]
+features = ["R4", "R4B", "R5", "R6"]
+rustdoc-args = ["--cfg", "docsrs"]
+

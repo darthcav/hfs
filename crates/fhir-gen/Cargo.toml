@@ -16,6 +16,7 @@ R4 = ["helios-fhir/R4"]
 R4B = ["helios-fhir/R4B"]
 R5 = ["helios-fhir/R5"]
 R6 = ["helios-fhir/R6"]
+skip-r6-download = []
 
 [dependencies]
 serde = { workspace = true }
