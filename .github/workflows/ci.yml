@@ -17,7 +17,7 @@ env:
 jobs:
   test-rust:
     name: Test Rust
-    runs-on: [self-hosted, Unix]
+    runs-on: [self-hosted]
     strategy:
       fail-fast: false
       matrix:
@@ -27,11 +27,29 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Rust toolchain (Linux/macOS)
+        if: runner.os != 'Windows'
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: ${{ matrix.rust }}
+          toolchain: stable
+
+      - name: Configure Rust to use LLD (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          if not exist "%USERPROFILE%\.cargo" mkdir "%USERPROFILE%\.cargo"
+          set "configPath=%USERPROFILE%\.cargo\config.toml"
+          if not exist "%configPath%" (
+            echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+            echo linker = "lld-link.exe" >> "%configPath%"
+          ) else (
+            findstr /C:"lld-link" "%configPath%" >nul || (
+              echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+              echo linker = "lld-link.exe" >> "%configPath%"
+            )
+          )
 
       - name: Configure Rust to use LLD (Linux/MacOS)
+        if: runner.os != 'Windows'
         run: |
           mkdir -p ~/.cargo
           if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
@@ -69,13 +87,10 @@ jobs:
 
   test-python:
     name: Test Python
-    runs-on: [self-hosted, Windows]
+    runs-on: [self-hosted]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
 
       - name: Install Rust toolchain (Linux/macOS)
         if: runner.os != 'Windows'
@@ -154,17 +169,35 @@ jobs:
 
   lint:
     name: Linting
-    runs-on: [self-hosted, Unix]
+    runs-on: [self-hosted]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Install Rust toolchain (Linux/macOS)
+        if: runner.os != 'Windows'
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
 
+      - name: Configure Rust to use LLD (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          if not exist "%USERPROFILE%\.cargo" mkdir "%USERPROFILE%\.cargo"
+          set "configPath=%USERPROFILE%\.cargo\config.toml"
+          if not exist "%configPath%" (
+            echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+            echo linker = "lld-link.exe" >> "%configPath%"
+          ) else (
+            findstr /C:"lld-link" "%configPath%" >nul || (
+              echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+              echo linker = "lld-link.exe" >> "%configPath%"
+            )
+          )
+
       - name: Configure Rust to use LLD (Linux/MacOS)
+        if: runner.os != 'Windows'
         run: |
           mkdir -p ~/.cargo
           if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
@@ -208,7 +241,6 @@ jobs:
         working-directory: crates/pysof
         run: |
           uv venv --python ${{ env.PYTHON_VERSION }} .venv
-          echo "path=$(pwd)/.venv" >> $GITHUB_OUTPUT
 
       - name: Install dependencies
         working-directory: crates/pysof
@@ -228,17 +260,35 @@ jobs:
 
   security:
     name: Security Audit
-    runs-on: [self-hosted, Unix]
+    runs-on: [self-hosted]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Install Rust toolchain (Linux/macOS)
+        if: runner.os != 'Windows'
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
 
+      - name: Configure Rust to use LLD (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          if not exist "%USERPROFILE%\.cargo" mkdir "%USERPROFILE%\.cargo"
+          set "configPath=%USERPROFILE%\.cargo\config.toml"
+          if not exist "%configPath%" (
+            echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+            echo linker = "lld-link.exe" >> "%configPath%"
+          ) else (
+            findstr /C:"lld-link" "%configPath%" >nul || (
+              echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+              echo linker = "lld-link.exe" >> "%configPath%"
+            )
+          )
+
       - name: Configure Rust to use LLD (Linux/MacOS)
+        if: runner.os != 'Windows'
         run: |
           mkdir -p ~/.cargo
           if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
@@ -246,7 +296,6 @@ jobs:
             echo 'linker = "clang"' >> ~/.cargo/config.toml
             echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' >> ~/.cargo/config.toml
           fi
-
 
       - name: Install cargo-audit
         run: cargo install cargo-audit
@@ -256,18 +305,36 @@ jobs:
 
   coverage:
     name: Code Coverage
-    runs-on: [self-hosted, Unix]
+    runs-on: [self-hosted]
     needs: [lint, security]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Install Rust toolchain (Linux/macOS)
+        if: runner.os != 'Windows'
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
 
+      - name: Configure Rust to use LLD (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          if not exist "%USERPROFILE%\.cargo" mkdir "%USERPROFILE%\.cargo"
+          set "configPath=%USERPROFILE%\.cargo\config.toml"
+          if not exist "%configPath%" (
+            echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+            echo linker = "lld-link.exe" >> "%configPath%"
+          ) else (
+            findstr /C:"lld-link" "%configPath%" >nul || (
+              echo [target.x86_64-pc-windows-msvc] >> "%configPath%"
+              echo linker = "lld-link.exe" >> "%configPath%"
+            )
+          )
+
       - name: Configure Rust to use LLD (Linux/MacOS)
+        if: runner.os != 'Windows'
         run: |
           mkdir -p ~/.cargo
           if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
@@ -641,56 +708,22 @@ jobs:
           path: |
             crates/sof/
 
-      # Build pysof wheel (set up Python)
-      - name: Set up Python ${{ env.PYTHON_VERSION }} for pysof (Windows)
-        if: matrix.os == 'Windows'
-        shell: 'powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "& ''{0}''"'
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
         working-directory: crates/pysof
         run: uv python install ${{ env.PYTHON_VERSION }}
 
-      - name: Set up Python ${{ env.PYTHON_VERSION }} for pysof (Unix)
-        if: matrix.os != 'Windows'
-        working-directory: crates/pysof
-        run: uv python install ${{ env.PYTHON_VERSION }}
-
-      - name: Create virtual environment for pysof (Windows)
-        if: matrix.os == 'Windows'
-        shell: 'powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "& ''{0}''"'
+      - name: Create virtual environment for pysof
         working-directory: crates/pysof
         run: |
           uv venv --python ${{ env.PYTHON_VERSION }} .venv
-          echo "path=$(Get-Location)\.venv" >> $env:GITHUB_OUTPUT
 
-      - name: Create virtual environment for pysof (Unix)
-        if: matrix.os != 'Windows'
-        working-directory: crates/pysof
-        run: |
-          uv venv --python ${{ env.PYTHON_VERSION }} .venv
-          echo "path=$(pwd)/.venv" >> $GITHUB_OUTPUT
-
-      - name: Install pysof build dependencies (Windows)
-        if: matrix.os == 'Windows'
-        shell: 'powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "& ''{0}''"'
+      - name: Install pysof build dependencies
         working-directory: crates/pysof
         run: |
           uv sync --group dev
           uv pip install patchelf
 
-      - name: Install pysof build dependencies (Unix)
-        if: matrix.os != 'Windows'
-        working-directory: crates/pysof
-        run: |
-          uv sync --group dev
-          uv pip install patchelf
-
-      - name: Build pysof wheel (Windows)
-        if: matrix.os == 'Windows'
-        shell: 'powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "& ''{0}''"'
-        working-directory: crates/pysof
-        run: uv run maturin build --release -o dist
-
-      - name: Build pysof wheel (Unix)
-        if: matrix.os != 'Windows'
+      - name: Build pysof wheel
         working-directory: crates/pysof
         run: uv run maturin build --release -o dist
 
