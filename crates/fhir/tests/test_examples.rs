@@ -220,6 +220,10 @@ fn test_examples_in_dir<R: DeserializeOwned + Serialize>(dir: &PathBuf) {
             "composition-example.json",
             "R6 Composition.attester.mode structure incompatibility - expecting string but got CodeableConcept",
         ),
+        (
+            "devicealert-example.json",
+            "R6 DeviceAlert example contains incompatible data structure",
+        ),
     ];
 
     for entry in fs::read_dir(dir).unwrap() {

@@ -157,7 +157,6 @@ jobs:
         working-directory: crates/pysof
         run: |
           uv sync --group dev
-          uv pip install patchelf
 
       - name: Build pysof wheel
         working-directory: crates/pysof
@@ -721,7 +720,6 @@ jobs:
         working-directory: crates/pysof
         run: |
           uv sync --group dev
-          uv pip install patchelf
 
       - name: Build pysof wheel
         working-directory: crates/pysof
