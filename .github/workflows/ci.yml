@@ -59,21 +59,8 @@ jobs:
           fi
 
       - name: Cache cargo registry
-        uses: tespkg/actions-cache@v1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          ACTIONS_CACHE_BACKEND: s3
-          ACTIONS_CACHE_BUCKET: github-cache
-          ACTIONS_CACHE_URL: ${{ secrets.AWS_ENDPOINT }}
+        uses: actions/cache@v4
         with:
-          endpoint: ${{ secrets.AWS_ENDPOINT }}
-          insecure: true 
-          accessKey: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          bucket: github-cache
-          use-fallback: false
           path: |
             ~/.cargo/registry
             ~/.cargo/git
@@ -138,42 +125,16 @@ jobs:
           fi
 
       - name: Set up uv cache
-        uses: tespkg/actions-cache@v1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          ACTIONS_CACHE_BACKEND: s3
-          ACTIONS_CACHE_BUCKET: github-cache
-          ACTIONS_CACHE_URL: ${{ secrets.AWS_ENDPOINT }}
+        uses: actions/cache@v4
         with:
-          endpoint: ${{ secrets.AWS_ENDPOINT }}
-          insecure: true 
-          accessKey: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          bucket: github-cache
-          use-fallback: false
           path: ~/.cache/uv
           key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-uv-
 
       - name: Cache cargo registry
-        uses: tespkg/actions-cache@v1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          ACTIONS_CACHE_BACKEND: s3
-          ACTIONS_CACHE_BUCKET: github-cache
-          ACTIONS_CACHE_URL: ${{ secrets.AWS_ENDPOINT }}
+        uses: actions/cache@v4
         with:
-          endpoint: ${{ secrets.AWS_ENDPOINT }}
-          insecure: true 
-          accessKey: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          bucket: github-cache
-          use-fallback: false
           path: |
             ~/.cargo/registry
             ~/.cargo/git
@@ -209,14 +170,6 @@ jobs:
     name: Linting
     runs-on: [self-hosted]
     steps:
-      - name: Debug endpoint
-        run: |
-          echo "Endpoint value:"
-          echo "${{ secrets.AWS_ENDPOINT }}"
-          echo "Length: ${#AWS_ENDPOINT}"
-        env:
-          AWS_ENDPOINT: ${{ secrets.AWS_ENDPOINT }}
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -253,21 +206,8 @@ jobs:
           fi
 
       - name: Cache cargo registry
-        uses: tespkg/actions-cache@v1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          ACTIONS_CACHE_BACKEND: s3
-          ACTIONS_CACHE_BUCKET: github-cache
-          ACTIONS_CACHE_URL: ${{ secrets.AWS_ENDPOINT }}
+        uses: actions/cache@v4
         with:
-          endpoint: ${{ secrets.AWS_ENDPOINT }}
-          insecure: true 
-          accessKey: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          bucket: github-cache
-          use-fallback: false
           path: |
             ~/.cargo/registry
             ~/.cargo/git
@@ -278,21 +218,8 @@ jobs:
             ${{ runner.os }}-cargo-
 
       - name: Set up uv cache
-        uses: tespkg/actions-cache@v1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          ACTIONS_CACHE_BACKEND: s3
-          ACTIONS_CACHE_BUCKET: github-cache
-          ACTIONS_CACHE_URL: ${{ secrets.AWS_ENDPOINT }}
+        uses: actions/cache@v4
         with:
-          endpoint: ${{ secrets.AWS_ENDPOINT }}
-          insecure: true 
-          accessKey: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          bucket: github-cache
-          use-fallback: false
           path: ~/.cache/uv
           key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
           restore-keys: |
@@ -727,21 +654,8 @@ jobs:
           fi
 
       - name: Cache cargo registry
-        uses: tespkg/actions-cache@v1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          ACTIONS_CACHE_BACKEND: s3
-          ACTIONS_CACHE_BUCKET: github-cache
-          ACTIONS_CACHE_URL: ${{ secrets.AWS_ENDPOINT }}
+        uses: actions/cache@v4
         with:
-          endpoint: ${{ secrets.AWS_ENDPOINT }}
-          insecure: true 
-          accessKey: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          bucket: github-cache
-          use-fallback: false
           path: |
             ~/.cargo/registry
             ~/.cargo/git
@@ -752,21 +666,8 @@ jobs:
             ${{ runner.os }}-cargo-
 
       - name: Set up uv cache
-        uses: tespkg/actions-cache@v1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          ACTIONS_CACHE_BACKEND: s3
-          ACTIONS_CACHE_BUCKET: github-cache
-          ACTIONS_CACHE_URL: ${{ secrets.AWS_ENDPOINT }}
+        uses: actions/cache@v4
         with:
-          endpoint: ${{ secrets.AWS_ENDPOINT }}
-          insecure: true 
-          accessKey: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          bucket: github-cache
-          use-fallback: false
           path: ~/.cache/uv
           key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
           restore-keys: |
