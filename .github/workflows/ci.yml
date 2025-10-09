@@ -162,7 +162,7 @@ jobs:
 
       - name: Build pysof wheel
         working-directory: crates/pysof
-        run: uv run maturin build
+        run: uv run maturin develop
 
       - name: Run tests with coverage
         working-directory: crates/pysof
