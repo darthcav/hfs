@@ -17,7 +17,7 @@ env:
 jobs:
   test-rust:
     name: Test Rust
-    runs-on: [self-hosted, Windows]
+    runs-on: [self-hosted]
     strategy:
       fail-fast: false
       matrix:
@@ -71,16 +71,6 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-${{ matrix.rust }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Build the FHIR model code generator for all versions (This will download the latest R6 from https://build.fhir.org/
-        run: |
-          echo "Build the FHIR model code generator for all versions..."
-          cargo build -p helios-fhir-gen --all-features
-
-      - name: Generate all FHIR model code
-        run: |
-          echo "Generate all FHIR model code..."
-          cargo run -p helios-fhir-gen --all-features -- --all
 
       - name: Run tests with all features
         run: |
@@ -146,20 +136,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
-        working-directory: crates/pysof
-        run: uv python install ${{ env.PYTHON_VERSION }}
-
-      - name: Create virtual environment for pysof
-        working-directory: crates/pysof
-        run: |
-          uv venv --python ${{ env.PYTHON_VERSION }} .venv
-
-      - name: Install pysof build dependencies
-        working-directory: crates/pysof
-        run: |
-          uv sync --group dev
-
       - name: Install patchelf (Linux)
         if: runner.os == 'Linux'
         working-directory: crates/pysof
@@ -176,7 +152,7 @@ jobs:
 
   lint:
     name: Linting
-    runs-on: [self-hosted, macOS]
+    runs-on: [self-hosted]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -666,11 +642,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          version: "latest"
-
       - name: Build Release (Windows)
         if: matrix.os == 'Windows'
         shell: cmd
@@ -705,20 +676,6 @@ jobs:
           path: |
             crates/sof/
 
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
-        working-directory: crates/pysof
-        run: uv python install ${{ env.PYTHON_VERSION }}
-
-      - name: Create virtual environment for pysof
-        working-directory: crates/pysof
-        run: |
-          uv venv --python ${{ env.PYTHON_VERSION }} .venv
-
-      - name: Install pysof build dependencies
-        working-directory: crates/pysof
-        run: |
-          uv sync --group dev
-
       - name: Build pysof wheel
         working-directory: crates/pysof
         run: uv run maturin build --release -o dist
@@ -741,14 +698,6 @@ jobs:
           pattern: pysof-*
           path: ./pysof-dist
           merge-multiple: true
-
-      - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          version: "latest"
-
-      - name: Set up Python for publishing
-        run: uv python install ${{ env.PYTHON_VERSION }}
 
       - name: Install twine
         run: uv pip install --system twine
