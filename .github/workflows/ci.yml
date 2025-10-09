@@ -170,7 +170,7 @@ jobs:
 
   lint:
     name: Linting
-    runs-on: [self-hosted]
+    runs-on: [self-hosted, macOS]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -242,20 +242,20 @@ jobs:
           uv venv --python ${{ env.PYTHON_VERSION }} .venv
 
       - name: Install dependencies
-        working-directory: crates/pysof
+        working-directory: crates/pysof --python ${{ env.PYTHON_VERSION }}
         run: uv sync --group dev
 
       - name: Format check
         working-directory: crates/pysof
-        run: uv run ruff format --check src
+        run: uv run ruff format --check src --python ${{ env.PYTHON_VERSION }}
 
       - name: Lint check
         working-directory: crates/pysof
-        run: uv run ruff check src
+        run: uv run ruff check src --python ${{ env.PYTHON_VERSION }}
 
       - name: Type check
         working-directory: crates/pysof
-        run: uv run mypy src
+        run: uv run mypy src --python ${{ env.PYTHON_VERSION }}
 
   security:
     name: Security Audit
