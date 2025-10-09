@@ -243,7 +243,6 @@ jobs:
 
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v6
-        working-directory: crates/pysof
 
       - name: Install dependencies
         working-directory: crates/pysof
