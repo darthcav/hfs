@@ -61,17 +61,26 @@ jobs:
           echo 'linker = "clang"' >> ~/.cargo/config.toml
           echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld", "-C", "link-arg=-Wl,-stack_size,0x800000"]' >> ~/.cargo/config.toml
 
-      - name: Cache cargo registry
+      - name: Cache cargo
         uses: corca-ai/local-cache@v2
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
+          path: ~/.cargo
           base: /mnt/github-cache
           key: ${{ runner.os }}-${{ matrix.rust }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      
+      - name: Cache target
+        uses: corca-ai/local-cache@v2
+        with:
+          path: target
+          base: /mnt/github-cache
+          key: ${{ runner.os }}-${{ matrix.rust }}-target-${{ hashFiles('**/Cargo.lock') }}
+      
+      - name: Cache uv 
+        uses: corca-ai/local-cache@v2
+        with:
+          path: ~/.cache/uv
+          base: /mnt/github-cache
+          key: ${{ runner.os }}-${{ matrix.rust }}-target-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Run tests with all features
         run: |
