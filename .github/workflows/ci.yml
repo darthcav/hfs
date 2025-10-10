@@ -64,23 +64,23 @@ jobs:
       - name: Cache cargo
         uses: corca-ai/local-cache@v2
         with:
-          path: ~/.cargo
+          path: $HOME/.cargo
           base: /mnt/github-cache
           key: ${{ runner.os }}-${{ matrix.rust }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      
+
       - name: Cache target
         uses: corca-ai/local-cache@v2
         with:
           path: target
           base: /mnt/github-cache
           key: ${{ runner.os }}-${{ matrix.rust }}-target-${{ hashFiles('**/Cargo.lock') }}
-      
-      - name: Cache uv 
+
+      - name: Cache uv
         uses: corca-ai/local-cache@v2
         with:
-          path: ~/.cache/uv
+          path: $HOME/.cache/uv
           base: /mnt/github-cache
-          key: ${{ runner.os }}-${{ matrix.rust }}-target-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-${{ matrix.rust }}-uv-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Run tests with all features
         run: |
