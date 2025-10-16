@@ -63,7 +63,7 @@ jobs:
 
       - name: Run tests with all features
         run: |
-          cargo test --workspace --all-features
+          cargo test --workspace --all-features --exclude pysof
 
   test-python:
     name: Test Python
