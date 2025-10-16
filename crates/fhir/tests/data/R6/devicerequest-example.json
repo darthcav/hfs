@@ -3,7 +3,7 @@
   "id": "example",
   "status": "completed",
   "intent": "original-order",
-  "code": {
+  "product": {
     "reference": {
       "reference": "Device/example"
     }

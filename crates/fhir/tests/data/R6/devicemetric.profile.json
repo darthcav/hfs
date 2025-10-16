@@ -2,7 +2,7 @@
   "resourceType": "StructureDefinition",
   "id": "DeviceMetric",
   "meta": {
-    "lastUpdated": "2025-10-09T18:25:56.447+00:00"
+    "lastUpdated": "2025-10-16T00:41:37.292+00:00"
   },
   "text": {
     "status": "generated",
@@ -31,7 +31,7 @@
   "name": "DeviceMetric",
   "status": "draft",
   "experimental": false,
-  "date": "2025-10-09T18:25:56+00:00",
+  "date": "2025-10-16T00:41:37+00:00",
   "publisher": "HL7 International / Health Care Devices",
   "contact": [
     {
@@ -69,6 +69,21 @@
       "identity": "w5",
       "uri": "http://hl7.org/fhir/fivews",
       "name": "FiveWs Pattern Mapping"
+    },
+    {
+      "identity": "DIM",
+      "uri": "urn:iso:std:iso:11073:10201",
+      "name": "ISO/IEEE 11073-10201"
+    },
+    {
+      "identity": "IEEESDC",
+      "uri": "urn:iso:std:iso:11073:20701",
+      "name": "ISO/IEEE 11073-20701: Service oriented medical device exchange architecture and protocol binding"
+    },
+    {
+      "identity": "ACOM",
+      "uri": "urn:iso:std:iso:11073:10206",
+      "name": "ISO/IEEE 11073-10206: Personal health device communication abstract content information model"
     },
     {
       "identity": "rim",
@@ -154,6 +169,14 @@
           {
             "identity": "w5",
             "map": "administrative.device"
+          },
+          {
+            "identity": "DIM",
+            "map": "Metric"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor"
           }
         ]
       },
@@ -554,6 +577,18 @@
           {
             "identity": "w5",
             "map": "FiveWs.class"
+          },
+          {
+            "identity": "ACOM",
+            "map": "SystemInfo.observation-type-list[i]"
+          },
+          {
+            "identity": "DIM",
+            "map": "type \u003d VMO::Type\ntype.text \u003d VMO::Label-String"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor/Type"
           }
         ]
       },
@@ -601,7 +636,21 @@
           "strength": "preferred",
           "description": "IEEE 11073-10101",
           "valueSet": "http://hl7.org/fhir/ValueSet/ucum-units"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "ACOM",
+            "map": "UCUM unit used for SystemInfo.observation-type-list[i] observations"
+          },
+          {
+            "identity": "DIM",
+            "map": "unit \u003d Metric::Unit-Code\nunit.text \u003d Unit::Label-String"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor/Unit"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.device",
@@ -676,7 +725,17 @@
           "strength": "required",
           "description": "Describes the operational status of the DeviceMetric.",
           "valueSet": "http://hl7.org/fhir/ValueSet/metric-operational-status|6.0.0-ballot3"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "Metric::Metric-Status"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "Metric/ActivationState"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.color",
@@ -711,7 +770,13 @@
           "strength": "required",
           "description": "Describes the typical color of representation.",
           "valueSet": "http://hl7.org/fhir/ValueSet/color-codes|6.0.0-ballot3"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "Metric::Color"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.category",
@@ -757,6 +822,18 @@
           {
             "identity": "w5",
             "map": "FiveWs.class"
+          },
+          {
+            "identity": "ACOM",
+            "map": "Filled in when this can be derived from SystemInfo.observation-type-list[i]"
+          },
+          {
+            "identity": "DIM",
+            "map": "Metric::Metric-Specification::category"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor/MetricCategory"
           }
         ]
       },
@@ -788,7 +865,17 @@
         ],
         "mustSupport": false,
         "isModifier": false,
-        "isSummary": false
+        "isSummary": false,
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "value \u003d Metric::Measure-Period::value or Metric::Metric-Specification::update-period\nunit \u003d Metric::Measure-Period::unit-code"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor/DeterminationPeriod"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.availability",
@@ -830,7 +917,13 @@
           "strength": "required",
           "description": "Describes the availability of the metric",
           "valueSet": "http://hl7.org/fhir/ValueSet/metric-availability|6.0.0-ballot3"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor/MetricAvailability"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.calibration",
@@ -1022,7 +1115,13 @@
           "strength": "extensible",
           "description": "Describes the type of a metric calibration.",
           "valueSet": "http://hl7.org/fhir/ValueSet/metric-calibration-type"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "Metric::Metric-Calibration::cal-type"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.calibration.state",
@@ -1063,7 +1162,13 @@
           "strength": "required",
           "description": "Describes the state of a metric calibration.",
           "valueSet": "http://hl7.org/fhir/ValueSet/metric-calibration-state|6.0.0-ballot3"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "Metric::Metric-Calibration::cal-state"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.calibration.time",
@@ -1093,7 +1198,13 @@
         ],
         "mustSupport": false,
         "isModifier": false,
-        "isSummary": false
+        "isSummary": false,
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "Metric::Metric-Calibration::cal-time"
+          }
+        ]
       }
     ]
   },
@@ -1113,6 +1224,14 @@
           {
             "identity": "w5",
             "map": "administrative.device"
+          },
+          {
+            "identity": "DIM",
+            "map": "Metric"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor"
           }
         ]
       },
@@ -1174,6 +1293,18 @@
           {
             "identity": "w5",
             "map": "FiveWs.class"
+          },
+          {
+            "identity": "ACOM",
+            "map": "SystemInfo.observation-type-list[i]"
+          },
+          {
+            "identity": "DIM",
+            "map": "type \u003d VMO::Type\ntype.text \u003d VMO::Label-String"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor/Type"
           }
         ]
       },
@@ -1207,7 +1338,21 @@
           "strength": "preferred",
           "description": "IEEE 11073-10101",
           "valueSet": "http://hl7.org/fhir/ValueSet/ucum-units"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "ACOM",
+            "map": "UCUM unit used for SystemInfo.observation-type-list[i] observations"
+          },
+          {
+            "identity": "DIM",
+            "map": "unit \u003d Metric::Unit-Code\nunit.text \u003d Unit::Label-String"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor/Unit"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.device",
@@ -1254,7 +1399,17 @@
           "strength": "required",
           "description": "Describes the operational status of the DeviceMetric.",
           "valueSet": "http://hl7.org/fhir/ValueSet/metric-operational-status|6.0.0-ballot3"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "Metric::Metric-Status"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "Metric/ActivationState"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.color",
@@ -1275,7 +1430,13 @@
           "strength": "required",
           "description": "Describes the typical color of representation.",
           "valueSet": "http://hl7.org/fhir/ValueSet/color-codes|6.0.0-ballot3"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "Metric::Color"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.category",
@@ -1307,6 +1468,18 @@
           {
             "identity": "w5",
             "map": "FiveWs.class"
+          },
+          {
+            "identity": "ACOM",
+            "map": "Filled in when this can be derived from SystemInfo.observation-type-list[i]"
+          },
+          {
+            "identity": "DIM",
+            "map": "Metric::Metric-Specification::category"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor/MetricCategory"
           }
         ]
       },
@@ -1324,7 +1497,17 @@
         ],
         "mustSupport": false,
         "isModifier": false,
-        "isSummary": false
+        "isSummary": false,
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "value \u003d Metric::Measure-Period::value or Metric::Metric-Specification::update-period\nunit \u003d Metric::Measure-Period::unit-code"
+          },
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor/DeterminationPeriod"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.availability",
@@ -1352,7 +1535,13 @@
           "strength": "required",
           "description": "Describes the availability of the metric",
           "valueSet": "http://hl7.org/fhir/ValueSet/metric-availability|6.0.0-ballot3"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "IEEESDC",
+            "map": "MetricDescriptor/MetricAvailability"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.calibration",
@@ -1395,7 +1584,13 @@
           "strength": "extensible",
           "description": "Describes the type of a metric calibration.",
           "valueSet": "http://hl7.org/fhir/ValueSet/metric-calibration-type"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "Metric::Metric-Calibration::cal-type"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.calibration.state",
@@ -1422,7 +1617,13 @@
           "strength": "required",
           "description": "Describes the state of a metric calibration.",
           "valueSet": "http://hl7.org/fhir/ValueSet/metric-calibration-state|6.0.0-ballot3"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "Metric::Metric-Calibration::cal-state"
+          }
+        ]
       },
       {
         "id": "DeviceMetric.calibration.time",
@@ -1438,7 +1639,13 @@
         ],
         "mustSupport": false,
         "isModifier": false,
-        "isSummary": false
+        "isSummary": false,
+        "mapping": [
+          {
+            "identity": "DIM",
+            "map": "Metric::Metric-Calibration::cal-time"
+          }
+        ]
       }
     ]
   }

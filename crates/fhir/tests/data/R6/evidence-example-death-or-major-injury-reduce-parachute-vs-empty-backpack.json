@@ -50,7 +50,15 @@
   "copyright": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
   "relatesTo": [
     {
-      "type": "part-of",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+            "code": "part-of",
+            "display": "Part Of"
+          }
+        ]
+      },
       "targetReference": {
         "reference": "Composition/312172",
         "type": "Composition",

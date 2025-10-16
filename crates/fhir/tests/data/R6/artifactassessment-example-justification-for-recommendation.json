@@ -63,7 +63,15 @@
       },
       "relatesTo": [
         {
-          "type": "derived-from",
+          "type": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+                "code": "derived-from",
+                "display": "Derived From"
+              }
+            ]
+          },
           "targetReference": {
             "reference": "Citation/32137",
             "type": "Citation",
@@ -172,7 +180,15 @@
       },
       "relatesTo": [
         {
-          "type": "justification",
+          "type": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+                "code": "justification",
+                "display": "Justification"
+              }
+            ]
+          },
           "targetReference": {
             "reference": "Citation/33089",
             "type": "Citation",
@@ -180,7 +196,15 @@
           }
         },
         {
-          "type": "justification",
+          "type": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+                "code": "justification",
+                "display": "Justification"
+              }
+            ]
+          },
           "targetReference": {
             "reference": "Evidence/33244",
             "type": "Evidence",
@@ -250,11 +274,27 @@
           },
           "relatesTo": [
             {
-              "type": "justification",
+              "type": {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+                    "code": "justification",
+                    "display": "Justification"
+                  }
+                ]
+              },
               "targetMarkdown": "Sjöström L, Peltonen M, Jacobson P, et al. Association of bariatric surgery with long-term remission of type 2 diabetes and with microvascular and macrovascular complications. JAMA 2014;311:2297–2304"
             },
             {
-              "type": "justification",
+              "type": {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+                    "code": "justification",
+                    "display": "Justification"
+                  }
+                ]
+              },
               "targetReference": {
                 "reference": "Evidence/32144",
                 "type": "Evidence",

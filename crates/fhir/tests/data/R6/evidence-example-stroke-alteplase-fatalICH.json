@@ -34,7 +34,15 @@
   ],
   "relatesTo": [
     {
-      "type": "cites",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+            "code": "cites",
+            "display": "Cites"
+          }
+        ]
+      },
       "targetMarkdown": "Effect of treatment delay, age, and stroke severity on the effects of intravenous thrombolysis with alteplase for acute ischaemic stroke: a meta-analysis of individual patient data from randomised trials. \u003cb\u003eCitation:\u003c/b\u003e Emberson J, Lees KR, Lyden P, Blackwell L, Albers G, Bluhmki E, et al;Stroke Thrombolysis Trialists\u0027 Collaborative Group. Effect of treatment delay, age, and stroke severity on the effects of intravenous thrombolysis with alteplase for acute ischaemic stroke: a meta-analysis of individual patient data from randomised trials. Lancet 2014 Nov 29;384(9958):1929-35 PMID 25106063 \u003cb\u003eURL:\u003c/b\u003e https://doi.org/10.1016/S0140-6736(14)60584-5"
     }
   ],

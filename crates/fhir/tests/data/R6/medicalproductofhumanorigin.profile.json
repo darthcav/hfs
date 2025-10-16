@@ -2398,14 +2398,14 @@
         "isSummary": false
       },
       {
-        "id": "BiologicallyDerivedProduct.collection.source",
-        "path": "BiologicallyDerivedProduct.collection.source",
-        "short": "The patient who underwent the medical procedure to collect the product or the organization that facilitated the collection",
-        "definition": "The patient or entity, such as a hospital or vendor in the case of a processed/manipulated/manufactured product, providing the product.",
+        "id": "BiologicallyDerivedProduct.collection.sourcePatient",
+        "path": "BiologicallyDerivedProduct.collection.sourcePatient",
+        "short": "The patient who underwent the medical procedure to collect the product",
+        "definition": "The patient providing the product.",
         "min": 0,
         "max": "1",
         "base": {
-          "path": "BiologicallyDerivedProduct.collection.source",
+          "path": "BiologicallyDerivedProduct.collection.sourcePatient",
           "min": 0,
           "max": "1"
         },
@@ -2413,8 +2413,7 @@
           {
             "code": "Reference",
             "targetProfile": [
-              "http://hl7.org/fhir/StructureDefinition/Patient",
-              "http://hl7.org/fhir/StructureDefinition/Organization"
+              "http://hl7.org/fhir/StructureDefinition/Patient"
             ]
           }
         ],
@@ -2436,6 +2435,39 @@
             "map": "Global Registration Identifier for Donors"
           }
         ]
+      },
+      {
+        "id": "BiologicallyDerivedProduct.collection.sourceOrganization",
+        "path": "BiologicallyDerivedProduct.collection.sourceOrganization",
+        "short": "The organization that facilitated the collection",
+        "definition": "The entity, such as a hospital or vendor in the case of a processed/manipulated/manufactured product, providing the product.",
+        "min": 0,
+        "max": "1",
+        "base": {
+          "path": "BiologicallyDerivedProduct.collection.sourceOrganization",
+          "min": 0,
+          "max": "1"
+        },
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Organization"
+            ]
+          }
+        ],
+        "constraint": [
+          {
+            "key": "ele-1",
+            "severity": "error",
+            "human": "All FHIR elements must have a @value or children",
+            "expression": "hasValue() or (children().count() \u003e id.count())",
+            "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          }
+        ],
+        "mustSupport": false,
+        "isModifier": false,
+        "isSummary": false
       },
       {
         "id": "BiologicallyDerivedProduct.collection.collected[x]",

@@ -8,7 +8,7 @@
     }
   ],
   "collection": {
-    "source": {
+    "sourcePatient": {
       "reference": "Patient/pat2",
       "display": "HCT Donor"
     }

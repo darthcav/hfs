@@ -79,8 +79,7 @@
         "system": "http://hl7.org/fhir/CodeSystem/task-code",
         "code": "fulfill"
       }
-    ],
-    "text": "Lipid Panel"
+    ]
   },
   "description": "Create order for getting specimen, Set up inhouse testing,  generate order for any sendouts and submit with specimen",
   "focus": [

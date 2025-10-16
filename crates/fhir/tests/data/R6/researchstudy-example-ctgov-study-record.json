@@ -390,11 +390,27 @@
   ],
   "relatesTo": [
     {
-      "type": "transforms",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+            "code": "transforms",
+            "display": "Transforms"
+          }
+        ]
+      },
       "targetUri": "https://clinicaltrials.gov/api/v2/studies/NCT05503693?format\u003djson"
     },
     {
-      "type": "transformed-with",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+            "code": "transformed-with",
+            "display": "Transformed With"
+          }
+        ]
+      },
       "targetAttachment": {
         "url": "https://fevir.net/resources/Project/29885",
         "title": "Computable Publishing®: ClinicalTrials.gov-to-FEvIR Converter"

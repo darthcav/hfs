@@ -6,9 +6,6 @@
       "value": "ip_request1.1"
     }
   ],
-  "instantiatesCanonical": [
-    "http://motivemi.com/artifacts/PlanDefinition/low-suicide-risk-order-set"
-  ],
   "basedOn": [
     {
       "display": "Homecare - DM follow-up"
@@ -25,7 +22,7 @@
   "status": "active",
   "intent": "instance-order",
   "priority": "routine",
-  "code": {
+  "product": {
     "concept": {
       "coding": [
         {
