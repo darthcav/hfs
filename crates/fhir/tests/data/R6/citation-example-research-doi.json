@@ -105,7 +105,15 @@
     ],
     "relatesTo": [
       {
-        "type": "derived-from",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+              "code": "derived-from",
+              "display": "Derived From"
+            }
+          ]
+        },
         "classifier": [
           {
             "text": "original publication"
@@ -114,7 +122,15 @@
         "citation": "Sulas, E., Urru, M., Tumbarello, R., Raffo, L., Sameni, R., Pani, D., A non-invasive multimodal foetal ECG–Doppler dataset for antenatal cardiology research. Sci Data 8, 30 (2021). https://doi.org/10.1038/s41597-021-00811-3"
       },
       {
-        "type": "depends-on",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+              "code": "depends-on",
+              "display": "Depends On"
+            }
+          ]
+        },
         "classifier": [
           {
             "text": "ontology"

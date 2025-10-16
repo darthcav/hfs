@@ -2,11 +2,21 @@
   "resourceType": "ImagingSelection",
   "id": "example-multiframe-image-selection",
   "status": "available",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://dicom.nema.org/resources/ontology/DCM",
+          "code": "113036"
+        }
+      ]
+    }
+  ],
   "code": {
     "coding": [
       {
         "system": "http://dicom.nema.org/resources/ontology/DCM",
-        "code": "113036"
+        "code": "121080"
       }
     ]
   },
@@ -17,6 +27,28 @@
       "value": "KUTGIQCVCDRHVBUK"
     }
   },
+  "basedOn": [
+    {
+      "type": "ServiceRequest",
+      "identifier": {
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+              "code": "ACSN"
+            }
+          ]
+        },
+        "value": "W12342398",
+        "assigner": {
+          "reference": "Organization/dicom-organization"
+        }
+      }
+    },
+    {
+      "reference": "ServiceRequest/example"
+    }
+  ],
   "derivedFrom": {
     "type": "ImagingStudy",
     "identifier": {
@@ -31,11 +63,11 @@
     {
       "uid": "1.2.840.113747.20080222.35738167368358372924412538783781.2.1",
       "sopClass": "urn:oid:1.2.840.10008.5.1.4.1.1.2.1",
-      "subset": [
-        "1",
-        "2",
-        "3",
-        "4"
+      "frameNumber": [
+        1,
+        2,
+        3,
+        4
       ]
     }
   ],

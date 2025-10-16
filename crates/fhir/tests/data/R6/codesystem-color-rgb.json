@@ -2,7 +2,7 @@
   "resourceType": "CodeSystem",
   "id": "color-rgb",
   "meta": {
-    "lastUpdated": "2025-10-09T18:25:56.447+00:00",
+    "lastUpdated": "2025-10-16T00:41:37.292+00:00",
     "profile": [
       "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
     ]

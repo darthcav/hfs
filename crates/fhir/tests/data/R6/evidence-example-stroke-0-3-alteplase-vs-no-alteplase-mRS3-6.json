@@ -34,7 +34,15 @@
   ],
   "relatesTo": [
     {
-      "type": "cites",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+            "code": "cites",
+            "display": "Cites"
+          }
+        ]
+      },
       "targetMarkdown": "Analysis 1.16 from Wardlaw 2014 \u003cb\u003eCitation:\u003c/b\u003e Wardlaw JM, Murray V, Berge E, del Zoppo GJ. Thrombolysis for acute ischaemic stroke. Cochrane Database Syst Rev. 2014 Jul 29(7):CD000213. PMID 25072528 \u003cb\u003eURL:\u003c/b\u003e https://doi.org/10.1002/14651858.CD000213.pub3"
     }
   ],

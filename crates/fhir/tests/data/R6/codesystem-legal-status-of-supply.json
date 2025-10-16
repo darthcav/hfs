@@ -2,7 +2,7 @@
   "resourceType": "CodeSystem",
   "id": "legal-status-of-supply",
   "meta": {
-    "lastUpdated": "2025-10-10T05:25:56.447+11:00",
+    "lastUpdated": "2025-10-16T11:41:37.292+11:00",
     "profile": [
       "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
     ]

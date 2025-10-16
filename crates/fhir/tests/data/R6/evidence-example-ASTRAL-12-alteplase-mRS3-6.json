@@ -34,7 +34,15 @@
   ],
   "relatesTo": [
     {
-      "type": "cites",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+            "code": "cites",
+            "display": "Cites"
+          }
+        ]
+      },
       "targetMarkdown": "External Validation of the ASTRAL and DRAGON Scores for Prediction of Functional Outcome in Stroke. \u003cb\u003eCitation:\u003c/b\u003e Cooray C, Mazya M, Bottai M, Dorado L, Skoda O, Toni D, Ford GA, Wahlgren N, Ahmed N. External Validation of the ASTRAL and DRAGON Scores for Prediction of Functional Outcome in Stroke. Stroke. 2016 Jun;47(6):1493-9. Epub 2016 May 12. PMID 27174528 \u003cb\u003eURL:\u003c/b\u003e https://doi.org/10.1161/STROKEAHA.116.012802"
     }
   ],

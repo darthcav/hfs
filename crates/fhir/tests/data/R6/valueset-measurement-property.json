@@ -2,14 +2,14 @@
   "resourceType": "ValueSet",
   "id": "measurement-property",
   "meta": {
-    "lastUpdated": "2025-10-09T18:25:56.447+00:00",
+    "lastUpdated": "2025-10-16T00:41:37.292+00:00",
     "profile": [
       "http://hl7.org/fhir/StructureDefinition/shareablevalueset"
     ]
   },
   "text": {
     "status": "generated",
-    "div": "\u003cdiv xmlns\u003d\"http://www.w3.org/1999/xhtml\"\u003e\u003cp class\u003d\"res-header-id\"\u003e\u003cb\u003eGenerated Narrative: ValueSet measurement-property\u003c/b\u003e\u003c/p\u003e\u003ca name\u003d\"measurement-property\"\u003e \u003c/a\u003e\u003ca name\u003d\"hcmeasurement-property\"\u003e \u003c/a\u003e\u003cdiv style\u003d\"display: inline-block; background-color: #d9e0e7; padding: 6px; margin: 4px; border: 1px solid #8da1b4; border-radius: 5px; line-height: 60%\"\u003e\u003cp style\u003d\"margin-bottom: 0px\"/\u003e\u003cp style\u003d\"margin-bottom: 0px\"\u003eProfile: \u003ca href\u003d\"shareablevalueset.html\"\u003eShareable ValueSet\u003c/a\u003e\u003c/p\u003e\u003c/div\u003e\u003cul\u003e\u003cli\u003eInclude codes from\u003ca href\u003d\"http://www.snomed.org/\"\u003e\u003ccode\u003ehttp://snomed.info/sct\u003c/code\u003e\u003c/a\u003e where parent  \u003d 118598001 (Property (qualifier value))\u003c/li\u003e\u003c/ul\u003e\u003c/div\u003e"
+    "div": "\u003cdiv xmlns\u003d\"http://www.w3.org/1999/xhtml\"\u003e\u003cp class\u003d\"res-header-id\"\u003e\u003cb\u003eGenerated Narrative: ValueSet measurement-property\u003c/b\u003e\u003c/p\u003e\u003ca name\u003d\"measurement-property\"\u003e \u003c/a\u003e\u003ca name\u003d\"hcmeasurement-property\"\u003e \u003c/a\u003e\u003cdiv style\u003d\"display: inline-block; background-color: #d9e0e7; padding: 6px; margin: 4px; border: 1px solid #8da1b4; border-radius: 5px; line-height: 60%\"\u003e\u003cp style\u003d\"margin-bottom: 0px\"/\u003e\u003cp style\u003d\"margin-bottom: 0px\"\u003eProfile: \u003ca href\u003d\"shareablevalueset.html\"\u003eShareable ValueSet\u003c/a\u003e\u003c/p\u003e\u003c/div\u003e\u003cul\u003e\u003cli\u003eInclude codes from\u003ca href\u003d\"http://www.snomed.org/\"\u003e\u003ccode\u003ehttp://snomed.info/sct\u003c/code\u003e\u003c/a\u003e version \u003cspan title\u003d\"Version is not explicity stated. No matching Code System found\"\u003eNot Stated (use latest from terminology server)\u003c/span\u003e where parent  \u003d 118598001 (Property (qualifier value))\u003c/li\u003e\u003c/ul\u003e\u003c/div\u003e"
   },
   "extension": [
     {

@@ -13,7 +13,7 @@
   },
   "status": "completed",
   "intent": "original-order",
-  "code": {
+  "product": {
     "concept": {
       "coding": [
         {

@@ -29,9 +29,9 @@ HFS is a multi-crate Rust workspace where all crates share the same version numb
 cargo build -p helios-fhir-gen --features R4,R4B,R5,R6
 ./target/debug/helios-fhir-gen --all
 cargo fmt --all 
-cargo test --all-features
+cargo test --workspace --all-features
 ```
-
+- Check in these changes.
 - Ensure that your build in GitHub Actions has succeeded fully.  These are found in [ci.yml](.github/workflows/ci.yml).
 
 

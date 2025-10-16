@@ -2,7 +2,7 @@
   "resourceType": "StructureDefinition",
   "id": "Task",
   "meta": {
-    "lastUpdated": "2025-10-09T18:25:56.447+00:00"
+    "lastUpdated": "2025-10-16T00:41:37.292+00:00"
   },
   "text": {
     "status": "generated",
@@ -31,7 +31,7 @@
   "name": "Task",
   "status": "draft",
   "experimental": false,
-  "date": "2025-10-09T18:25:56+00:00",
+  "date": "2025-10-16T00:41:37+00:00",
   "publisher": "HL7 International / Orders and Observations",
   "contact": [
     {
@@ -775,6 +775,10 @@
         },
         "mapping": [
           {
+            "identity": "workflow",
+            "map": "Request.statusReason, Event.statusReason"
+          },
+          {
             "identity": "rim",
             "map": ".inboundRelationship[typeCode\u003dSUBJ].source[classCode\u003dCACT, moodCode\u003dEVN, code\u003d\"status change\"].reasonCode"
           }
@@ -979,7 +983,7 @@
         "mapping": [
           {
             "identity": "workflow",
-            "map": "Request.code, Event.code"
+            "map": "Request.doNotPerform, Event.doNotPerform"
           },
           {
             "identity": "w5",
@@ -1123,6 +1127,10 @@
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "workflow",
+            "map": "Request.product, Event.product"
+          },
           {
             "identity": "w5",
             "map": "FiveWs.what[x]"
@@ -1353,7 +1361,7 @@
         "mapping": [
           {
             "identity": "workflow",
-            "map": "Request.authoredOn"
+            "map": "Request.authoredOn, Event.recorded"
           },
           {
             "identity": "w5",
@@ -1855,6 +1863,10 @@
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "workflow",
+            "map": "Event.location"
+          },
           {
             "identity": "w5",
             "map": "FiveWs.where[x]"
@@ -2747,6 +2759,10 @@
         "isSummary": false,
         "mapping": [
           {
+            "identity": "workflow",
+            "map": "Request.supportingInfo"
+          },
+          {
             "identity": "rim",
             "map": "???"
           }
@@ -3397,6 +3413,10 @@
         },
         "mapping": [
           {
+            "identity": "workflow",
+            "map": "Request.statusReason, Event.statusReason"
+          },
+          {
             "identity": "rim",
             "map": ".inboundRelationship[typeCode\u003dSUBJ].source[classCode\u003dCACT, moodCode\u003dEVN, code\u003d\"status change\"].reasonCode"
           }
@@ -3545,7 +3565,7 @@
         "mapping": [
           {
             "identity": "workflow",
-            "map": "Request.code, Event.code"
+            "map": "Request.doNotPerform, Event.doNotPerform"
           },
           {
             "identity": "w5",
@@ -3647,6 +3667,10 @@
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "workflow",
+            "map": "Request.product, Event.product"
+          },
           {
             "identity": "w5",
             "map": "FiveWs.what[x]"
@@ -3807,7 +3831,7 @@
         "mapping": [
           {
             "identity": "workflow",
-            "map": "Request.authoredOn"
+            "map": "Request.authoredOn, Event.recorded"
           },
           {
             "identity": "w5",
@@ -4076,6 +4100,10 @@
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "workflow",
+            "map": "Event.location"
+          },
           {
             "identity": "w5",
             "map": "FiveWs.where[x]"
@@ -4571,6 +4599,10 @@
         "isModifier": false,
         "isSummary": false,
         "mapping": [
+          {
+            "identity": "workflow",
+            "map": "Request.supportingInfo"
+          },
           {
             "identity": "rim",
             "map": "???"

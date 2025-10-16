@@ -34,7 +34,15 @@
   ],
   "relatesTo": [
     {
-      "type": "cites",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/artifact-relationship-type",
+            "code": "cites",
+            "display": "Cites"
+          }
+        ]
+      },
       "targetMarkdown": "Figure 2 Lees 2016 \u003cb\u003eCitation:\u003c/b\u003e Lees KR, Emberson J, Blackwell L, Bluhmki E, Davis SM, Donnan GA, et al; Stroke Thrombolysis Trialists’ Collaborators Group. Effects of alteplase for acute stroke on the distribution of functional outcomes: a pooled analysis of 9 trials. Stroke. 2016;47:2373-2379. PMID 27507856 \u003cb\u003eURL:\u003c/b\u003e https://doi.org/10.1161/STROKEAHA.116.013644"
     }
   ],
