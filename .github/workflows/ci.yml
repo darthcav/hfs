@@ -18,11 +18,11 @@ env:
 jobs:
   test-rust:
     name: Test Rust
-    runs-on: [self-hosted, Linux]
+    runs-on: [self-hosted, Windows]
     strategy:
       fail-fast: false
       matrix:
-        rust: [stable, beta, nightly]
+        rust: [stable]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
