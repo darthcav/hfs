@@ -48,7 +48,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           rm -f ~/.cargo/config.toml
-          echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+          echo '[target.x86_64-unknown-linux-gnu]' >> ~/.cargo/config.toml
           echo 'linker = "clang"' >> ~/.cargo/config.toml
           echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld", "-C", "link-arg=-Wl,-zstack-size=8388608"]' >> ~/.cargo/config.toml
 
@@ -57,7 +57,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           rm -f ~/.cargo/config.toml
-          echo "[target.aarch64-apple-darwin]" >> ~/.cargo/config.toml
+          echo '[target.aarch64-apple-darwin]' >> ~/.cargo/config.toml
           echo 'linker = "clang"' >> ~/.cargo/config.toml
           echo 'rustflags = ["-C", "link-arg=-Wl,-dead_strip", "-C", "link-arg=-undefined", "-C", "link-arg=dynamic_lookup"]' >> ~/.cargo/config.toml
 
@@ -94,7 +94,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           rm -f ~/.cargo/config.toml
-          echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+          echo '[target.x86_64-unknown-linux-gnu]' >> ~/.cargo/config.toml
           echo 'linker = "clang"' >> ~/.cargo/config.toml
           echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld", "-C", "link-arg=-Wl,-zstack-size=8388608"]' >> ~/.cargo/config.toml
 
@@ -103,7 +103,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           rm -f ~/.cargo/config.toml
-          echo "[target.aarch64-apple-darwin]" >> ~/.cargo/config.toml
+          echo '[target.aarch64-apple-darwin]' >> ~/.cargo/config.toml
           echo 'linker = "clang"' >> ~/.cargo/config.toml
           echo 'rustflags = ["-C", "link-arg=-Wl,-dead_strip", "-C", "link-arg=-undefined", "-C", "link-arg=dynamic_lookup"]' >> ~/.cargo/config.toml
 
@@ -144,7 +144,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           rm -f ~/.cargo/config.toml
-          echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+          echo '[target.x86_64-unknown-linux-gnu]' >> ~/.cargo/config.toml
           echo 'linker = "clang"' >> ~/.cargo/config.toml
           echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld", "-C", "link-arg=-Wl,-zstack-size=8388608"]' >> ~/.cargo/config.toml
 
@@ -153,7 +153,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           rm -f ~/.cargo/config.toml
-          echo "[target.aarch64-apple-darwin]" >> ~/.cargo/config.toml
+          echo '[target.aarch64-apple-darwin]' >> ~/.cargo/config.toml
           echo 'linker = "clang"' >> ~/.cargo/config.toml
           echo 'rustflags = ["-C", "link-arg=-Wl,-dead_strip", "-C", "link-arg=-undefined", "-C", "link-arg=dynamic_lookup"]' >> ~/.cargo/config.toml
 
@@ -208,7 +208,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           rm -f ~/.cargo/config.toml
-          echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+          echo '[target.x86_64-unknown-linux-gnu]' >> ~/.cargo/config.toml
           echo 'linker = "clang"' >> ~/.cargo/config.toml
           echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld", "-C", "link-arg=-Wl,-zstack-size=8388608"]' >> ~/.cargo/config.toml
 
@@ -217,7 +217,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           rm -f ~/.cargo/config.toml
-          echo "[target.aarch64-apple-darwin]" >> ~/.cargo/config.toml
+          echo '[target.aarch64-apple-darwin]' >> ~/.cargo/config.toml
           echo 'linker = "clang"' >> ~/.cargo/config.toml
           echo 'rustflags = ["-C", "link-arg=-Wl,-dead_strip", "-C", "link-arg=-undefined", "-C", "link-arg=dynamic_lookup"]' >> ~/.cargo/config.toml
 
@@ -225,6 +225,7 @@ jobs:
         run: cargo install cargo-audit
 
       - name: Run security audit
+        run: cargo audit
  
   coverage:
     name: Code Coverage
@@ -256,7 +257,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           rm -f ~/.cargo/config.toml
-          echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+          echo '[target.x86_64-unknown-linux-gnu]' >> ~/.cargo/config.toml
           echo 'linker = "clang"' >> ~/.cargo/config.toml
           echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld", "-C", "link-arg=-Wl,-zstack-size=8388608"]' >> ~/.cargo/config.toml
 
@@ -265,7 +266,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           rm -f ~/.cargo/config.toml
-          echo "[target.aarch64-apple-darwin]" >> ~/.cargo/config.toml
+          echo '[target.aarch64-apple-darwin]' >> ~/.cargo/config.toml
           echo 'linker = "clang"' >> ~/.cargo/config.toml
           echo 'rustflags = ["-C", "link-arg=-Wl,-dead_strip", "-C", "link-arg=-undefined", "-C", "link-arg=dynamic_lookup"]' >> ~/.cargo/config.toml
 
@@ -565,7 +566,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
-            echo "[target.x86_64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+            echo '[target.x86_64-unknown-linux-gnu]' >> ~/.cargo/config.toml
             echo 'linker = "clang"' >> ~/.cargo/config.toml
             echo 'rustflags = ["-C", "link-arg=-fuse-ld=lld", "-C", "link-arg=-Wl,-zstack-size=8388608"]' >> ~/.cargo/config.toml
           fi
@@ -575,7 +576,7 @@ jobs:
         run: |
           mkdir -p ~/.cargo
           if ! grep -q "link-arg=-fuse-ld=lld" ~/.cargo/config.toml 2>/dev/null; then
-            echo "[target.x86_64-apple-darwin]" >> ~/.cargo/config.toml
+            echo '[target.x86_64-apple-darwin]' >> ~/.cargo/config.toml
             echo 'linker = "clang"' >> ~/.cargo/config.toml
             echo 'rustflags = ["-C", "link-arg=-Wl,-dead_strip", "-C", "link-arg=-undefined", "-C", "link-arg=dynamic_lookup"]' >> ~/.cargo/config.toml
           fi
