@@ -147,8 +147,7 @@ Transform FHIR resources into tabular data using [ViewDefinitions](https://sql-o
 - **Executables:**
   - `sof-cli` - Command-line tool for batch transformations
   - `sof-server` - HTTP server with `ViewDefinition/$run` operation
-- Supports multiple output formats: CSV, JSON, NDJSON, Parquet (planned)
-- Version-agnostic processing with automatic FHIR version detection
+- Supports multiple output formats: CSV, JSON, NDJSON, and Parquet
 
 ### 5. [`pysof`](crates/pysof) - Python Bindings
 Python bindings for SQL-on-FHIR using PyO3, bringing high-performance FHIR data transformation to Python.
@@ -181,15 +180,7 @@ result = pysof.run_view_definition(
 ```
 
 **Distribution:**
-- Cross-platform wheel distribution for Linux, Windows, and macOS
-- If building this project yourself, pysof is excluded from default workspace build via workspace default-members.
-  - Build only pysof (Rust-only): `cargo build -p pysof`
-  - Preferred (Python): use maturin to build and install into a venv:
-    - `cd crates/pysof`
-    - `uv venv --python 3.11`
-    - `uv sync`
-    - `uv run maturin develop --release`
-    - Build wheels/sdist: `uv run maturin build --release -o dist` and `uv run maturin sdist -o dist`
+- Cross-platform wheel distribution for Linux, Windows, and macOS available on [PyPi](https://pypi.org/project/pysof/)
 
 ### 6. [`helios-fhir-macro`](crates/fhir-macro) - Procedural Macros
 Helper macros for code generation used by other components.
