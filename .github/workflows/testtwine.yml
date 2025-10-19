@@ -13,6 +13,21 @@ jobs:
     name: Test Twine
     runs-on: [self-hosted, Linux]
     steps:
+      - name: Debug environment
+        run: |
+          echo "Current user:"
+          whoami
+          echo "PATH:"
+          echo $PATH
+          echo "Which sh:"
+          which sh
+          echo "Which bash:"
+          which bash
+          echo "Checking if twine file exists:"
+          ls -la /home/github/.local/share/pipx/venvs/twine/bin/twine
+          echo "Head of twine:"
+          head -3 /home/github/.local/share/pipx/venvs/twine/bin/twine
       - name: Test Twine
-        run: twine
-
+        run: | 
+          export PATH="/home/github/.local/bin:$PATH"
+          twine --version
