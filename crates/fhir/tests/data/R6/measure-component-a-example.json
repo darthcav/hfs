@@ -26,13 +26,6 @@
     }
   ],
   "description": "Screening for Alcohol Misuse",
-  "scoring": {
-    "coding": [
-      {
-        "code": "proportion"
-      }
-    ]
-  },
   "group": [
     {
       "id": "Main",

@@ -2,7 +2,7 @@
   "resourceType": "Bundle",
   "id": "types",
   "meta": {
-    "lastUpdated": "2025-10-16T00:41:37.292+00:00",
+    "lastUpdated": "2025-10-21T00:18:33.033+00:00",
     "tag": [
       {
         "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
@@ -19,7 +19,7 @@
         "resourceType": "StructureDefinition",
         "id": "Element",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -44,7 +44,7 @@
         "name": "Element",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -330,7 +330,7 @@
         "resourceType": "StructureDefinition",
         "id": "BackboneElement",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -355,7 +355,7 @@
         "name": "BackboneElement",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -639,7 +639,7 @@
         "resourceType": "StructureDefinition",
         "id": "base64Binary",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -668,7 +668,7 @@
         "name": "base64Binary",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -885,7 +885,7 @@
         "resourceType": "StructureDefinition",
         "id": "boolean",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -910,7 +910,7 @@
         "name": "boolean",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -1125,7 +1125,7 @@
         "resourceType": "StructureDefinition",
         "id": "canonical",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -1158,7 +1158,7 @@
         "name": "canonical",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -1375,7 +1375,7 @@
         "resourceType": "StructureDefinition",
         "id": "code",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -1408,7 +1408,7 @@
         "name": "code",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -1623,7 +1623,7 @@
         "resourceType": "StructureDefinition",
         "id": "date",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -1656,7 +1656,7 @@
         "name": "date",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -1871,7 +1871,7 @@
         "resourceType": "StructureDefinition",
         "id": "dateTime",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -1908,7 +1908,7 @@
         "name": "dateTime",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -2125,7 +2125,7 @@
         "resourceType": "StructureDefinition",
         "id": "decimal",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -2162,7 +2162,7 @@
         "name": "decimal",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -2379,7 +2379,7 @@
         "resourceType": "StructureDefinition",
         "id": "id",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -2408,7 +2408,7 @@
         "name": "id",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -2625,7 +2625,7 @@
         "resourceType": "StructureDefinition",
         "id": "instant",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -2662,7 +2662,7 @@
         "name": "instant",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -2879,7 +2879,7 @@
         "resourceType": "StructureDefinition",
         "id": "integer",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -2912,7 +2912,7 @@
         "name": "integer",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -3133,7 +3133,7 @@
         "resourceType": "StructureDefinition",
         "id": "integer64",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -3166,7 +3166,7 @@
         "name": "integer64",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -3387,7 +3387,7 @@
         "resourceType": "StructureDefinition",
         "id": "markdown",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -3420,7 +3420,7 @@
         "name": "markdown",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -3637,7 +3637,7 @@
         "resourceType": "StructureDefinition",
         "id": "oid",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -3666,7 +3666,7 @@
         "name": "oid",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -3883,7 +3883,7 @@
         "resourceType": "StructureDefinition",
         "id": "positiveInt",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -3916,7 +3916,7 @@
         "name": "positiveInt",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -4133,7 +4133,7 @@
         "resourceType": "StructureDefinition",
         "id": "string",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -4170,7 +4170,7 @@
         "name": "string",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -4389,7 +4389,7 @@
         "resourceType": "StructureDefinition",
         "id": "time",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -4426,7 +4426,7 @@
         "name": "time",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -4641,7 +4641,7 @@
         "resourceType": "StructureDefinition",
         "id": "unsignedInt",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -4674,7 +4674,7 @@
         "name": "unsignedInt",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -4891,7 +4891,7 @@
         "resourceType": "StructureDefinition",
         "id": "uri",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -4924,7 +4924,7 @@
         "name": "uri",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -5141,7 +5141,7 @@
         "resourceType": "StructureDefinition",
         "id": "url",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -5174,7 +5174,7 @@
         "name": "url",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -5389,7 +5389,7 @@
         "resourceType": "StructureDefinition",
         "id": "uuid",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -5418,7 +5418,7 @@
         "name": "uuid",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -5635,7 +5635,7 @@
         "resourceType": "StructureDefinition",
         "id": "xhtml",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -5664,7 +5664,7 @@
         "name": "xhtml",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 FHIR Standard",
         "contact": [
           {
@@ -5876,7 +5876,7 @@
         "resourceType": "StructureDefinition",
         "id": "Address",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -5901,7 +5901,7 @@
         "name": "Address",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -7088,7 +7088,7 @@
         "resourceType": "StructureDefinition",
         "id": "Age",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -7121,7 +7121,7 @@
         "name": "Age",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -7654,7 +7654,7 @@
         "resourceType": "StructureDefinition",
         "id": "Annotation",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -7683,7 +7683,7 @@
         "name": "Annotation",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -8121,7 +8121,7 @@
         "resourceType": "StructureDefinition",
         "id": "Attachment",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -8150,7 +8150,7 @@
         "name": "Attachment",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -9365,7 +9365,7 @@
         "resourceType": "StructureDefinition",
         "id": "Availability",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -9386,7 +9386,7 @@
         "name": "Availability",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -10210,7 +10210,7 @@
         "resourceType": "StructureDefinition",
         "id": "BackboneType",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -10235,7 +10235,7 @@
         "name": "BackboneType",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -10519,7 +10519,7 @@
         "resourceType": "StructureDefinition",
         "id": "Base",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -10544,7 +10544,7 @@
         "name": "Base",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -10657,7 +10657,7 @@
         "resourceType": "StructureDefinition",
         "id": "CodeableConcept",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -10690,7 +10690,7 @@
         "name": "CodeableConcept",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -11091,7 +11091,7 @@
         "resourceType": "StructureDefinition",
         "id": "CodeableReference",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -11124,7 +11124,7 @@
         "name": "CodeableReference",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -11431,7 +11431,7 @@
         "resourceType": "StructureDefinition",
         "id": "Coding",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -11464,7 +11464,7 @@
         "name": "Coding",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -12121,7 +12121,7 @@
         "resourceType": "StructureDefinition",
         "id": "ContactDetail",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -12146,7 +12146,7 @@
         "name": "ContactDetail",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -12439,7 +12439,7 @@
         "resourceType": "StructureDefinition",
         "id": "ContactPoint",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -12464,7 +12464,7 @@
         "name": "ContactPoint",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -13146,7 +13146,7 @@
         "resourceType": "StructureDefinition",
         "id": "Contributor",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -13167,7 +13167,7 @@
         "name": "Contributor",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -13522,7 +13522,7 @@
         "resourceType": "StructureDefinition",
         "id": "Count",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -13547,7 +13547,7 @@
         "name": "Count",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -14044,7 +14044,7 @@
         "resourceType": "StructureDefinition",
         "id": "DataRequirement",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -14065,7 +14065,7 @@
         "name": "DataRequirement",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -15797,7 +15797,7 @@
         "resourceType": "StructureDefinition",
         "id": "DataType",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -15822,7 +15822,7 @@
         "name": "DataType",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -16034,7 +16034,7 @@
         "resourceType": "StructureDefinition",
         "id": "Distance",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -16067,7 +16067,7 @@
         "name": "Distance",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -16600,7 +16600,7 @@
         "resourceType": "StructureDefinition",
         "id": "Dosage",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -16621,7 +16621,7 @@
         "name": "Dosage",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -18279,7 +18279,7 @@
         "resourceType": "StructureDefinition",
         "id": "Duration",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -18316,7 +18316,7 @@
         "name": "Duration",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -18857,7 +18857,7 @@
         "resourceType": "StructureDefinition",
         "id": "ElementDefinition",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -18882,7 +18882,7 @@
         "name": "ElementDefinition",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -27202,7 +27202,7 @@
         "resourceType": "StructureDefinition",
         "id": "Expression",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -27223,7 +27223,7 @@
         "name": "Expression",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -27739,7 +27739,7 @@
         "resourceType": "StructureDefinition",
         "id": "ExtendedContactDetail",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -27760,7 +27760,7 @@
         "name": "ExtendedContactDetail",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -28259,7 +28259,7 @@
         "resourceType": "StructureDefinition",
         "id": "Extension",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -28288,7 +28288,7 @@
         "name": "Extension",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -28962,7 +28962,7 @@
         "resourceType": "StructureDefinition",
         "id": "HumanName",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -28987,7 +28987,7 @@
         "name": "HumanName",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -29769,7 +29769,7 @@
         "resourceType": "StructureDefinition",
         "id": "Identifier",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -29794,7 +29794,7 @@
         "name": "Identifier",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -30578,7 +30578,7 @@
         "resourceType": "StructureDefinition",
         "id": "MarketingStatus",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -30599,7 +30599,7 @@
         "name": "MarketingStatus",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -31065,7 +31065,7 @@
         "resourceType": "StructureDefinition",
         "id": "Meta",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -31090,7 +31090,7 @@
         "name": "Meta",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -31640,7 +31640,7 @@
         "resourceType": "StructureDefinition",
         "id": "MonetaryComponent",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -31673,7 +31673,7 @@
         "name": "MonetaryComponent",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -32099,7 +32099,7 @@
         "resourceType": "StructureDefinition",
         "id": "Money",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -32136,7 +32136,7 @@
         "name": "Money",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -32505,7 +32505,7 @@
         "resourceType": "StructureDefinition",
         "id": "Narrative",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -32530,7 +32530,7 @@
         "name": "Narrative",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -32898,7 +32898,7 @@
         "resourceType": "StructureDefinition",
         "id": "ParameterDefinition",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -32919,7 +32919,7 @@
         "name": "ParameterDefinition",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -33497,7 +33497,7 @@
         "resourceType": "StructureDefinition",
         "id": "Period",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -33522,7 +33522,7 @@
         "name": "Period",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -33907,7 +33907,7 @@
         "resourceType": "StructureDefinition",
         "id": "PrimitiveType",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -33932,7 +33932,7 @@
         "name": "PrimitiveType",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -34144,7 +34144,7 @@
         "resourceType": "StructureDefinition",
         "id": "ProductShelfLife",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -34165,7 +34165,7 @@
         "name": "ProductShelfLife",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -34553,7 +34553,7 @@
         "resourceType": "StructureDefinition",
         "id": "Quantity",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -34594,7 +34594,7 @@
         "name": "Quantity",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -35267,7 +35267,7 @@
         "resourceType": "StructureDefinition",
         "id": "Range",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -35296,7 +35296,7 @@
         "name": "Range",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -35692,7 +35692,7 @@
         "resourceType": "StructureDefinition",
         "id": "Ratio",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -35717,7 +35717,7 @@
         "name": "Ratio",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -36087,7 +36087,7 @@
         "resourceType": "StructureDefinition",
         "id": "RatioRange",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -36112,7 +36112,7 @@
         "name": "RatioRange",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -36572,7 +36572,7 @@
         "resourceType": "StructureDefinition",
         "id": "Reference",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -36601,7 +36601,7 @@
         "name": "Reference",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -37139,11 +37139,11 @@
         "resourceType": "StructureDefinition",
         "id": "RelatedArtifact",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
-          "div": "\u003cdiv xmlns\u003d\"http://www.w3.org/1999/xhtml\"\u003e\u003ctable border\u003d\"0\" cellpadding\u003d\"0\" cellspacing\u003d\"0\" style\u003d\"border: 0px #F0F0F0 solid; font-size: 11px; font-family: verdana; vertical-align: top;\"\u003e\u003ctr style\u003d\"border: 1px #F0F0F0 solid; font-size: 11px; font-family: verdana; vertical-align: top\"\u003e\u003cth style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; padding-top: 3px; padding-bottom: 3px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"The logical name of the element\"\u003eName\u003c/a\u003e\u003c/th\u003e\u003cth style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; padding-top: 3px; padding-bottom: 3px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Information about the use of the element\"\u003eFlags\u003c/a\u003e\u003c/th\u003e\u003cth style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; padding-top: 3px; padding-bottom: 3px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Minimum and Maximum # of times the element can appear in the instance\"\u003eCard.\u003c/a\u003e\u003c/th\u003e\u003cth style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; padding-top: 3px; padding-bottom: 3px; width: 100px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Reference to the type of the element\"\u003eType\u003c/a\u003e\u003c/th\u003e\u003cth style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; padding-top: 3px; padding-bottom: 3px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Additional information about the element\"\u003eDescription \u0026amp; Constraints\u003c/a\u003e\u003cspan style\u003d\"float: right\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Legend for this format\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3goXBCwdPqAP0wAAAldJREFUOMuNk0tIlFEYhp9z/vE2jHkhxXA0zJCMitrUQlq4lnSltEqCFhFG2MJFhIvIFpkEWaTQqjaWZRkp0g26URZkTpbaaOJkDqk10szoODP//7XIMUe0elcfnPd9zsfLOYplGrpRwZaqTtw3K7PtGem7Q6FoidbGgqHVy/HRb669R+56zx7eRV1L31JGxYbBtjKK93cxeqfyQHbehkZbUkK20goELEuIzEd+dHS+qz/Y8PTSif0FnGkbiwcAjHaU1+QWOptFiyCLp/LnKptpqIuXHx6rbR26kJcBX3yLgBfnd7CxwJmflpP2wUg0HIAoUUpZBmKzELGWcN8nAr6Gpu7tLU/CkwAaoKTWRSQyt89Q8w6J+oVQkKnBoblH7V0PPvUOvDYXfopE/SJmALsxnVm6LbkotrUtNowMeIrVrBcBpaMmdS0j9df7abpSuy7HWehwJdt1lhVwi/J58U5beXGAF6c3UXLycw1wdFklArBn87xdh0ZsZtArghBdAA3+OEDVubG4UEzP6x1FOWneHh2VDAHBAt80IbdXDcesNoCvs3E5AFyNSU5nbrDPZpcUEQQTFZiEVx+51fxMhhyJEAgvlriadIJZZksRuwBYMOPBbO3hePVVqgEJhFeUuFLhIPkRP6BQLIBrmMenujm/3g4zc398awIe90Zb5A1vREALqneMcYgP/xVQWlG+Ncu5vgwwlaUNx+3799rfe96u9K0JSDXcOzOTJg4B6IgmXfsygc7/Bvg9g9E58/cDVmGIBOP/zT8Bz1zqWqpbXIsd0O9hajXfL6u4BaOS6SeWAAAAAElFTkSuQmCC\" alt\u003d\"doco\" style\u003d\"background-color: inherit\"/\u003e\u003c/a\u003e\u003c/span\u003e\u003c/th\u003e\u003c/tr\u003e\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAAJUlEQVR4Xu3IIQEAAAgDsHd9/w4EQIOamFnaBgAA4MMKAACAKwNp30CqZFfFmwAAAABJRU5ErkJggg\u003d\u003d)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,R0lGODlhEAAQAPQfAOvGUf7ztuvPMf/78/fkl/Pbg+u8Rvjqteu2Pf3zxPz36Pz0z+vTmPzurPvuw/npofbjquvNefHVduuyN+uuMu3Oafbgjfnqvf/3zv/3xevPi+vRjP/20/bmsP///wD/ACH5BAEKAB8ALAAAAAAQABAAAAVl4CeOZGme5qCqqDg8jyVJaz1876DsmAQAgqDgltspMEhMJoMZ4iy6I1AooFCIv+wKybziALVAoAEjYLwDgGIpJhMslgxaLR4/3rMAWoBp32V5exg8Shl1ckRUQVaMVkQ2kCstKCEAOw\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Element\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact\" title\u003d\"RelatedArtifact : Related artifacts such as additional documentation, justification, or bibliographic references.\"\u003eRelatedArtifact\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca style\u003d\"padding-left: 3px; padding-right: 3px; border: 1px grey solid; font-weight: bold; color: black; background-color: #fff5e6; padding-left: 3px; padding-right: 3px; border: 1px grey solid; font-weight: bold; color: black; background-color: #fff5e6\" href\u003d\"versions.html#std-process\" title\u003d\"Standards Status \u003d Trial Use\"\u003eTU\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"types.html#Element\"\u003eElement\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eRelated artifacts for a knowledge resource\u003cbr/\u003e\u003cbr/\u003eElements defined in Ancestors: \u003ca href\u003d\"types.html#Element\" title\u003d\"Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.\"\u003eid\u003c/a\u003e, \u003ca href\u003d\"types.html#Element\" title\u003d\"May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and managable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.\"\u003eextension\u003c/a\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: #F7F7F7; background-color: inherit\" title\u003d\"Primitive Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.type\" title\u003d\"RelatedArtifact.type : The type of relationship to the related artifact.\"\u003etype\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e1..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#code\"\u003ecode\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003edocumentation | justification | citation | predecessor | successor | derived-from | depends-on | composed-of | part-of | amends | amended-with | appends | appended-with | cites | cited-by | comments-on | comment-in | contains | contained-in | corrects | correction-in | replaces | replaced-with | retracts | retracted-by | signs | similar-to | supports | supported-with | transforms | transformed-into | transformed-with | documents | specification-of | created-with | cite-as\u003cbr/\u003eBinding: \u003ca href\u003d\"valueset-related-artifact-type.html\" title\u003d\"The type of relationship to the related artifact.\"\u003eRelatedArtifactType\u003c/a\u003e (\u003ca href\u003d\"terminologies.html#required\" title\u003d\"To be conformant, the concept in this element SHALL be from the specified value set.\"\u003eRequired\u003c/a\u003e)\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,R0lGODlhEAAQAPZ/APrkusOiYvvfqbiXWaV2G+jGhdq1b8GgYf3v1frw3vTUlsWkZNewbcSjY/DQkad4Hb6dXv3u0f3v1ObEgfPTlerJiP3w1v79+e7OkPrfrfnjuNOtZPrpydaxa+/YrvvdpP779ZxvFPvnwKKBQaFyF/369M2vdaqHRPz58/HNh/vowufFhfroxO3OkPrluv779tK0e6JzGProwvrow9m4eOnIifPTlPDPkP78+Naxaf3v0/zowfXRi+bFhLWUVv379/rnwPvszv3rye3LiPvnv+3MjPDasKiIS/789/3x2f747eXDg+7Mifvu0tu7f+/QkfDTnPXWmPrjsvrjtPbPgrqZW+/QlPz48K2EMv36866OUPvowat8Ivvgq/Pbrvzgq/PguvrgrqN0Gda2evfYm9+7d/rpw9q6e/LSku/Rl/XVl/LSlfrkt+zVqe7Wqv3x1/bNffbOf59wFdS6if3u0vrqyP3owPvepfXQivDQkO/PkKh9K7STVf779P///wD/ACH5BAEKAH8ALAAAAAAQABAAAAemgH+CgxeFF4OIhBdKGwFChYl/hYwbdkoBPnaQkosbG3d3VEpSUlonUoY1Gzo6QkI8SrGxWBOFG4uySgY5ZWR3PFy2hnaWZXC/PHcPwkpJk1ShoHcxhQEXSUmtFy6+0iSFVResrjoTPDzdcoU+F65CduVU6KAhhQa3F8Tx8nchBoYuqoTLZoAKFRIhqGwqJAULFx0GYpBQeChRIR4TJm6KJMhQRUSBAAA7\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.classifier\" title\u003d\"RelatedArtifact.classifier : Provides additional classifiers of the related artifact.\"\u003eclassifier\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..*\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#CodeableConcept\"\u003eCodeableConcept\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eAdditional classifiers\u003cbr/\u003eBinding: \u003ca href\u003d\"valueset-citation-artifact-classifier.html\" title\u003d\"Additional classifiers for the related artifact.\"\u003eCitation Artifact Classifier\u003c/a\u003e (\u003ca href\u003d\"terminologies.html#example\" title\u003d\"Instances are not expected or even encouraged to draw from the specified value set.  The value set merely provides examples of the types of concepts intended to be included.\"\u003eExample\u003c/a\u003e)\u003cbr/\u003e\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: #F7F7F7; background-color: inherit\" title\u003d\"Primitive Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.label\" title\u003d\"RelatedArtifact.label : A short label that can be used to reference the citation from elsewhere in the containing artifact, such as a footnote index.\"\u003elabel\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eShort label\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Primitive Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.display\" title\u003d\"RelatedArtifact.display : A brief description of the document or knowledge resource being referenced, suitable for display to a consumer.\"\u003edisplay\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eBrief description of the related artifact\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: #F7F7F7; background-color: inherit\" title\u003d\"Primitive Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.citation\" title\u003d\"RelatedArtifact.citation : A bibliographic citation for the related artifact. This text SHOULD be formatted according to an accepted citation format.\"\u003ecitation\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#markdown\"\u003emarkdown\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eBibliographic citation for the artifact\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,R0lGODlhEAAQAPZ/APrkusOiYvvfqbiXWaV2G+jGhdq1b8GgYf3v1frw3vTUlsWkZNewbcSjY/DQkad4Hb6dXv3u0f3v1ObEgfPTlerJiP3w1v79+e7OkPrfrfnjuNOtZPrpydaxa+/YrvvdpP779ZxvFPvnwKKBQaFyF/369M2vdaqHRPz58/HNh/vowufFhfroxO3OkPrluv779tK0e6JzGProwvrow9m4eOnIifPTlPDPkP78+Naxaf3v0/zowfXRi+bFhLWUVv379/rnwPvszv3rye3LiPvnv+3MjPDasKiIS/789/3x2f747eXDg+7Mifvu0tu7f+/QkfDTnPXWmPrjsvrjtPbPgrqZW+/QlPz48K2EMv36866OUPvowat8Ivvgq/Pbrvzgq/PguvrgrqN0Gda2evfYm9+7d/rpw9q6e/LSku/Rl/XVl/LSlfrkt+zVqe7Wqv3x1/bNffbOf59wFdS6if3u0vrqyP3owPvepfXQivDQkO/PkKh9K7STVf779P///wD/ACH5BAEKAH8ALAAAAAAQABAAAAemgH+CgxeFF4OIhBdKGwFChYl/hYwbdkoBPnaQkosbG3d3VEpSUlonUoY1Gzo6QkI8SrGxWBOFG4uySgY5ZWR3PFy2hnaWZXC/PHcPwkpJk1ShoHcxhQEXSUmtFy6+0iSFVResrjoTPDzdcoU+F65CduVU6KAhhQa3F8Tx8nchBoYuqoTLZoAKFRIhqGwqJAULFx0GYpBQeChRIR4TJm6KJMhQRUSBAAA7\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.document\" title\u003d\"RelatedArtifact.document : The document being referenced, represented as an attachment. This is exclusive with the resource element.\"\u003edocument\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#Attachment\"\u003eAttachment\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eWhat document is being referenced\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAFxJREFUOE/NjEEOACEIA/0o/38GGw+agoXYeNnDJDCUDnd/gkoFKhWozJiZI3gLwY6rAgxhsPKTPUzycTl8lAryMyMsVQG6TFi6cHULyz8KOjC7OIQKlQpU3uPjAwhX2CCcGsgOAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: #F7F7F7; background-color: inherit\" title\u003d\"Reference to another Resource\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.resource\" title\u003d\"RelatedArtifact.resource : The related artifact, such as a library, value set, profile, or other knowledge resource.\"\u003eresource\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#canonical\"\u003ecanonical\u003c/a\u003e(\u003ca href\u003d\"resourcelist.html\"\u003eAny\u003c/a\u003e)\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eWhat artifact is being referenced\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAFxJREFUOE/NjEEOACEIA/0o/38GGw+agoXYeNnDJDCUDnd/gkoFKhWozJiZI3gLwY6rAgxhsPKTPUzycTl8lAryMyMsVQG6TFi6cHULyz8KOjC7OIQKlQpU3uPjAwhX2CCcGsgOAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Reference to another Resource\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.resourceReference\" title\u003d\"RelatedArtifact.resourceReference : The related artifact, if the artifact is not a canonical resource, or a resource reference to a canonical resource.\"\u003eresourceReference\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"references.html#Reference\"\u003eReference\u003c/a\u003e(\u003ca href\u003d\"resourcelist.html\"\u003eAny\u003c/a\u003e)\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eWhat artifact, if not a conformance resource\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: #F7F7F7; background-color: inherit\" title\u003d\"Primitive Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.publicationStatus\" title\u003d\"RelatedArtifact.publicationStatus : The publication status of the artifact being referred to.\"\u003epublicationStatus\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#code\"\u003ecode\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003edraft | active | retired | unknown\u003cbr/\u003eBinding: \u003ca href\u003d\"valueset-publication-status.html\" title\u003d\"Publication status of an artifact being referred to.\"\u003ePublicationStatus\u003c/a\u003e (\u003ca href\u003d\"terminologies.html#required\" title\u003d\"To be conformant, the concept in this element SHALL be from the specified value set.\"\u003eRequired\u003c/a\u003e)\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAAJUlEQVR4Xu3IIQEAAAgDsHd9/w4EQIOamFnaBgAA4MMKAACAKwNp30CqZFfFmwAAAABJRU5ErkJggg\u003d\u003d)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzME+lXFigAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+3OsRUAIAjEUOL+O8cJABttJM11/x1qZAGqRBEVcNIqdWj1efDqQbb3HwwwwEfABmQUHSPM9dtDAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Primitive Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.publicationDate\" title\u003d\"RelatedArtifact.publicationDate : The date of publication of the artifact being referred to.\"\u003epublicationDate\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#date\"\u003edate\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eDate of publication of the artifact being referred to\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr\u003e\u003ctd colspan\u003d\"5\" class\u003d\"hierarchy\"\u003e\u003cbr/\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Legend for this format\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3goXBCwdPqAP0wAAAldJREFUOMuNk0tIlFEYhp9z/vE2jHkhxXA0zJCMitrUQlq4lnSltEqCFhFG2MJFhIvIFpkEWaTQqjaWZRkp0g26URZkTpbaaOJkDqk10szoODP//7XIMUe0elcfnPd9zsfLOYplGrpRwZaqTtw3K7PtGem7Q6FoidbGgqHVy/HRb669R+56zx7eRV1L31JGxYbBtjKK93cxeqfyQHbehkZbUkK20goELEuIzEd+dHS+qz/Y8PTSif0FnGkbiwcAjHaU1+QWOptFiyCLp/LnKptpqIuXHx6rbR26kJcBX3yLgBfnd7CxwJmflpP2wUg0HIAoUUpZBmKzELGWcN8nAr6Gpu7tLU/CkwAaoKTWRSQyt89Q8w6J+oVQkKnBoblH7V0PPvUOvDYXfopE/SJmALsxnVm6LbkotrUtNowMeIrVrBcBpaMmdS0j9df7abpSuy7HWehwJdt1lhVwi/J58U5beXGAF6c3UXLycw1wdFklArBn87xdh0ZsZtArghBdAA3+OEDVubG4UEzP6x1FOWneHh2VDAHBAt80IbdXDcesNoCvs3E5AFyNSU5nbrDPZpcUEQQTFZiEVx+51fxMhhyJEAgvlriadIJZZksRuwBYMOPBbO3hePVVqgEJhFeUuFLhIPkRP6BQLIBrmMenujm/3g4zc398awIe90Zb5A1vREALqneMcYgP/xVQWlG+Ncu5vgwwlaUNx+3799rfe96u9K0JSDXcOzOTJg4B6IgmXfsygc7/Bvg9g9E58/cDVmGIBOP/zT8Bz1zqWqpbXIsd0O9hajXfL6u4BaOS6SeWAAAAAElFTkSuQmCC\" alt\u003d\"doco\" style\u003d\"background-color: inherit\"/\u003e Documentation for this format\u003c/a\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003c/div\u003e"
+          "div": "\u003cdiv xmlns\u003d\"http://www.w3.org/1999/xhtml\"\u003e\u003ctable border\u003d\"0\" cellpadding\u003d\"0\" cellspacing\u003d\"0\" style\u003d\"border: 0px #F0F0F0 solid; font-size: 11px; font-family: verdana; vertical-align: top;\"\u003e\u003ctr style\u003d\"border: 1px #F0F0F0 solid; font-size: 11px; font-family: verdana; vertical-align: top\"\u003e\u003cth style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; padding-top: 3px; padding-bottom: 3px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"The logical name of the element\"\u003eName\u003c/a\u003e\u003c/th\u003e\u003cth style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; padding-top: 3px; padding-bottom: 3px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Information about the use of the element\"\u003eFlags\u003c/a\u003e\u003c/th\u003e\u003cth style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; padding-top: 3px; padding-bottom: 3px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Minimum and Maximum # of times the element can appear in the instance\"\u003eCard.\u003c/a\u003e\u003c/th\u003e\u003cth style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; padding-top: 3px; padding-bottom: 3px; width: 100px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Reference to the type of the element\"\u003eType\u003c/a\u003e\u003c/th\u003e\u003cth style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; padding-top: 3px; padding-bottom: 3px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Additional information about the element\"\u003eDescription \u0026amp; Constraints\u003c/a\u003e\u003cspan style\u003d\"float: right\"\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Legend for this format\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3goXBCwdPqAP0wAAAldJREFUOMuNk0tIlFEYhp9z/vE2jHkhxXA0zJCMitrUQlq4lnSltEqCFhFG2MJFhIvIFpkEWaTQqjaWZRkp0g26URZkTpbaaOJkDqk10szoODP//7XIMUe0elcfnPd9zsfLOYplGrpRwZaqTtw3K7PtGem7Q6FoidbGgqHVy/HRb669R+56zx7eRV1L31JGxYbBtjKK93cxeqfyQHbehkZbUkK20goELEuIzEd+dHS+qz/Y8PTSif0FnGkbiwcAjHaU1+QWOptFiyCLp/LnKptpqIuXHx6rbR26kJcBX3yLgBfnd7CxwJmflpP2wUg0HIAoUUpZBmKzELGWcN8nAr6Gpu7tLU/CkwAaoKTWRSQyt89Q8w6J+oVQkKnBoblH7V0PPvUOvDYXfopE/SJmALsxnVm6LbkotrUtNowMeIrVrBcBpaMmdS0j9df7abpSuy7HWehwJdt1lhVwi/J58U5beXGAF6c3UXLycw1wdFklArBn87xdh0ZsZtArghBdAA3+OEDVubG4UEzP6x1FOWneHh2VDAHBAt80IbdXDcesNoCvs3E5AFyNSU5nbrDPZpcUEQQTFZiEVx+51fxMhhyJEAgvlriadIJZZksRuwBYMOPBbO3hePVVqgEJhFeUuFLhIPkRP6BQLIBrmMenujm/3g4zc398awIe90Zb5A1vREALqneMcYgP/xVQWlG+Ncu5vgwwlaUNx+3799rfe96u9K0JSDXcOzOTJg4B6IgmXfsygc7/Bvg9g9E58/cDVmGIBOP/zT8Bz1zqWqpbXIsd0O9hajXfL6u4BaOS6SeWAAAAAElFTkSuQmCC\" alt\u003d\"doco\" style\u003d\"background-color: inherit\"/\u003e\u003c/a\u003e\u003c/span\u003e\u003c/th\u003e\u003c/tr\u003e\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAAJUlEQVR4Xu3IIQEAAAgDsHd9/w4EQIOamFnaBgAA4MMKAACAKwNp30CqZFfFmwAAAABJRU5ErkJggg\u003d\u003d)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,R0lGODlhEAAQAPQfAOvGUf7ztuvPMf/78/fkl/Pbg+u8Rvjqteu2Pf3zxPz36Pz0z+vTmPzurPvuw/npofbjquvNefHVduuyN+uuMu3Oafbgjfnqvf/3zv/3xevPi+vRjP/20/bmsP///wD/ACH5BAEKAB8ALAAAAAAQABAAAAVl4CeOZGme5qCqqDg8jyVJaz1876DsmAQAgqDgltspMEhMJoMZ4iy6I1AooFCIv+wKybziALVAoAEjYLwDgGIpJhMslgxaLR4/3rMAWoBp32V5exg8Shl1ckRUQVaMVkQ2kCstKCEAOw\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Element\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact\" title\u003d\"RelatedArtifact : Related artifacts such as dependencies, components, additional documentation, justification, or bibliographic references.\"\u003eRelatedArtifact\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca style\u003d\"padding-left: 3px; padding-right: 3px; border: 1px grey solid; font-weight: bold; color: black; background-color: #fff5e6; padding-left: 3px; padding-right: 3px; border: 1px grey solid; font-weight: bold; color: black; background-color: #fff5e6\" href\u003d\"versions.html#std-process\" title\u003d\"Standards Status \u003d Trial Use\"\u003eTU\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"types.html#Element\"\u003eElement\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eRelated artifacts for a knowledge resource\u003cbr/\u003e\u003cspan style\u003d\"font-style: italic\" title\u003d\"rla-1\"\u003e+ Warning: Citation must be inline or a canonical reference to a Citation\u003c/span\u003e\u003cbr/\u003e\u003cspan style\u003d\"font-style: italic\" title\u003d\"rla-2\"\u003e+ Warning: Documentation must be an attachment\u003c/span\u003e\u003cbr/\u003e\u003cspan style\u003d\"font-style: italic\" title\u003d\"rla-3\"\u003e+ Warning: Justification must be an attachment or a reference to an ArtifactAssessment\u003c/span\u003e\u003cbr/\u003e\u003cbr/\u003eElements defined in Ancestors: \u003ca href\u003d\"types.html#Element\" title\u003d\"Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.\"\u003eid\u003c/a\u003e, \u003ca href\u003d\"types.html#Element\" title\u003d\"May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and managable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.\"\u003eextension\u003c/a\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: #F7F7F7; background-color: inherit\" title\u003d\"Primitive Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.type\" title\u003d\"RelatedArtifact.type : The type of relationship to the related artifact.\"\u003etype\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e1..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#code\"\u003ecode\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003edocumentation | justification | citation | predecessor | successor | derived-from | depends-on | composed-of | part-of\u003cbr/\u003eBinding: \u003ca href\u003d\"valueset-related-artifact-type.html\" title\u003d\"The type of relationship to the related artifact.\"\u003eRelatedArtifactType\u003c/a\u003e (\u003ca href\u003d\"terminologies.html#required\" title\u003d\"To be conformant, the concept in this element SHALL be from the specified value set.\"\u003eRequired\u003c/a\u003e)\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Primitive Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.label\" title\u003d\"RelatedArtifact.label : A short label that can be used to reference the citation from elsewhere in the containing artifact, such as a footnote index.\"\u003elabel\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eShort label\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: #F7F7F7; background-color: inherit\" title\u003d\"Primitive Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.display\" title\u003d\"RelatedArtifact.display : A brief description of the document or knowledge resource being referenced, suitable for display to a consumer.\"\u003edisplay\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eBrief description of the related artifact\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Primitive Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.citation\" title\u003d\"RelatedArtifact.citation : Deprecated in favor of the new artifact[x] element. A bibliographic citation for the related artifact. This text SHOULD be formatted according to an accepted citation format.\"\u003ecitation\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#markdown\"\u003emarkdown\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eBibliographic citation for the artifact\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,R0lGODlhEAAQAPZ/APrkusOiYvvfqbiXWaV2G+jGhdq1b8GgYf3v1frw3vTUlsWkZNewbcSjY/DQkad4Hb6dXv3u0f3v1ObEgfPTlerJiP3w1v79+e7OkPrfrfnjuNOtZPrpydaxa+/YrvvdpP779ZxvFPvnwKKBQaFyF/369M2vdaqHRPz58/HNh/vowufFhfroxO3OkPrluv779tK0e6JzGProwvrow9m4eOnIifPTlPDPkP78+Naxaf3v0/zowfXRi+bFhLWUVv379/rnwPvszv3rye3LiPvnv+3MjPDasKiIS/789/3x2f747eXDg+7Mifvu0tu7f+/QkfDTnPXWmPrjsvrjtPbPgrqZW+/QlPz48K2EMv36866OUPvowat8Ivvgq/Pbrvzgq/PguvrgrqN0Gda2evfYm9+7d/rpw9q6e/LSku/Rl/XVl/LSlfrkt+zVqe7Wqv3x1/bNffbOf59wFdS6if3u0vrqyP3owPvepfXQivDQkO/PkKh9K7STVf779P///wD/ACH5BAEKAH8ALAAAAAAQABAAAAemgH+CgxeFF4OIhBdKGwFChYl/hYwbdkoBPnaQkosbG3d3VEpSUlonUoY1Gzo6QkI8SrGxWBOFG4uySgY5ZWR3PFy2hnaWZXC/PHcPwkpJk1ShoHcxhQEXSUmtFy6+0iSFVResrjoTPDzdcoU+F65CduVU6KAhhQa3F8Tx8nchBoYuqoTLZoAKFRIhqGwqJAULFx0GYpBQeChRIR4TJm6KJMhQRUSBAAA7\" alt\u003d\".\" style\u003d\"background-color: #F7F7F7; background-color: inherit\" title\u003d\"Data Type\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.document\" title\u003d\"RelatedArtifact.document : Deprecated in favor of the new artifact[x] element. The document being referenced, represented as an attachment. This is exclusive with the resource element.\"\u003edocument\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#Attachment\"\u003eAttachment\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eWhat document is being referenced\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAFxJREFUOE/NjEEOACEIA/0o/38GGw+agoXYeNnDJDCUDnd/gkoFKhWozJiZI3gLwY6rAgxhsPKTPUzycTl8lAryMyMsVQG6TFi6cHULyz8KOjC7OIQKlQpU3uPjAwhX2CCcGsgOAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Reference to another Resource\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.resource\" title\u003d\"RelatedArtifact.resource : Deprecated in favor of the new artifact[x] element. The related artifact, such as a library, value set, profile, or other knowledge resource.\"\u003eresource\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#canonical\"\u003ecanonical\u003c/a\u003e(\u003ca href\u003d\"resourcelist.html\"\u003eAny\u003c/a\u003e)\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eWhat artifact is being referenced\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALUlEQVR4Xu3IoREAIAwEwfT6/ddA0GBAxO3NrLlKUj9263wAAAAvrgEAADClAVWFQIBRHMicAAAAAElFTkSuQmCC)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAFxJREFUOE/NjEEOACEIA/0o/38GGw+agoXYeNnDJDCUDnd/gkoFKhWozJiZI3gLwY6rAgxhsPKTPUzycTl8lAryMyMsVQG6TFi6cHULyz8KOjC7OIQKlQpU3uPjAwhX2CCcGsgOAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: #F7F7F7; background-color: inherit\" title\u003d\"Reference to another Resource\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.resourceReference\" title\u003d\"RelatedArtifact.resourceReference : Deprecated in favor of the new artifact[x] element. The related artifact, if the artifact is not a canonical resource, or a resource reference to a canonical resource.\"\u003eresourceReference\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"references.html#Reference\"\u003eReference\u003c/a\u003e(\u003ca href\u003d\"resourcelist.html\"\u003eAny\u003c/a\u003e)\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eWhat artifact, if not a conformance resource\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAAJUlEQVR4Xu3IIQEAAAgDsHd9/w4EQIOamFnaBgAA4MMKAACAKwNp30CqZFfFmwAAAABJRU5ErkJggg\u003d\u003d)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzME+lXFigAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+3OsRUAIAjEUOL+O8cJABttJM11/x1qZAGqRBEVcNIqdWj1efDqQbb3HwwwwEfABmQUHSPM9dtDAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,R0lGODlhEAAQAMQfAGm6/idTd4yTmF+v8Xa37KvW+lyh3KHJ62aq41ee2bXZ98nm/2mt5W2Ck5XN/C1chEZieho8WXXA/2Gn4P39/W+y6V+l3qjP8Njt/lx2izxPYGyv51Oa1EJWZ////////yH5BAEAAB8ALAAAAAAQABAAAAWH4Cd+Xml6Y0pCQts0EKp6GbYshaM/skhjhCChUmFIeL4OsHIxXRAISQTl6SgIG8+FgfBMoh2qtbLZQr0TQJhk3TC4pYPBApiyFVDEwSOf18UFXxMWBoUJBn9sDgmDewcJCRyJJBoEkRyYmAABPZQEAAOhA5seFDMaDw8BAQ9TpiokJyWwtLUhADs\u003d\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Choice of Types\" class\u003d\"hierarchy\"/\u003e \u003ca href\u003d\"metadatatypes-definitions.html#RelatedArtifact.artifact_x_\" title\u003d\"RelatedArtifact.artifact[x] : The related artifact represented as a canonical or direct reference to a FHIR resource, an Attachment, or directly inline as markdown.\"\u003eartifact[x]\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e0..1\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003eWhat document, citation, artifact, or resource is being referenced\u003cbr/\u003e\u003c/td\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALElEQVR4Xu3IsQ0AIAwEsez6+89AqKGGJj7JzVWS+mm3zgcAAMxwDQAAgFcaYAVAgNGLTjgAAAAASUVORK5CYII\u003d)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIZgEiYEgAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAIElEQVQ4y2P8//8/AyWAiYFCMGrAqAGjBowaMGoAAgAALL0DKYQ0DPIAAAAASUVORK5CYII\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARklEQVQ4y2P8//8/AyWAhYFCMAgMuHjx4n+KXaCv+I0szW8WpCG8kFO1lGFKW/SIjAUYgxz/MzAwMDC+nqhDUTQyjuYFBgCNmhP4OvTRgwAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: #F7F7F7; background-color: inherit\" title\u003d\"Primitive Data Type\" class\u003d\"hierarchy\"/\u003e \u003cspan title\u003d\"A string that may contain Github Flavored Markdown syntax for optional processing by a mark down presentation engine\"\u003eartifactMarkdown\u003c/span\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#markdown\"\u003emarkdown\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALElEQVR4Xu3IsQ0AIAwEsez6+89AqKGGJj7JzVWS+mm3zgcAAMxwDQAAgFcaYAVAgNGLTjgAAAAASUVORK5CYII\u003d)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIZgEiYEgAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAIElEQVQ4y2P8//8/AyWAiYFCMGrAqAGjBowaMGoAAgAALL0DKYQ0DPIAAAAASUVORK5CYII\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,R0lGODlhEAAQAPZ/APrkusOiYvvfqbiXWaV2G+jGhdq1b8GgYf3v1frw3vTUlsWkZNewbcSjY/DQkad4Hb6dXv3u0f3v1ObEgfPTlerJiP3w1v79+e7OkPrfrfnjuNOtZPrpydaxa+/YrvvdpP779ZxvFPvnwKKBQaFyF/369M2vdaqHRPz58/HNh/vowufFhfroxO3OkPrluv779tK0e6JzGProwvrow9m4eOnIifPTlPDPkP78+Naxaf3v0/zowfXRi+bFhLWUVv379/rnwPvszv3rye3LiPvnv+3MjPDasKiIS/789/3x2f747eXDg+7Mifvu0tu7f+/QkfDTnPXWmPrjsvrjtPbPgrqZW+/QlPz48K2EMv36866OUPvowat8Ivvgq/Pbrvzgq/PguvrgrqN0Gda2evfYm9+7d/rpw9q6e/LSku/Rl/XVl/LSlfrkt+zVqe7Wqv3x1/bNffbOf59wFdS6if3u0vrqyP3owPvepfXQivDQkO/PkKh9K7STVf779P///wD/ACH5BAEKAH8ALAAAAAAQABAAAAemgH+CgxeFF4OIhBdKGwFChYl/hYwbdkoBPnaQkosbG3d3VEpSUlonUoY1Gzo6QkI8SrGxWBOFG4uySgY5ZWR3PFy2hnaWZXC/PHcPwkpJk1ShoHcxhQEXSUmtFy6+0iSFVResrjoTPDzdcoU+F65CduVU6KAhhQa3F8Tx8nchBoYuqoTLZoAKFRIhqGwqJAULFx0GYpBQeChRIR4TJm6KJMhQRUSBAAA7\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Data Type\" class\u003d\"hierarchy\"/\u003e \u003cspan title\u003d\"For referring to data content defined in other formats.\"\u003eartifactAttachment\u003c/span\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#Attachment\"\u003eAttachment\u003c/a\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAALElEQVR4Xu3IsQ0AIAwEsez6+89AqKGGJj7JzVWS+mm3zgcAAMxwDQAAgFcaYAVAgNGLTjgAAAAASUVORK5CYII\u003d)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIZgEiYEgAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAIElEQVQ4y2P8//8/AyWAiYFCMGrAqAGjBowaMGoAAgAALL0DKYQ0DPIAAAAASUVORK5CYII\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzI3XJ6V3QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+2RsQ0AIAzDav7/2VzQwoCY4iWbZSmo1QGoUgNMghvWaIejPQW/CrrNCylIwcOCDYfLNRcNer4SAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAFxJREFUOE/NjEEOACEIA/0o/38GGw+agoXYeNnDJDCUDnd/gkoFKhWozJiZI3gLwY6rAgxhsPKTPUzycTl8lAryMyMsVQG6TFi6cHULyz8KOjC7OIQKlQpU3uPjAwhX2CCcGsgOAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: #F7F7F7; background-color: inherit\" title\u003d\"Reference to another Resource\" class\u003d\"hierarchy\"/\u003e artifactCanonical\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"datatypes.html#canonical\"\u003ecanonical\u003c/a\u003e(\u003ca href\u003d\"resourcelist.html\"\u003eAny\u003c/a\u003e)\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: #F7F7F7; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003c/tr\u003e\r\n\u003ctr style\u003d\"border: 0px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAACCAYAAACg/LjIAAAAJUlEQVR4Xu3IIQEAAAgDsHd9/w4EQIOamFnaBgAA4MMKAACAKwNp30CqZFfFmwAAAABJRU5ErkJggg\u003d\u003d)\" class\u003d\"hierarchy\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIs1vtcMQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAE0lEQVQI12P4//8/AxMDAwNdCABMPwMo2ctnoQAAAABJRU5ErkJggg\u003d\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzIZgEiYEgAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAIElEQVQ4y2P8//8/AyWAiYFCMGrAqAGjBowaMGoAAgAALL0DKYQ0DPIAAAAASUVORK5CYII\u003d\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYeFzME+lXFigAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANklEQVQ4y+3OsRUAIAjEUOL+O8cJABttJM11/x1qZAGqRBEVcNIqdWj1efDqQbb3HwwwwEfABmQUHSPM9dtDAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: inherit\" class\u003d\"hierarchy\"/\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAFxJREFUOE/NjEEOACEIA/0o/38GGw+agoXYeNnDJDCUDnd/gkoFKhWozJiZI3gLwY6rAgxhsPKTPUzycTl8lAryMyMsVQG6TFi6cHULyz8KOjC7OIQKlQpU3uPjAwhX2CCcGsgOAAAAAElFTkSuQmCC\" alt\u003d\".\" style\u003d\"background-color: white; background-color: inherit\" title\u003d\"Reference to another Resource\" class\u003d\"hierarchy\"/\u003e artifactReference\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"\u003e\u003ca href\u003d\"references.html#Reference\"\u003eReference\u003c/a\u003e(\u003ca href\u003d\"resourcelist.html\"\u003eAny\u003c/a\u003e)\u003c/td\u003e\u003ctd style\u003d\"vertical-align: top; text-align : var(--ig-left,left); background-color: white; border: 0px #F0F0F0 solid; padding:0px 4px 0px 4px\" class\u003d\"hierarchy\"/\u003e\u003c/tr\u003e\r\n\u003ctr\u003e\u003ctd colspan\u003d\"5\" class\u003d\"hierarchy\"\u003e\u003cbr/\u003e\u003ca href\u003d\"https://build.fhir.org/ig/FHIR/ig-guidance/readingIgs.html#table-views\" title\u003d\"Legend for this format\"\u003e\u003cimg src\u003d\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3goXBCwdPqAP0wAAAldJREFUOMuNk0tIlFEYhp9z/vE2jHkhxXA0zJCMitrUQlq4lnSltEqCFhFG2MJFhIvIFpkEWaTQqjaWZRkp0g26URZkTpbaaOJkDqk10szoODP//7XIMUe0elcfnPd9zsfLOYplGrpRwZaqTtw3K7PtGem7Q6FoidbGgqHVy/HRb669R+56zx7eRV1L31JGxYbBtjKK93cxeqfyQHbehkZbUkK20goELEuIzEd+dHS+qz/Y8PTSif0FnGkbiwcAjHaU1+QWOptFiyCLp/LnKptpqIuXHx6rbR26kJcBX3yLgBfnd7CxwJmflpP2wUg0HIAoUUpZBmKzELGWcN8nAr6Gpu7tLU/CkwAaoKTWRSQyt89Q8w6J+oVQkKnBoblH7V0PPvUOvDYXfopE/SJmALsxnVm6LbkotrUtNowMeIrVrBcBpaMmdS0j9df7abpSuy7HWehwJdt1lhVwi/J58U5beXGAF6c3UXLycw1wdFklArBn87xdh0ZsZtArghBdAA3+OEDVubG4UEzP6x1FOWneHh2VDAHBAt80IbdXDcesNoCvs3E5AFyNSU5nbrDPZpcUEQQTFZiEVx+51fxMhhyJEAgvlriadIJZZksRuwBYMOPBbO3hePVVqgEJhFeUuFLhIPkRP6BQLIBrmMenujm/3g4zc398awIe90Zb5A1vREALqneMcYgP/xVQWlG+Ncu5vgwwlaUNx+3799rfe96u9K0JSDXcOzOTJg4B6IgmXfsygc7/Bvg9g9E58/cDVmGIBOP/zT8Bz1zqWqpbXIsd0O9hajXfL6u4BaOS6SeWAAAAAElFTkSuQmCC\" alt\u003d\"doco\" style\u003d\"background-color: inherit\"/\u003e Documentation for this format\u003c/a\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003c/div\u003e"
         },
         "extension": [
           {
@@ -37160,7 +37160,7 @@
         "name": "RelatedArtifact",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -37180,7 +37180,7 @@
             ]
           }
         ],
-        "description": "RelatedArtifact Type: Related artifacts such as additional documentation, justification, or bibliographic references.",
+        "description": "RelatedArtifact Type: Related artifacts such as dependencies, components, additional documentation, justification, or bibliographic references.",
         "jurisdiction": [
           {
             "coding": [
@@ -37218,8 +37218,8 @@
               ],
               "path": "RelatedArtifact",
               "short": "Related artifacts for a knowledge resource",
-              "definition": "Related artifacts such as additional documentation, justification, or bibliographic references.",
-              "comment": "Each related artifact is either an attachment, or a reference to another knowledge resource, but not both.",
+              "definition": "Related artifacts such as dependencies, components, additional documentation, justification, or bibliographic references.",
+              "comment": "Each related artifact is either a reference to another knowledge resource, or represented directly inline as an Attachment or markdown.",
               "min": 0,
               "max": "*",
               "base": {
@@ -37234,6 +37234,27 @@
                   "human": "All FHIR elements must have a @value or children",
                   "expression": "hasValue() or (children().count() \u003e id.count())",
                   "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                },
+                {
+                  "key": "rla-1",
+                  "severity": "warning",
+                  "human": "Citation must be inline or a canonical reference to a Citation",
+                  "expression": "type \u003d \u0027citation\u0027 implies ((citation.exists() xor resource.exists()) or (artifact is markdown or artifact is canonical))",
+                  "source": "http://hl7.org/fhir/StructureDefinition/RelatedArtifact"
+                },
+                {
+                  "key": "rla-2",
+                  "severity": "warning",
+                  "human": "Documentation must be an attachment",
+                  "expression": "type \u003d \u0027documentation\u0027 implies (document.exists() or artifact is Attachment)",
+                  "source": "http://hl7.org/fhir/StructureDefinition/RelatedArtifact"
+                },
+                {
+                  "key": "rla-3",
+                  "severity": "warning",
+                  "human": "Justification must be an attachment or a reference to an ArtifactAssessment",
+                  "expression": "type \u003d \u0027justification\u0027 implies ((document.exists() or resourceReference.exists()) or (artifact is Attachment or artifact is Reference))",
+                  "source": "http://hl7.org/fhir/StructureDefinition/RelatedArtifact"
                 }
               ],
               "isModifier": false,
@@ -37335,7 +37356,7 @@
             {
               "id": "RelatedArtifact.type",
               "path": "RelatedArtifact.type",
-              "short": "documentation | justification | citation | predecessor | successor | derived-from | depends-on | composed-of | part-of | amends | amended-with | appends | appended-with | cites | cited-by | comments-on | comment-in | contains | contained-in | corrects | correction-in | replaces | replaced-with | retracts | retracted-by | signs | similar-to | supports | supported-with | transforms | transformed-into | transformed-with | documents | specification-of | created-with | cite-as",
+              "short": "documentation | justification | citation | predecessor | successor | derived-from | depends-on | composed-of | part-of",
               "definition": "The type of relationship to the related artifact.",
               "comment": "The presence of both sides of a relationship type (e.g. successor and predecessor) is required to support use cases where one side of a relationship is not represented in FHIR. However, this feature SHALL NOT be used to create bi-directional resource links in FHIR instances. Specifically, following the methodology of \"new points to old\" and \"many points to one\", when using related artifact elements to describe and reference FHIR resources, the type element SHALL be drawn from the fhir-related-artifact-type ValueSet.",
               "min": 1,
@@ -37375,50 +37396,6 @@
                 "strength": "required",
                 "description": "The type of relationship to the related artifact.",
                 "valueSet": "http://hl7.org/fhir/ValueSet/related-artifact-type|6.0.0-ballot3"
-              }
-            },
-            {
-              "id": "RelatedArtifact.classifier",
-              "path": "RelatedArtifact.classifier",
-              "short": "Additional classifiers",
-              "definition": "Provides additional classifiers of the related artifact.",
-              "min": 0,
-              "max": "*",
-              "base": {
-                "path": "RelatedArtifact.classifier",
-                "min": 0,
-                "max": "*"
-              },
-              "type": [
-                {
-                  "code": "CodeableConcept"
-                }
-              ],
-              "constraint": [
-                {
-                  "key": "ele-1",
-                  "severity": "error",
-                  "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() or (children().count() \u003e id.count())",
-                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
-                }
-              ],
-              "isModifier": false,
-              "isSummary": false,
-              "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/tools/StructureDefinition/binding-definition",
-                    "valueMarkdown": "Additional classifiers for the related artifact."
-                  },
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "RelatedArtifactClassifier"
-                  }
-                ],
-                "strength": "example",
-                "description": "Additional classifiers for the related artifact.",
-                "valueSet": "http://hl7.org/fhir/ValueSet/citation-artifact-classifier"
               }
             },
             {
@@ -37483,7 +37460,7 @@
               "id": "RelatedArtifact.citation",
               "path": "RelatedArtifact.citation",
               "short": "Bibliographic citation for the artifact",
-              "definition": "A bibliographic citation for the related artifact. This text SHOULD be formatted according to an accepted citation format.",
+              "definition": "Deprecated in favor of the new artifact[x] element. A bibliographic citation for the related artifact. This text SHOULD be formatted according to an accepted citation format.",
               "comment": "Additional structured information about citations should be captured as extensions.",
               "min": 0,
               "max": "1",
@@ -37513,7 +37490,7 @@
               "id": "RelatedArtifact.document",
               "path": "RelatedArtifact.document",
               "short": "What document is being referenced",
-              "definition": "The document being referenced, represented as an attachment. This is exclusive with the resource element.",
+              "definition": "Deprecated in favor of the new artifact[x] element. The document being referenced, represented as an attachment. This is exclusive with the resource element.",
               "min": 0,
               "max": "1",
               "base": {
@@ -37542,7 +37519,7 @@
               "id": "RelatedArtifact.resource",
               "path": "RelatedArtifact.resource",
               "short": "What artifact is being referenced",
-              "definition": "The related artifact, such as a library, value set, profile, or other knowledge resource.",
+              "definition": "Deprecated in favor of the new artifact[x] element. The related artifact, such as a library, value set, profile, or other knowledge resource.",
               "comment": "If the type is predecessor, this is a reference to the succeeding knowledge resource. If the type is successor, this is a reference to the prior knowledge resource.",
               "min": 0,
               "max": "1",
@@ -37575,7 +37552,7 @@
               "id": "RelatedArtifact.resourceReference",
               "path": "RelatedArtifact.resourceReference",
               "short": "What artifact, if not a conformance resource",
-              "definition": "The related artifact, if the artifact is not a canonical resource, or a resource reference to a canonical resource.",
+              "definition": "Deprecated in favor of the new artifact[x] element. The related artifact, if the artifact is not a canonical resource, or a resource reference to a canonical resource.",
               "comment": "If both resource and resourceReference are present, they SHOULD be consistent and reference the same resource. Although relatedArtifact is intended to support references to definitional resources, there are cases where non-definitional resources can be definitional (such as Location where the kind is mode). Related artifacts SHOULD be used to reference definitional resources, and profiles SHOULD be used to make that explicit for particular use cases.",
               "min": 0,
               "max": "1",
@@ -37605,68 +37582,36 @@
               "isSummary": false
             },
             {
-              "id": "RelatedArtifact.publicationStatus",
-              "path": "RelatedArtifact.publicationStatus",
-              "short": "draft | active | retired | unknown",
-              "definition": "The publication status of the artifact being referred to.",
+              "id": "RelatedArtifact.artifact[x]",
+              "path": "RelatedArtifact.artifact[x]",
+              "short": "What document, citation, artifact, or resource is being referenced",
+              "definition": "The related artifact represented as a canonical or direct reference to a FHIR resource, an Attachment, or directly inline as markdown.",
+              "comment": "For artifacts represented as FHIR resources, a canonical or Reference to the FHIR Resource. If the target is a CanonicalResource, this SHOULD be a canonical reference. For documentation and justification, what document is being referenced, represented as an Attachment. For citations, either a bibliographic citation for the related artifact represented as markdown, or a reference to a Citation resource. The text SHOULD be formatted according to an accepted citation format.",
               "min": 0,
               "max": "1",
               "base": {
-                "path": "RelatedArtifact.publicationStatus",
+                "path": "RelatedArtifact.artifact[x]",
                 "min": 0,
                 "max": "1"
               },
               "type": [
                 {
-                  "code": "code"
-                }
-              ],
-              "constraint": [
+                  "code": "markdown"
+                },
                 {
-                  "key": "ele-1",
-                  "severity": "error",
-                  "human": "All FHIR elements must have a @value or children",
-                  "expression": "hasValue() or (children().count() \u003e id.count())",
-                  "source": "http://hl7.org/fhir/StructureDefinition/Element"
-                }
-              ],
-              "isModifier": false,
-              "isSummary": false,
-              "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/tools/StructureDefinition/binding-definition",
-                    "valueMarkdown": "Publication status of an artifact being referred to."
-                  },
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "RelatedArtifactPublicationStatus"
-                  },
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
-                    "valueBoolean": true
-                  }
-                ],
-                "strength": "required",
-                "description": "Publication status of an artifact being referred to.",
-                "valueSet": "http://hl7.org/fhir/ValueSet/publication-status|6.0.0-ballot3"
-              }
-            },
-            {
-              "id": "RelatedArtifact.publicationDate",
-              "path": "RelatedArtifact.publicationDate",
-              "short": "Date of publication of the artifact being referred to",
-              "definition": "The date of publication of the artifact being referred to.",
-              "min": 0,
-              "max": "1",
-              "base": {
-                "path": "RelatedArtifact.publicationDate",
-                "min": 0,
-                "max": "1"
-              },
-              "type": [
+                  "code": "Attachment"
+                },
                 {
-                  "code": "date"
+                  "code": "canonical",
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Resource"
+                  ]
+                },
+                {
+                  "code": "Reference",
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Resource"
+                  ]
                 }
               ],
               "constraint": [
@@ -37695,15 +37640,38 @@
               ],
               "path": "RelatedArtifact",
               "short": "Related artifacts for a knowledge resource",
-              "definition": "Related artifacts such as additional documentation, justification, or bibliographic references.",
-              "comment": "Each related artifact is either an attachment, or a reference to another knowledge resource, but not both.",
+              "definition": "Related artifacts such as dependencies, components, additional documentation, justification, or bibliographic references.",
+              "comment": "Each related artifact is either a reference to another knowledge resource, or represented directly inline as an Attachment or markdown.",
               "min": 0,
-              "max": "*"
+              "max": "*",
+              "constraint": [
+                {
+                  "key": "rla-1",
+                  "severity": "warning",
+                  "human": "Citation must be inline or a canonical reference to a Citation",
+                  "expression": "type \u003d \u0027citation\u0027 implies ((citation.exists() xor resource.exists()) or (artifact is markdown or artifact is canonical))",
+                  "source": "http://hl7.org/fhir/StructureDefinition/RelatedArtifact"
+                },
+                {
+                  "key": "rla-3",
+                  "severity": "warning",
+                  "human": "Justification must be an attachment or a reference to an ArtifactAssessment",
+                  "expression": "type \u003d \u0027justification\u0027 implies ((document.exists() or resourceReference.exists()) or (artifact is Attachment or artifact is Reference))",
+                  "source": "http://hl7.org/fhir/StructureDefinition/RelatedArtifact"
+                },
+                {
+                  "key": "rla-2",
+                  "severity": "warning",
+                  "human": "Documentation must be an attachment",
+                  "expression": "type \u003d \u0027documentation\u0027 implies (document.exists() or artifact is Attachment)",
+                  "source": "http://hl7.org/fhir/StructureDefinition/RelatedArtifact"
+                }
+              ]
             },
             {
               "id": "RelatedArtifact.type",
               "path": "RelatedArtifact.type",
-              "short": "documentation | justification | citation | predecessor | successor | derived-from | depends-on | composed-of | part-of | amends | amended-with | appends | appended-with | cites | cited-by | comments-on | comment-in | contains | contained-in | corrects | correction-in | replaces | replaced-with | retracts | retracted-by | signs | similar-to | supports | supported-with | transforms | transformed-into | transformed-with | documents | specification-of | created-with | cite-as",
+              "short": "documentation | justification | citation | predecessor | successor | derived-from | depends-on | composed-of | part-of",
               "definition": "The type of relationship to the related artifact.",
               "comment": "The presence of both sides of a relationship type (e.g. successor and predecessor) is required to support use cases where one side of a relationship is not represented in FHIR. However, this feature SHALL NOT be used to create bi-directional resource links in FHIR instances. Specifically, following the methodology of \"new points to old\" and \"many points to one\", when using related artifact elements to describe and reference FHIR resources, the type element SHALL be drawn from the fhir-related-artifact-type ValueSet.",
               "min": 1,
@@ -37727,34 +37695,6 @@
                 "strength": "required",
                 "description": "The type of relationship to the related artifact.",
                 "valueSet": "http://hl7.org/fhir/ValueSet/related-artifact-type|6.0.0-ballot3"
-              }
-            },
-            {
-              "id": "RelatedArtifact.classifier",
-              "path": "RelatedArtifact.classifier",
-              "short": "Additional classifiers",
-              "definition": "Provides additional classifiers of the related artifact.",
-              "min": 0,
-              "max": "*",
-              "type": [
-                {
-                  "code": "CodeableConcept"
-                }
-              ],
-              "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/tools/StructureDefinition/binding-definition",
-                    "valueMarkdown": "Additional classifiers for the related artifact."
-                  },
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "RelatedArtifactClassifier"
-                  }
-                ],
-                "strength": "example",
-                "description": "Additional classifiers for the related artifact.",
-                "valueSet": "http://hl7.org/fhir/ValueSet/citation-artifact-classifier"
               }
             },
             {
@@ -37787,7 +37727,7 @@
               "id": "RelatedArtifact.citation",
               "path": "RelatedArtifact.citation",
               "short": "Bibliographic citation for the artifact",
-              "definition": "A bibliographic citation for the related artifact. This text SHOULD be formatted according to an accepted citation format.",
+              "definition": "Deprecated in favor of the new artifact[x] element. A bibliographic citation for the related artifact. This text SHOULD be formatted according to an accepted citation format.",
               "comment": "Additional structured information about citations should be captured as extensions.",
               "min": 0,
               "max": "1",
@@ -37801,7 +37741,7 @@
               "id": "RelatedArtifact.document",
               "path": "RelatedArtifact.document",
               "short": "What document is being referenced",
-              "definition": "The document being referenced, represented as an attachment. This is exclusive with the resource element.",
+              "definition": "Deprecated in favor of the new artifact[x] element. The document being referenced, represented as an attachment. This is exclusive with the resource element.",
               "min": 0,
               "max": "1",
               "type": [
@@ -37814,7 +37754,7 @@
               "id": "RelatedArtifact.resource",
               "path": "RelatedArtifact.resource",
               "short": "What artifact is being referenced",
-              "definition": "The related artifact, such as a library, value set, profile, or other knowledge resource.",
+              "definition": "Deprecated in favor of the new artifact[x] element. The related artifact, such as a library, value set, profile, or other knowledge resource.",
               "comment": "If the type is predecessor, this is a reference to the succeeding knowledge resource. If the type is successor, this is a reference to the prior knowledge resource.",
               "min": 0,
               "max": "1",
@@ -37831,7 +37771,7 @@
               "id": "RelatedArtifact.resourceReference",
               "path": "RelatedArtifact.resourceReference",
               "short": "What artifact, if not a conformance resource",
-              "definition": "The related artifact, if the artifact is not a canonical resource, or a resource reference to a canonical resource.",
+              "definition": "Deprecated in favor of the new artifact[x] element. The related artifact, if the artifact is not a canonical resource, or a resource reference to a canonical resource.",
               "comment": "If both resource and resourceReference are present, they SHOULD be consistent and reference the same resource. Although relatedArtifact is intended to support references to definitional resources, there are cases where non-definitional resources can be definitional (such as Location where the kind is mode). Related artifacts SHOULD be used to reference definitional resources, and profiles SHOULD be used to make that explicit for particular use cases.",
               "min": 0,
               "max": "1",
@@ -37845,47 +37785,31 @@
               ]
             },
             {
-              "id": "RelatedArtifact.publicationStatus",
-              "path": "RelatedArtifact.publicationStatus",
-              "short": "draft | active | retired | unknown",
-              "definition": "The publication status of the artifact being referred to.",
+              "id": "RelatedArtifact.artifact[x]",
+              "path": "RelatedArtifact.artifact[x]",
+              "short": "What document, citation, artifact, or resource is being referenced",
+              "definition": "The related artifact represented as a canonical or direct reference to a FHIR resource, an Attachment, or directly inline as markdown.",
+              "comment": "For artifacts represented as FHIR resources, a canonical or Reference to the FHIR Resource. If the target is a CanonicalResource, this SHOULD be a canonical reference. For documentation and justification, what document is being referenced, represented as an Attachment. For citations, either a bibliographic citation for the related artifact represented as markdown, or a reference to a Citation resource. The text SHOULD be formatted according to an accepted citation format.",
               "min": 0,
               "max": "1",
               "type": [
                 {
-                  "code": "code"
-                }
-              ],
-              "binding": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/tools/StructureDefinition/binding-definition",
-                    "valueMarkdown": "Publication status of an artifact being referred to."
-                  },
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
-                    "valueString": "RelatedArtifactPublicationStatus"
-                  },
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
-                    "valueBoolean": true
-                  }
-                ],
-                "strength": "required",
-                "description": "Publication status of an artifact being referred to.",
-                "valueSet": "http://hl7.org/fhir/ValueSet/publication-status|6.0.0-ballot3"
-              }
-            },
-            {
-              "id": "RelatedArtifact.publicationDate",
-              "path": "RelatedArtifact.publicationDate",
-              "short": "Date of publication of the artifact being referred to",
-              "definition": "The date of publication of the artifact being referred to.",
-              "min": 0,
-              "max": "1",
-              "type": [
+                  "code": "markdown"
+                },
                 {
-                  "code": "date"
+                  "code": "Attachment"
+                },
+                {
+                  "code": "canonical",
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Resource"
+                  ]
+                },
+                {
+                  "code": "Reference",
+                  "targetProfile": [
+                    "http://hl7.org/fhir/StructureDefinition/Resource"
+                  ]
                 }
               ]
             }
@@ -37899,7 +37823,7 @@
         "resourceType": "StructureDefinition",
         "id": "RelativeTime",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -37920,7 +37844,7 @@
         "name": "RelativeTime",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -38521,7 +38445,7 @@
         "resourceType": "StructureDefinition",
         "id": "SampledData",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -38542,7 +38466,7 @@
         "name": "SampledData",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -39379,7 +39303,7 @@
         "resourceType": "StructureDefinition",
         "id": "Signature",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -39404,7 +39328,7 @@
         "name": "Signature",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -40069,7 +39993,7 @@
         "resourceType": "StructureDefinition",
         "id": "Timing",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -40094,7 +40018,7 @@
         "name": "Timing",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -41809,7 +41733,7 @@
         "resourceType": "StructureDefinition",
         "id": "TriggerDefinition",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -41830,7 +41754,7 @@
         "name": "TriggerDefinition",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -42472,7 +42396,7 @@
         "resourceType": "StructureDefinition",
         "id": "UsageContext",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -42493,7 +42417,7 @@
         "name": "UsageContext",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -42880,7 +42804,7 @@
         "resourceType": "StructureDefinition",
         "id": "VirtualServiceDetail",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -42901,7 +42825,7 @@
         "name": "VirtualServiceDetail",
         "status": "draft",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -43363,7 +43287,7 @@
         "resourceType": "StructureDefinition",
         "id": "MoneyQuantity",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -43404,7 +43328,7 @@
         "name": "MoneyQuantity",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {
@@ -43872,7 +43796,7 @@
         "resourceType": "StructureDefinition",
         "id": "SimpleQuantity",
         "meta": {
-          "lastUpdated": "2025-10-16T00:41:37.292+00:00"
+          "lastUpdated": "2025-10-21T00:18:33.033+00:00"
         },
         "text": {
           "status": "generated",
@@ -43913,7 +43837,7 @@
         "name": "SimpleQuantity",
         "status": "active",
         "experimental": false,
-        "date": "2025-10-16T00:41:37+00:00",
+        "date": "2025-10-21T00:18:33+00:00",
         "publisher": "HL7 International / FHIR Infrastructure",
         "contact": [
           {

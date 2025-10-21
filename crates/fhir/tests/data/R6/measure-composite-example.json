@@ -36,20 +36,6 @@
       "resource": "http://example.org/fhir/Measure/component-b-example"
     }
   ],
-  "scoring": {
-    "coding": [
-      {
-        "code": "proportion"
-      }
-    ]
-  },
-  "compositeScoring": {
-    "coding": [
-      {
-        "code": "opportunity"
-      }
-    ]
-  },
   "meta": {
     "tag": [
       {

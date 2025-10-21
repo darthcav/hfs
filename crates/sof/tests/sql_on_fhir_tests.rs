@@ -368,3 +368,59 @@ fn test_run_basic_test_file() {
         // This allows us to see what's working and what needs to be fixed
     }
 }
+
+#[test]
+fn test_repeat_directive() {
+    // Load and run repeat directive tests
+    let mut test_suite_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    test_suite_path.push("tests/sql-on-fhir-v2/tests/repeat.json");
+
+    if !test_suite_path.exists() {
+        panic!("Repeat test file not found at {:?}", test_suite_path);
+    }
+
+    let content = fs::read_to_string(&test_suite_path).expect("Failed to read repeat test file");
+    let test_case: TestCase = serde_json::from_str(&content).expect("Failed to parse repeat test case");
+
+    // Check if we support the FHIR version
+    let supports_r4 = test_case.fhir_version.contains(&"4.0.1".to_string());
+    if !supports_r4 {
+        panic!("Repeat tests don't support R4");
+    }
+
+    // Create a bundle from the test resources
+    let bundle = create_test_bundle(&test_case.resources).expect("Failed to create test bundle");
+
+    // Run all tests
+    let mut failed_tests = Vec::new();
+    for test in &test_case.tests {
+        let result = run_single_test(test, &bundle);
+        if !result.passed {
+            failed_tests.push((test.title.clone(), result.reason.clone()));
+        }
+        println!(
+            "Test '{}': {}",
+            test.title,
+            if result.passed { "PASSED" } else { "FAILED" }
+        );
+        if let Some(reason) = &result.reason {
+            println!("  Reason: {}", reason);
+        }
+    }
+
+    if !failed_tests.is_empty() {
+        panic!(
+            "Failed {} repeat tests:\n{}",
+            failed_tests.len(),
+            failed_tests
+                .iter()
+                .map(|(title, reason)| format!(
+                    "  - {}: {}",
+                    title,
+                    reason.as_ref().unwrap_or(&"Unknown reason".to_string())
+                ))
+                .collect::<Vec<_>>()
+                .join("\n")
+        );
+    }
+}

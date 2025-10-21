@@ -33,7 +33,7 @@
   "title": "History bundle",
   "status": "active",
   "experimental": false,
-  "date": "2025-10-16T00:41:37+00:00",
+  "date": "2025-10-21T00:18:33+00:00",
   "description": "This profile holds all the requirements and constraints related to a FHIR history bundle.",
   "fhirVersion": "6.0.0-ballot3",
   "mapping": [

@@ -47,13 +47,6 @@
   "library": [
     "http://ohie.org/Library/hiv-indicators"
   ],
-  "scoring": {
-    "coding": [
-      {
-        "code": "cohort"
-      }
-    ]
-  },
   "group": [
     {
       "code": {

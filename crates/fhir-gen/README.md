@@ -48,15 +48,24 @@ These hand-coded types are the absolute minimum required to read and process the
 - **R6** - FHIR Release 6 (upcoming release)
 
 For released versions of the FHIR Specification (R4, R4B, and R5), specification files are copied from the FHIR Specification
-and maintained in this repo in the `resources` folder. 
+and maintained in this repo in the `resources` folder.
 
-For the latest upcoming release (R6), the specification files are automatically downloaded from `https://build.fhir.org/definitions.json.zip` during the build process. To trigger this download, build the crate with the R6 feature enabled:
+For the latest upcoming release (R6), specification files are also maintained in the `resources/R6/` folder. However, you can optionally download fresh R6 definitions from `https://build.fhir.org/definitions.json.zip` during the build process:
 
 ```bash
+# Download latest R6 from build.fhir.org (default behavior)
 cargo build -p helios-fhir-gen --features R6
+
+# Skip R6 download and use checked-in resources
+cargo build -p helios-fhir-gen --features R6,skip-r6-download
 ```
 
-The build script (`build.rs`) will automatically fetch the latest R6 specification files from HL7's build server and extract them to the `resources/R6/` directory, ensuring you always have the most current development version.  
+### R6 Feature Flags
+
+- **`R6`** - Enable R6 support
+- **`skip-r6-download`** - Use checked-in R6 resources instead of downloading from build.fhir.org
+
+The build script (`build.rs`) will automatically fetch the latest R6 specification files from HL7's build server when the `skip-r6-download` feature is NOT enabled. The ViewDefinition resource is automatically merged into the R6 profiles during this process.  
 
 
 ## Command Line Interface

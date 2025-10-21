@@ -1680,6 +1680,18 @@ where
         );
     }
 
+    // Handle repeat directive for recursive traversal
+    if let Some(repeat_paths) = select.repeat() {
+        return expand_repeat_combinations(
+            context,
+            select,
+            existing_combinations,
+            all_columns,
+            &repeat_paths,
+            variables,
+        );
+    }
+
     // Handle regular columns (no forEach)
     let mut new_combinations = Vec::new();
 
@@ -2027,6 +2039,122 @@ where
     }
 
     Ok(new_combinations)
+}
+
+fn expand_repeat_combinations<S>(
+    context: &EvaluationContext,
+    select: &S,
+    existing_combinations: &[RowCombination],
+    all_columns: &[String],
+    repeat_paths: &[&str],
+    variables: &HashMap<String, EvaluationResult>,
+) -> Result<Vec<RowCombination>, SofError>
+where
+    S: ViewDefinitionSelectTrait,
+    S::Select: ViewDefinitionSelectTrait,
+{
+    // The repeat directive performs recursive traversal:
+    // 1. For each repeat path, find child elements from the current context
+    // 2. For each child element:
+    //    a. Evaluate columns in the child's context
+    //    b. Recursively process the child with the same repeat paths
+    // 3. Union all results together
+    //
+    // Note: Unlike forEach, repeat does NOT process the current level's columns
+    // - it ONLY processes elements found via the repeat paths
+
+    let mut all_combinations = Vec::new();
+
+    // Process each existing combination
+    for existing_combo in existing_combinations {
+        // Process each repeat path to find children to traverse
+        for repeat_path in repeat_paths {
+            // Evaluate the repeat path to get child elements
+            let repeat_result = evaluate_expression(repeat_path, context).map_err(|e| {
+                SofError::FhirPathError(format!(
+                    "Error evaluating repeat expression '{}': {}",
+                    repeat_path, e
+                ))
+            })?;
+
+            let child_items = extract_iteration_items(repeat_result);
+
+            // For each child item found via this repeat path
+            for child_item in &child_items {
+                // Create a combination for this child with current level's columns
+                let mut child_combo = existing_combo.clone();
+
+                // Evaluate columns in the context of this child item
+                if let Some(columns) = select.column() {
+                    for col in columns {
+                        if let Some(col_name) = col.name() {
+                            if let Some(col_index) =
+                                all_columns.iter().position(|name| name == col_name)
+                            {
+                                let path = col.path().ok_or_else(|| {
+                                    SofError::InvalidViewDefinition(
+                                        "Column path is required".to_string(),
+                                    )
+                                })?;
+
+                                // Evaluate the path on the child item
+                                let result = if path == "$this" {
+                                    child_item.clone()
+                                } else {
+                                    evaluate_path_on_item(path, child_item, variables)?
+                                };
+
+                                let is_collection = col.collection().unwrap_or(false);
+                                child_combo.values[col_index] = if is_collection {
+                                    fhirpath_result_to_json_value_collection(result)
+                                } else {
+                                    fhirpath_result_to_json_value(result)
+                                };
+                            }
+                        }
+                    }
+                }
+
+                // Create context for this child item
+                let child_context = create_iteration_context(child_item, variables);
+
+                // Start with the child combination we just created
+                let mut child_combinations = vec![child_combo.clone()];
+
+                // Process nested selects (like forEach/forEachOrNull) in the child's context
+                if let Some(nested_selects) = select.select() {
+                    for nested_select in nested_selects {
+                        child_combinations = expand_select_combinations(
+                            &child_context,
+                            nested_select,
+                            &child_combinations,
+                            all_columns,
+                            variables,
+                        )?;
+                    }
+                }
+
+                // Add the processed combinations to our results
+                // (these may have been filtered by forEach, which is correct)
+                all_combinations.extend(child_combinations);
+
+                // Now recursively process this child with the same repeat paths
+                // IMPORTANT: Use the original child_combo, not the forEach-filtered results
+                let recursive_combinations = expand_repeat_combinations(
+                    &child_context,
+                    select,
+                    &[child_combo],
+                    all_columns,
+                    repeat_paths,
+                    variables,
+                )?;
+
+                all_combinations.extend(recursive_combinations);
+            }
+        }
+    }
+
+    Ok(all_combinations)
 }
 
 // Generic helper functions

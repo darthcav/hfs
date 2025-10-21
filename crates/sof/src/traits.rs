@@ -121,6 +121,8 @@ pub trait ViewDefinitionSelectTrait {
     fn for_each(&self) -> Option<&str>;
     /// Returns the FHIRPath expression for forEachOrNull iteration (includes null rows for empty collections)
     fn for_each_or_null(&self) -> Option<&str>;
+    /// Returns FHIRPath expressions for recursive traversal with the repeat directive
+    fn repeat(&self) -> Option<Vec<&str>>;
     /// Returns select statements to union with this one (all results combined)
     fn union_all(&self) -> Option<&[Self::Select]>;
 }
@@ -406,6 +408,15 @@ mod r4_impl {
             self.for_each_or_null.as_ref()?.value.as_deref()
         }
 
+        fn repeat(&self) -> Option<Vec<&str>> {
+            self.repeat.as_ref().map(|paths| {
+                paths
+                    .iter()
+                    .filter_map(|p| p.value.as_deref())
+                    .collect()
+            })
+        }
+
         fn union_all(&self) -> Option<&[Self::Select]> {
             self.union_all.as_deref()
         }
@@ -623,6 +634,15 @@ mod r4b_impl {
 
         fn for_each_or_null(&self) -> Option<&str> {
             self.for_each_or_null.as_ref()?.value.as_deref()
+        }
+
+        fn repeat(&self) -> Option<Vec<&str>> {
+            self.repeat.as_ref().map(|paths| {
+                paths
+                    .iter()
+                    .filter_map(|p| p.value.as_deref())
+                    .collect()
+            })
         }
 
         fn union_all(&self) -> Option<&[Self::Select]> {
@@ -843,6 +863,15 @@ mod r5_impl {
 
         fn for_each_or_null(&self) -> Option<&str> {
             self.for_each_or_null.as_ref()?.value.as_deref()
+        }
+
+        fn repeat(&self) -> Option<Vec<&str>> {
+            self.repeat.as_ref().map(|paths| {
+                paths
+                    .iter()
+                    .filter_map(|p| p.value.as_deref())
+                    .collect()
+            })
         }
 
         fn union_all(&self) -> Option<&[Self::Select]> {
@@ -1072,6 +1101,15 @@ mod r6_impl {
 
         fn for_each_or_null(&self) -> Option<&str> {
             self.for_each_or_null.as_ref()?.value.as_deref()
+        }
+
+        fn repeat(&self) -> Option<Vec<&str>> {
+            self.repeat.as_ref().map(|paths| {
+                paths
+                    .iter()
+                    .filter_map(|p| p.value.as_deref())
+                    .collect()
+            })
         }
 
         fn union_all(&self) -> Option<&[Self::Select]> {

@@ -1414,9 +1414,9 @@
       {
         "id": "PlanDefinition.copyright",
         "path": "PlanDefinition.copyright",
-        "short": "Use and/or publishing restrictions",
-        "definition": "A copyright statement relating to the plan definition and/or its contents. Copyright statements are generally legal restrictions on the use and publishing of the plan definition.",
-        "comment": "The short copyright declaration (e.g. (c) \u00272015+ xyz organization\u0027 should be sent in the copyrightLabel element.",
+        "short": "Notice about intellectual property ownership, can include restrictions on use",
+        "definition": "A copyright statement relating to the plan definition and/or its contents. Copyright statements are notices of intellectual property ownership and can include restrictions on the use and publishing of the plan definition.",
+        "comment": "The short copyright declaration (e.g. (c) \u00272015+ xyz organization\u0027) should be sent in the copyrightLabel element without the copyright prefix (i.e., do not include \u0027(c)\u0027 or the symbol).",
         "requirements": "Consumers must be able to determine any legal restrictions on the use of the plan definition and/or its content.",
         "alias": [
           "License",
@@ -1471,8 +1471,8 @@
         ],
         "path": "PlanDefinition.copyrightLabel",
         "short": "Copyright holder and year(s)",
-        "definition": "A short string (\u003c50 characters), suitable for inclusion in a page footer that identifies the copyright holder, effective period, and optionally whether rights are resctricted. (e.g. \u0027All rights reserved\u0027, \u0027Some rights reserved\u0027).",
-        "comment": "The (c) symbol should NOT be included in this string. It will be added by software when rendering the notation. Full details about licensing, restrictions, warrantees, etc. goes in the more general \u0027copyright\u0027 element.",
+        "definition": "A short string (\u003c50 characters), suitable for inclusion in a page footer that identifies the copyright holder, effective period, and optionally whether rights are restricted. (e.g. \u0027All rights reserved\u0027, \u0027Some rights reserved\u0027).",
+        "comment": "The copyright symbol and the \u0027(c)\u0027 textual representation SHOULD NOT be included in this string. It will be added by software when rendering the notation. Full details about licensing, restrictions, warrantees, etc. goes in the more general \u0027copyright\u0027 element.",
         "requirements": "Defines the content expected to be rendered in all representations of the artifact.",
         "min": 0,
         "max": "1",

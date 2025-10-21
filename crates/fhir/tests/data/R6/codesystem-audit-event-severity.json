@@ -2,7 +2,7 @@
   "resourceType": "CodeSystem",
   "id": "audit-event-severity",
   "meta": {
-    "lastUpdated": "2025-10-16T11:41:37.292+11:00",
+    "lastUpdated": "2025-10-21T11:18:33.033+11:00",
     "profile": [
       "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
     ]
