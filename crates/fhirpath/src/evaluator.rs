@@ -5991,12 +5991,13 @@ fn call_function(
                 EvaluationResult::Empty => Ok(EvaluationResult::boolean(false)),
                 EvaluationResult::Object { type_info, .. } => {
                     // Check if this is an Element (primitive with extensions but no value)
-                    let is_element = type_info.as_ref()
+                    let is_element = type_info
+                        .as_ref()
                         .map(|ti| ti.name == "Element")
                         .unwrap_or(false);
                     Ok(EvaluationResult::boolean(!is_element))
                 }
-                _ => Ok(EvaluationResult::boolean(true))
+                _ => Ok(EvaluationResult::boolean(true)),
             }
         }
         "encode" => {
