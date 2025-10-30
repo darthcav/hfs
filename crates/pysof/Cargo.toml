@@ -1,6 +1,6 @@
 [package]
 name = "pysof"
-version = "0.1.2"
+version.workspace = true
 edition = "2024"
 description = "Python bindings for helios-sof using PyO3"
 license.workspace = true
