@@ -36,7 +36,7 @@ This checklist ensures high-quality PyPI releases with proper metadata, document
   - [ ] Documentation
   - [ ] Bug Tracker
   - [ ] Source
-- [ ] Python version requirement correct: `requires-python = ">=3.11,<3.12"`
+- [ ] Python version requirement correct: `requires-python = ">=3.8"`
 - [ ] Keywords appropriate for PyPI search
 - [ ] Classifiers accurate (Development Status, Intended Audience, etc.)
 - [ ] License field matches repository license
@@ -220,7 +220,7 @@ If critical issues are found after release:
 
 ### Version Mismatch
 - **Problem**: Python package version doesn't match Rust version
-- **Solution**: Manually sync `pyproject.toml` version before release
+- **Solution**: Verify `python_requires = ">=3.8, <3.14"` in `pyproject.toml` and sync `pyproject.toml` version before release
 - **Prevention**: Follow version sync checklist above
 
 ### Missing Wheels for Platform

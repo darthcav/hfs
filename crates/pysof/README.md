@@ -38,7 +38,7 @@ pip install pysof
 - **Linux**: x86_64 (glibc and musl)
 - **Windows**: x86_64 (MSVC)
 - **macOS**: AArch64 (Apple Silicon)
-- **Python**: 3.11 only
+- **Python**: 3.8, 3.9, 3.10, 3.11, 3.12, 3.13
 
 ### From GitHub Releases
 
@@ -237,7 +237,7 @@ Use `pysof.get_supported_fhir_versions()` to check available versions in your bu
 
 ### Requirements
 
-- Python 3.11
+- Python 3.8 or later (3.8, 3.9, 3.10, 3.11, 3.12, 3.13 supported)
 - uv (package and environment manager)
 - Rust toolchain (for building from source)
 
@@ -268,8 +268,8 @@ For Python development, it's recommended to use `maturin` via `uv`:
 # From repo root
 cd crates/pysof
 
-# Ensure Python 3.11 is available and create a venv
-uv venv --python 3.11
+# Create a venv with your preferred Python version (3.8+)
+uv venv --python 3.11  # or 3.8, 3.9, 3.10, 3.12, 3.13
 
 # Install the project dev dependencies
 uv sync --group dev
@@ -504,7 +504,7 @@ default = ["R4", "R4B", "R5", "R6"]
 
 ```
 crates/pysof/
-├─ pyproject.toml          # PEP 621 metadata, Python >=3.11, uv-compatible
+├─ pyproject.toml          # PEP 621 metadata, Python >=3.8, uv-compatible
 ├─ README.md
 ├─ src/
 │  ├─ pysof/

@@ -164,6 +164,7 @@ The current version on PyPI is 0.1.3 which:
 - Uses old inline dict format for project-urls (may not display links)
 - Has older README structure
 - Version doesn't match workspace version
+- Only supports Python 3.11
 
 ### After Next Release (0.1.25)
 The improvements in this branch will:
@@ -171,6 +172,7 @@ The improvements in this branch will:
 - ✅ Use proper [project.urls] table format
 - ✅ Have restructured README with badges
 - ✅ Point Homepage and Source to pysof crate specifically
+- ✅ Support Python 3.8, 3.9, 3.10, 3.11, 3.12, 3.13
 
 ## Clean Up
 
