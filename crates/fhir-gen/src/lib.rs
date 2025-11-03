@@ -97,7 +97,7 @@ fn generate_version_header(version: &FhirVersion) -> String {
                         // Parse the Unix timestamp and format it nicely
                         if let Some(timestamp) = metadata["download_timestamp"].as_u64() {
                             let datetime = chrono::DateTime::from_timestamp(timestamp as i64, 0)
-                                .unwrap_or_else(|| chrono::Utc::now());
+                                .unwrap_or_else(chrono::Utc::now);
                             datetime.format("%B %-d, %Y").to_string()
                         } else {
                             "date unknown".to_string()
