@@ -30,7 +30,13 @@
       }
     ]
   },
-  "batch": {
+  "instance": {
+    "identifier": [
+      {
+        "system": "http://hl7.org/fhir/sid/gs1-128",
+        "value": "(01)00351144050016(10)A1234(17)251031(21)SN987654321"
+      }
+    ],
     "lotNumber": "12345",
     "expirationDate": "2019-10-31"
   },

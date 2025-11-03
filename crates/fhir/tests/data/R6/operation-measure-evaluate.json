@@ -3,7 +3,7 @@
   "id": "Measure-evaluate",
   "text": {
     "status": "generated",
-    "div": "\u003cdiv xmlns\u003d\"http://www.w3.org/1999/xhtml\"\u003e\u003cp class\u003d\"res-header-id\"\u003e\u003cb\u003eGenerated Narrative: OperationDefinition Measure-evaluate\u003c/b\u003e\u003c/p\u003e\u003ca name\u003d\"Measure-evaluate\"\u003e \u003c/a\u003e\u003ca name\u003d\"hcMeasure-evaluate\"\u003e \u003c/a\u003e\u003cp\u003eURL: [base]/Measure/$evaluate\u003c/p\u003e\u003cp\u003eURL: [base]/Measure/[id]/$evaluate\u003c/p\u003e\u003ch3\u003eParameters\u003c/h3\u003e\u003ctable class\u003d\"grid\"\u003e\u003ctr\u003e\u003ctd\u003e\u003cb\u003eUse\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eName\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eScope\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eCardinality\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eType\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eBinding\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eDocumentation\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003emeasure\u003c/td\u003e\u003ctd\u003etype\u003c/td\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"measure.html\"\u003eMeasure\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe measure to evaluate. If the operation is invoked at the instance level, this parameter is not allowed; if the operation is invoked at the type level, this parameter is required, or a url (and optionally version) must be supplied.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003eurl\u003c/td\u003e\u003ctd\u003etype\u003c/td\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#canonical\"\u003ecanonical\u003c/a\u003e (\u003ca href\u003d\"measure.html\" title\u003d\"http://hl7.org/fhir/StructureDefinition/Measure\"\u003eMeasure\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe url of the measure to be applied. If the operation is invoked at the instance level, this parameter is not allowed; if the operation is invoked at the type level, this parameter (and optionally the version), or the measure parameter must be supplied\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003eversion\u003c/td\u003e\u003ctd\u003etype\u003c/td\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe version of the measure to be applied. If the operation is invoked at the instance level, this parameter is not allowed; if the operation is invoked at the type level, this parameter may only be used if the url parameter is supplied, and the version is not supplied with it.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003esubject\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003cbr/\u003e(\u003ca href\u003d\"search.html#reference\"\u003ereference\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eSubject for which the measure will be calculated. The subject may be a Patient, Practitioner, PractitionerRole, Organization, Location, Device, or Group. Subjects provided in this parameter will be resolved as the subject of the measure based on the type of the subject. If multiple subjects of the same type are provided, the behavior is implementation-defined\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003eperiodStart\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e1..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#date\"\u003edate\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe start of the measurement period. In keeping with the semantics of the date parameter used in the FHIR search operation, the period will start at the beginning of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period start to be 2014-01-01T00:00:00 inclusive\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003eperiodEnd\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e1..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#date\"\u003edate\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe end of the measurement period. The period will end at the end of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period end to be 2014-12-31T23:59:59 inclusive\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003ereportType\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#code\"\u003ecode\u003c/a\u003e\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"valueset-measure-report-evaluation-type.html\"\u003eMeasure Report Evaluation Type\u003c/a\u003e (Required)\u003c/td\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe type of measure report: \u003ccode\u003eindividual\u003c/code\u003e, \u003ccode\u003esubject-list\u003c/code\u003e, or \u003ccode\u003esummary\u003c/code\u003e. If not specified, a default value of \u003ccode\u003esummary\u003c/code\u003e will be used if the subject parameter is supplied and is a \u003ccode\u003eGroup\u003c/code\u003e resource; a default value of \u003ccode\u003eindividual\u003c/code\u003e will be used if the subject parameter is supplied and is not a \u003ccode\u003eGroup\u003c/code\u003e resource; otherwise, a default value of \u003ccode\u003esummary\u003c/code\u003e will be used. NOTE: Implementations should support the use of \u003ccode\u003esubject\u003c/code\u003e for \u003ccode\u003eindividual\u003c/code\u003e and \u003ccode\u003epopulation\u003c/code\u003e for \u003ccode\u003esummary\u003c/code\u003e for backwards compatibility with existing implementations.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003eprovider\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003cbr/\u003e(\u003ca href\u003d\"search.html#reference\"\u003ereference\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe provider for which the report will be run. This may be a reference to a Practitioner, PractitionerRole, or Organization. If specified, the measure will be calculated for subjects that have a primary relationship to the identified provider. How this relationship is determined is implementation-specific.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003elocation\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003cbr/\u003e(\u003ca href\u003d\"search.html#reference\"\u003ereference\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe location for which the report will be run.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003elastReceivedOn\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#dateTime\"\u003edateTime\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe date the results of this measure were last received. This parameter is only valid for patient-level reports and is used to indicate when the last time a result for this patient was received. This information can be used to limit the set of resources returned for a patient-level report\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003eparameters\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"parameters.html\"\u003eParameters\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eAny input parameters for the evaluation. Parameters defined in this input will be made available by name to the CQL expression. Parameter types are mapped to CQL as specified in the \u003ca href\u003d\"https://hl7.org/fhir/uv/cql/\"\u003eUsing CQL with FHIR\u003c/a\u003e implementation guide. If a parameter appears more than once in the input Parameters resource, it is represented with a List in the input CQL. If a parameter has parts, it is represented as a Tuple in the input CQL.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eOUT\u003c/td\u003e\u003ctd\u003ereturn\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..*\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"bundle.html\"\u003eBundle\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe results of the measure calculation. The result of this operation will be a Bundle for each input subject, where the first entry of the Bundle is a MeasureReport representing the results of the calculation, and subsequent entries in the Bundle are resources created and/or evaluated as part of the calculation. See the MeasureReport resource for a complete description of the output of this operation. Note that implementations may choose to return a MeasureReport with a status of pending to indicate that the report is still being generated. In this case, the client can use a polling method to continually request the MeasureReport until the status is updated to complete\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cdiv\u003e\u003cp\u003eThe effect of invoking this operation is to calculate the measure for the given subject(s), or all subjects if no subject is supplied. For individual and subject-list reports, the result is a set of Bundles, one for each evaluated subject, where the first entry in each bundle is a MeasureReport resource, and subsequent entries in the Bundle are resources evaluated or created as part of the measure evaluation. For the summary report, the result of this operation is a single bundle with a single MeasureReport of type summary. Note that whether or not this operation affects the state of the server depends on whether the server persists the generated MeasureReport. If the MeasureReport is not persisted, this operation can be invoked with GET\u003c/p\u003e\n\u003c/div\u003e\u003c/div\u003e"
+    "div": "\u003cdiv xmlns\u003d\"http://www.w3.org/1999/xhtml\"\u003e\u003cp class\u003d\"res-header-id\"\u003e\u003cb\u003eGenerated Narrative: OperationDefinition Measure-evaluate\u003c/b\u003e\u003c/p\u003e\u003ca name\u003d\"Measure-evaluate\"\u003e \u003c/a\u003e\u003ca name\u003d\"hcMeasure-evaluate\"\u003e \u003c/a\u003e\u003cp\u003eURL: [base]/Measure/$evaluate\u003c/p\u003e\u003ch3\u003eParameters\u003c/h3\u003e\u003ctable class\u003d\"grid\"\u003e\u003ctr\u003e\u003ctd\u003e\u003cb\u003eUse\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eName\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eScope\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eCardinality\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eType\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eBinding\u003c/b\u003e\u003c/td\u003e\u003ctd\u003e\u003cb\u003eDocumentation\u003c/b\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003emeasureUrl\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e1..*\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#canonical\"\u003ecanonical\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe URL of the measure(s) to be evaluated. A measure URL is specified in the url element of the Measure resource. The measure URL remains the same when the measure is stored on different servers.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003emeasure\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..*\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003cbr/\u003e(\u003ca href\u003d\"search.html#reference\"\u003ereference\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe measure to evaluate. This parameter is only required when the operation is invoked on the resource type, it is not used when invoking the operation on a Measure instance\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003emeasureResource\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..*\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"measure.html\"\u003eMeasure\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe measure to be evaluated is provided as a Measure resource.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003emanifest\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#canonical\"\u003ecanonical\u003c/a\u003e (\u003ca href\u003d\"library.html\" title\u003d\"http://hl7.org/fhir/StructureDefinition/Library\"\u003eLibrary\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eSpecifies an asset-collection library that provides dependency version resolution and expansion rules for the operation. See the description of manifest in the Canonical Resource Management Infrastructure IG for a complete description of how manifest values are used to provide defaults for dependency version resolution and expansion parameters. Parameters specified directly in the operation override behaviors specified by the manifest parameter. In general, if this parameter is supplied, it is expected to be used in nested operation calls. For example, in evaluating a measure, if the expansion of a value set is required, this parameter SHALL be supplied to that expansion.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003eprogramIdentifier\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003cbr/\u003e(\u003ca href\u003d\"search.html#token\"\u003etoken\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe business identifier of the reporting program, for which measures are being evaluated. For example, downstream IGs could specify program identifiers. Mutually exclusive use with programUrl - it is an error to pass in both programIdentifier and programUrl parameters.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003eprogramUrl\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#canonical\"\u003ecanonical\u003c/a\u003e (\u003ca href\u003d\"library.html\" title\u003d\"http://hl7.org/fhir/StructureDefinition/Library\"\u003eLibrary\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eMutually exclusive use with programIdentifier - it is an error to pass in both programIdentifier and programUrl parameters.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003esubject\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003cbr/\u003e(\u003ca href\u003d\"search.html#reference\"\u003ereference\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eSubject for which the measure will be calculated. The subject may be a Patient, Practitioner, PractitionerRole, Organization, Location, Device, or Group. Subjects provided in this parameter will be resolved as the subject of the measure based on the type of the subject. If multiple subjects of the same type are provided, the behavior is implementation-defined\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003eperiodStart\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e1..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#date\"\u003edate\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe start of the measurement period. In keeping with the semantics of the date parameter used in the FHIR search operation, the period will start at the beginning of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period start to be 2014-01-01T00:00:00 inclusive\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003eperiodEnd\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e1..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#date\"\u003edate\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe end of the measurement period. The period will end at the end of the period implied by the supplied timestamp. E.g. a value of 2014 would set the period end to be 2014-12-31T23:59:59 inclusive\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003ereportType\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#code\"\u003ecode\u003c/a\u003e\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"valueset-measure-report-evaluation-type.html\"\u003eMeasure Report Evaluation Type\u003c/a\u003e (Required)\u003c/td\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe type of measure report: \u003ccode\u003eindividual\u003c/code\u003e, \u003ccode\u003esubject-list\u003c/code\u003e, or \u003ccode\u003esummary\u003c/code\u003e. If not specified, a default value of \u003ccode\u003esummary\u003c/code\u003e will be used if the subject parameter is supplied and is a \u003ccode\u003eGroup\u003c/code\u003e resource; a default value of \u003ccode\u003eindividual\u003c/code\u003e will be used if the subject parameter is supplied and is not a \u003ccode\u003eGroup\u003c/code\u003e resource; otherwise, a default value of \u003ccode\u003esummary\u003c/code\u003e will be used. NOTE: Implementations should support the use of \u003ccode\u003esubject\u003c/code\u003e for \u003ccode\u003eindividual\u003c/code\u003e and \u003ccode\u003epopulation\u003c/code\u003e for \u003ccode\u003esummary\u003c/code\u003e for backwards compatibility with existing implementations.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003epractitioner\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003cbr/\u003e(\u003ca href\u003d\"search.html#reference\"\u003ereference\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe provider for which the report will be run. This may be a reference to a Practitioner, PractitionerRole, or Organization. If specified, the measure will be calculated for subjects that have a primary relationship to the identified provider. How this relationship is determined is implementation-specific.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003elastReceivedOn\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#dateTime\"\u003edateTime\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe date the results of this measure were last received. This parameter is only valid for patient-level reports and is used to indicate when the last time a result for this patient was received. This information can be used to limit the set of resources returned for a patient-level report\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003esubjectGroup\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"group.html\"\u003eGroup\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eSubject for which the measure will be evaluated provided as a Group resource.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003eparameters\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"parameters.html\"\u003eParameters\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eAny input parameters for the evaluation. Parameters defined in this input will be made available by name to the CQL expression. Parameter types are mapped to CQL as specified in the \u003ca href\u003d\"https://hl7.org/fhir/uv/cql/\"\u003eUsing CQL with FHIR\u003c/a\u003e implementation guide. If a parameter appears more than once in the input Parameters resource, it is represented with a List in the input CQL. If a parameter has parts, it is represented as a Tuple in the input CQL.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003ereporter\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003cbr/\u003e(\u003ca href\u003d\"search.html#reference\"\u003ereference\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eA reference to an Organization that will be populated in the MeasureReport.reporter\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003estratifier\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..*\u003c/td\u003e\u003ctd\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eAdditional stratifier criteria for the measure. The resulting MeasureReport will contain this additional stratifier information as well as any stratifiers defined in the Measure being reported.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003estratifier.measureUrl\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..*\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#canonical\"\u003ecanonical\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eIf the evaluate operation is for multiple measures, this parameter may be used to specify which measures the additional stratifier should be reported on. If not specified, the stratifier will be reported on all the measures. Note that if this results in a stratifier definition that cannot be interpreted correctly for the measure being reported, the behavior is at server discretion; it may throw an error, or simply ignore the additional stratifier definition.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003estratifier.groupId\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..*\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eIf the measure being evaluated has multiple groups, this parameter may be used to specify which groups the additional stratifier should be reported on. If not specified, the stratifier will be reported on all groups in the measure being reported. Note that if this results in a stratifier definition that cannot be interpreted correctly for the measure group being reported, the behavior is at server discretion; it may throw an error, or simply ignore the additional stratifier definition.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003estratifier.component\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e1..*\u003c/td\u003e\u003ctd\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eOne or more components of the stratifier definition. Additional stratifiers are reported in the MeasureReport in the same way as stratifiers defined in the Measure.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003estratifier.component.code\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#code\"\u003ecode\u003c/a\u003e\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"valueset-measure-stratifier-example.html\"\u003eMeasure Stratifier Example\u003c/a\u003e (Example)\u003c/td\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eMeaning of the stratifier component.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003estratifier.component.description\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#markdown\"\u003emarkdown\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eHuman readable description of the stratifier component\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003estratifier.component.valueSet\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#canonical\"\u003ecanonical\u003c/a\u003e (\u003ca href\u003d\"valueset.html\" title\u003d\"http://hl7.org/fhir/StructureDefinition/ValueSet\"\u003eValueSet\u003c/a\u003e)\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eA value set defining possible stratifier values. If both expression and valueset are specified, they SHALL be consistent (i.e. the expression SHALL evaluate to a code that is a member of the specified valueset).\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003estratifier.component.unit\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#string\"\u003estring\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eIndicates what units, if any, stratifier values are expected to be expressed in. This element SHOULD be specified in UCUM units or calendar units. This information SHOULD be provided if it cannot be inferred from the stsratifier expression directly.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003esupplementalData\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..*\u003c/td\u003e\u003ctd\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eWhat additional supplemental data should be reported with the measure. This additional data is specified in the same was as supplemental data in the Measure resource, and is reported in the same way in the MeasureReport.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003esupplementalData.code\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#CodeableConcept\"\u003eCodeableConcept\u003c/a\u003e\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"valueset-measure-supplemental-data-example.html\"\u003eMeasure Supplemental Data Example\u003c/a\u003e (Example)\u003c/td\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eMeaning of the supplemental data.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003esupplementalData.usage\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..*\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#CodeableConcept\"\u003eCodeableConcept\u003c/a\u003e\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"http://terminology.hl7.org/6.5.0/ValueSet-measure-data-usage.html\"\u003eMeasureDataUsage\u003c/a\u003e (Extensible)\u003c/td\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003esupplemental-data | risk-adjustment | factor\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003esupplementalData.description\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"datatypes.html#markdown\"\u003emarkdown\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eHuman readable description of this supplemental data element\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eIN\u003c/td\u003e\u003ctd\u003esupplementalData.criteria\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e1..1\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"metadatatypes.html#Expression\"\u003eExpression\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eExpression describing the additional data to be reported. This may be the name of an expression in a library, or it may be a path to a specific data element, reachable from the subject being evaluated.\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003ctr\u003e\u003ctd\u003eOUT\u003c/td\u003e\u003ctd\u003ereturn\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e0..*\u003c/td\u003e\u003ctd\u003e\u003ca href\u003d\"bundle.html\"\u003eBundle\u003c/a\u003e\u003c/td\u003e\u003ctd/\u003e\u003ctd\u003e\u003cdiv\u003e\u003cp\u003eThe results of the measure calculation. The result of this operation will be a Bundle for each input subject, where the first entry of the Bundle is a MeasureReport representing the results of the calculation, and subsequent entries in the Bundle are resources created and/or evaluated as part of the calculation. See the MeasureReport resource for a complete description of the output of this operation. Note that implementations may choose to return a MeasureReport with a status of pending to indicate that the report is still being generated. In this case, the client can use a polling method to continually request the MeasureReport until the status is updated to complete\u003c/p\u003e\n\u003c/div\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\u003cdiv\u003e\u003cp\u003eThe effect of invoking this operation is to calculate the measure for the given subject(s), or all subjects if no subject is supplied. For individual and subject-list reports, the result is a set of Bundles, one for each evaluated subject, where the first entry in each bundle is a MeasureReport resource, and subsequent entries in the Bundle are resources evaluated or created as part of the measure evaluation. For the summary report, the result of this operation is a single bundle with a single MeasureReport of type summary. Note that whether or not this operation affects the state of the server depends on whether the server persists the generated MeasureReport. If the MeasureReport is not persisted, this operation can be invoked with GET\u003c/p\u003e\n\u003c/div\u003e\u003c/div\u003e"
   },
   "extension": [
     {
@@ -26,7 +26,7 @@
   "status": "draft",
   "kind": "operation",
   "experimental": false,
-  "date": "2025-10-21T00:18:33+00:00",
+  "date": "2025-11-03T08:55:27+00:00",
   "publisher": "HL7 International / Clinical Quality Information",
   "contact": [
     {
@@ -50,7 +50,7 @@
       ]
     }
   ],
-  "description": "The evaluate operation processes the given Measure(s) to produce the corresponding MeasureReport(s). This operation expects that Measure resources used have a computable representation.",
+  "description": "The evaluate operation processes the given Measure(s) to produce the corresponding MeasureReport(s). This operation expects that Measure resources used have a computable representation. The value of title elements in the resulting [MeasureReport](clinicalreasoning-quality-reporting.html#measure-report) should be copied from the corresponding elements on the Measure.",
   "jurisdiction": [
     {
       "coding": [
@@ -70,43 +70,63 @@
   ],
   "system": false,
   "type": true,
-  "instance": true,
+  "instance": false,
   "parameter": [
+    {
+      "name": "measureUrl",
+      "use": "in",
+      "min": 1,
+      "max": "*",
+      "documentation": "The URL of the measure(s) to be evaluated. A measure URL is specified in the url element of the Measure resource. The measure URL remains the same when the measure is stored on different servers.",
+      "type": "canonical"
+    },
     {
       "name": "measure",
       "use": "in",
-      "scope": [
-        "type"
-      ],
       "min": 0,
-      "max": "1",
-      "documentation": "The measure to evaluate. If the operation is invoked at the instance level, this parameter is not allowed; if the operation is invoked at the type level, this parameter is required, or a url (and optionally version) must be supplied.",
+      "max": "*",
+      "documentation": "The measure to evaluate. This parameter is only required when the operation is invoked on the resource type, it is not used when invoking the operation on a Measure instance",
+      "type": "string",
+      "searchType": "reference"
+    },
+    {
+      "name": "measureResource",
+      "use": "in",
+      "min": 0,
+      "max": "*",
+      "documentation": "The measure to be evaluated is provided as a Measure resource.",
       "type": "Measure"
     },
     {
-      "name": "url",
+      "name": "manifest",
       "use": "in",
-      "scope": [
-        "type"
-      ],
       "min": 0,
       "max": "1",
-      "documentation": "The url of the measure to be applied. If the operation is invoked at the instance level, this parameter is not allowed; if the operation is invoked at the type level, this parameter (and optionally the version), or the measure parameter must be supplied",
+      "documentation": "Specifies an asset-collection library that provides dependency version resolution and expansion rules for the operation. See the description of manifest in the Canonical Resource Management Infrastructure IG for a complete description of how manifest values are used to provide defaults for dependency version resolution and expansion parameters. Parameters specified directly in the operation override behaviors specified by the manifest parameter. In general, if this parameter is supplied, it is expected to be used in nested operation calls. For example, in evaluating a measure, if the expansion of a value set is required, this parameter SHALL be supplied to that expansion.",
       "type": "canonical",
       "targetProfile": [
-        "http://hl7.org/fhir/StructureDefinition/Measure"
+        "http://hl7.org/fhir/StructureDefinition/Library"
       ]
     },
     {
-      "name": "version",
+      "name": "programIdentifier",
       "use": "in",
-      "scope": [
-        "type"
-      ],
       "min": 0,
       "max": "1",
-      "documentation": "The version of the measure to be applied. If the operation is invoked at the instance level, this parameter is not allowed; if the operation is invoked at the type level, this parameter may only be used if the url parameter is supplied, and the version is not supplied with it.",
-      "type": "string"
+      "documentation": "The business identifier of the reporting program, for which measures are being evaluated. For example, downstream IGs could specify program identifiers. Mutually exclusive use with programUrl - it is an error to pass in both programIdentifier and programUrl parameters.",
+      "type": "string",
+      "searchType": "token"
+    },
+    {
+      "name": "programUrl",
+      "use": "in",
+      "min": 0,
+      "max": "1",
+      "documentation": "Mutually exclusive use with programIdentifier - it is an error to pass in both programIdentifier and programUrl parameters.",
+      "type": "canonical",
+      "targetProfile": [
+        "http://hl7.org/fhir/StructureDefinition/Library"
+      ]
     },
     {
       "name": "subject",
@@ -146,20 +166,11 @@
       }
     },
     {
-      "name": "provider",
+      "name": "practitioner",
       "use": "in",
       "min": 0,
       "max": "1",
       "documentation": "The provider for which the report will be run. This may be a reference to a Practitioner, PractitionerRole, or Organization. If specified, the measure will be calculated for subjects that have a primary relationship to the identified provider. How this relationship is determined is implementation-specific.",
-      "type": "string",
-      "searchType": "reference"
-    },
-    {
-      "name": "location",
-      "use": "in",
-      "min": 0,
-      "max": "1",
-      "documentation": "The location for which the report will be run.",
       "type": "string",
       "searchType": "reference"
     },
@@ -172,12 +183,151 @@
       "type": "dateTime"
     },
     {
+      "name": "subjectGroup",
+      "use": "in",
+      "min": 0,
+      "max": "1",
+      "documentation": "Subject for which the measure will be evaluated provided as a Group resource.",
+      "type": "Group"
+    },
+    {
       "name": "parameters",
       "use": "in",
       "min": 0,
       "max": "1",
       "documentation": "Any input parameters for the evaluation. Parameters defined in this input will be made available by name to the CQL expression. Parameter types are mapped to CQL as specified in the [Using CQL with FHIR](https://hl7.org/fhir/uv/cql/) implementation guide. If a parameter appears more than once in the input Parameters resource, it is represented with a List in the input CQL. If a parameter has parts, it is represented as a Tuple in the input CQL.",
       "type": "Parameters"
+    },
+    {
+      "name": "reporter",
+      "use": "in",
+      "min": 0,
+      "max": "1",
+      "documentation": "A reference to an Organization that will be populated in the MeasureReport.reporter",
+      "type": "string",
+      "searchType": "reference"
+    },
+    {
+      "name": "stratifier",
+      "use": "in",
+      "min": 0,
+      "max": "*",
+      "documentation": "Additional stratifier criteria for the measure. The resulting MeasureReport will contain this additional stratifier information as well as any stratifiers defined in the Measure being reported.",
+      "part": [
+        {
+          "name": "measureUrl",
+          "use": "in",
+          "min": 0,
+          "max": "*",
+          "documentation": "If the evaluate operation is for multiple measures, this parameter may be used to specify which measures the additional stratifier should be reported on. If not specified, the stratifier will be reported on all the measures. Note that if this results in a stratifier definition that cannot be interpreted correctly for the measure being reported, the behavior is at server discretion; it may throw an error, or simply ignore the additional stratifier definition.",
+          "type": "canonical"
+        },
+        {
+          "name": "groupId",
+          "use": "in",
+          "min": 0,
+          "max": "*",
+          "documentation": "If the measure being evaluated has multiple groups, this parameter may be used to specify which groups the additional stratifier should be reported on. If not specified, the stratifier will be reported on all groups in the measure being reported. Note that if this results in a stratifier definition that cannot be interpreted correctly for the measure group being reported, the behavior is at server discretion; it may throw an error, or simply ignore the additional stratifier definition.",
+          "type": "string"
+        },
+        {
+          "name": "component",
+          "use": "in",
+          "min": 1,
+          "max": "*",
+          "documentation": "One or more components of the stratifier definition. Additional stratifiers are reported in the MeasureReport in the same way as stratifiers defined in the Measure.",
+          "part": [
+            {
+              "name": "code",
+              "use": "in",
+              "min": 0,
+              "max": "1",
+              "documentation": "Meaning of the stratifier component.",
+              "type": "code",
+              "binding": {
+                "strength": "example",
+                "valueSet": "http://hl7.org/fhir/ValueSet/measure-stratifier-example"
+              }
+            },
+            {
+              "name": "description",
+              "use": "in",
+              "min": 0,
+              "max": "1",
+              "documentation": "Human readable description of the stratifier component",
+              "type": "markdown"
+            },
+            {
+              "name": "valueSet",
+              "use": "in",
+              "min": 0,
+              "max": "1",
+              "documentation": "A value set defining possible stratifier values. If both expression and valueset are specified, they SHALL be consistent (i.e. the expression SHALL evaluate to a code that is a member of the specified valueset).",
+              "type": "canonical",
+              "targetProfile": [
+                "http://hl7.org/fhir/StructureDefinition/ValueSet"
+              ]
+            },
+            {
+              "name": "unit",
+              "use": "in",
+              "min": 0,
+              "max": "1",
+              "documentation": "Indicates what units, if any, stratifier values are expected to be expressed in. This element SHOULD be specified in UCUM units or calendar units. This information SHOULD be provided if it cannot be inferred from the stsratifier expression directly.",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "supplementalData",
+      "use": "in",
+      "min": 0,
+      "max": "*",
+      "documentation": "What additional supplemental data should be reported with the measure. This additional data is specified in the same was as supplemental data in the Measure resource, and is reported in the same way in the MeasureReport.",
+      "part": [
+        {
+          "name": "code",
+          "use": "in",
+          "min": 0,
+          "max": "1",
+          "documentation": "Meaning of the supplemental data.",
+          "type": "CodeableConcept",
+          "binding": {
+            "strength": "example",
+            "valueSet": "http://hl7.org/fhir/ValueSet/measure-supplemental-data-example"
+          }
+        },
+        {
+          "name": "usage",
+          "use": "in",
+          "min": 0,
+          "max": "*",
+          "documentation": "supplemental-data | risk-adjustment | factor",
+          "type": "CodeableConcept",
+          "binding": {
+            "strength": "extensible",
+            "valueSet": "http://terminology.hl7.org/ValueSet/measure-data-usage"
+          }
+        },
+        {
+          "name": "description",
+          "use": "in",
+          "min": 0,
+          "max": "1",
+          "documentation": "Human readable description of this supplemental data element",
+          "type": "markdown"
+        },
+        {
+          "name": "criteria",
+          "use": "in",
+          "min": 1,
+          "max": "1",
+          "documentation": "Expression describing the additional data to be reported. This may be the name of an expression in a library, or it may be a path to a specific data element, reachable from the subject being evaluated.",
+          "type": "Expression"
+        }
+      ]
     },
     {
       "name": "return",

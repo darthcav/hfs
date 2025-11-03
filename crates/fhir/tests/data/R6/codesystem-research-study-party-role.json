@@ -2,7 +2,7 @@
   "resourceType": "CodeSystem",
   "id": "research-study-party-role",
   "meta": {
-    "lastUpdated": "2025-10-21T00:18:33+00:00",
+    "lastUpdated": "2025-11-03T08:55:27+00:00",
     "profile": [
       "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
     ]

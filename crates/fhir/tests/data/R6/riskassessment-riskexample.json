@@ -55,7 +55,12 @@
       "outcome": {
         "text": "Breast Cancer"
       },
-      "probabilityDecimal": 0.000368,
+      "probabilityQuantity": {
+        "value": 0.000368,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
       "whenRange": {
         "low": {
           "value": 54,

@@ -21,7 +21,7 @@
   "title": "definition",
   "status": "draft",
   "experimental": false,
-  "date": "2025-10-21T00:18:33+00:00",
+  "date": "2025-11-03T08:55:27+00:00",
   "publisher": "HL7 International / FHIR Infrastructure",
   "contact": [
     {
@@ -360,7 +360,21 @@
         },
         "type": [
           {
-            "code": "canonical"
+            "code": "canonical",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/ActivityDefinition",
+              "http://hl7.org/fhir/StructureDefinition/ChargeItemDefinition",
+              "http://hl7.org/fhir/StructureDefinition/ClinicalUseDefinition",
+              "http://hl7.org/fhir/StructureDefinition/EventDefinition",
+              "http://hl7.org/fhir/StructureDefinition/Measure",
+              "http://hl7.org/fhir/StructureDefinition/MessageDefinition",
+              "http://hl7.org/fhir/StructureDefinition/ObservationDefinition",
+              "http://hl7.org/fhir/StructureDefinition/OperationDefinition",
+              "http://hl7.org/fhir/StructureDefinition/PlanDefinition",
+              "http://hl7.org/fhir/StructureDefinition/Questionnaire",
+              "http://hl7.org/fhir/StructureDefinition/Requirements",
+              "http://hl7.org/fhir/StructureDefinition/SubscriptionTopic"
+            ]
           }
         ],
         "constraint": [
@@ -445,7 +459,21 @@
         },
         "type": [
           {
-            "code": "canonical"
+            "code": "canonical",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/ActivityDefinition",
+              "http://hl7.org/fhir/StructureDefinition/ChargeItemDefinition",
+              "http://hl7.org/fhir/StructureDefinition/ClinicalUseDefinition",
+              "http://hl7.org/fhir/StructureDefinition/EventDefinition",
+              "http://hl7.org/fhir/StructureDefinition/Measure",
+              "http://hl7.org/fhir/StructureDefinition/MessageDefinition",
+              "http://hl7.org/fhir/StructureDefinition/ObservationDefinition",
+              "http://hl7.org/fhir/StructureDefinition/OperationDefinition",
+              "http://hl7.org/fhir/StructureDefinition/PlanDefinition",
+              "http://hl7.org/fhir/StructureDefinition/Questionnaire",
+              "http://hl7.org/fhir/StructureDefinition/Requirements",
+              "http://hl7.org/fhir/StructureDefinition/SubscriptionTopic"
+            ]
           }
         ],
         "constraint": [
@@ -624,7 +652,7 @@
           },
           {
             "identity": "w5",
-            "map": "FiveWs.subject[x]"
+            "map": "FiveWs.subject"
           }
         ]
       },

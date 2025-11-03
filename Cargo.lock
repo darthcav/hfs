@@ -1427,6 +1427,7 @@ dependencies = [
 name = "helios-fhir-gen"
 version = "0.1.25"
 dependencies = [
+ "chrono",
  "clap",
  "helios-fhir",
  "reqwest",

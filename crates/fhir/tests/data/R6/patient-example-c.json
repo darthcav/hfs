@@ -11,6 +11,21 @@
       }
     ]
   },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
+      "extension": [
+        {
+          "url": "detailed",
+          "valueCoding": {
+            "system": "urn:oid:2.16.840.1.113883.6.238",
+            "code": "2036-2",
+            "display": "Filipino"
+          }
+        }
+      ]
+    }
+  ],
   "identifier": [
     {
       "use": "usual",

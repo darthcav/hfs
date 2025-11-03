@@ -32,7 +32,7 @@
   },
   "focus": [
     {
-      "display": "BloodDraw ServiceRequest"
+      "valueCanonical": "http://hl7.org/fhir/ServiceRequest/BloodDrawf201"
     }
   ],
   "for": {
@@ -70,12 +70,6 @@
   "owner": {
     "reference": "Practitioner/f202",
     "display": "Luigi Maas"
-  },
-  "restriction": {
-    "repetitions": 1,
-    "period": {
-      "end": "2016-11-01T09:45:05+10:00"
-    }
   },
   "output": [
     {

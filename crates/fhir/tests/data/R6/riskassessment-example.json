@@ -27,7 +27,12 @@
       "outcome": {
         "text": "Breast Cancer"
       },
-      "probabilityDecimal": 0.000168,
+      "probabilityQuantity": {
+        "value": 0.000168,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
       "whenRange": {
         "high": {
           "value": 53,
@@ -41,7 +46,12 @@
       "outcome": {
         "text": "Breast Cancer"
       },
-      "probabilityDecimal": 0.000368,
+      "probabilityQuantity": {
+        "value": 0.000368,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
       "whenRange": {
         "low": {
           "value": 54,
@@ -61,7 +71,12 @@
       "outcome": {
         "text": "Breast Cancer"
       },
-      "probabilityDecimal": 0.000594,
+      "probabilityQuantity": {
+        "value": 0.000594,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
       "whenRange": {
         "low": {
           "value": 58,
@@ -81,7 +96,12 @@
       "outcome": {
         "text": "Breast Cancer"
       },
-      "probabilityDecimal": 0.000838,
+      "probabilityQuantity": {
+        "value": 0.000838,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
       "whenRange": {
         "low": {
           "value": 63,
@@ -101,7 +121,12 @@
       "outcome": {
         "text": "Breast Cancer"
       },
-      "probabilityDecimal": 0.001089,
+      "probabilityQuantity": {
+        "value": 0.001089,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
       "whenRange": {
         "low": {
           "value": 68,
@@ -121,7 +146,12 @@
       "outcome": {
         "text": "Breast Cancer"
       },
-      "probabilityDecimal": 0.001327,
+      "probabilityQuantity": {
+        "value": 0.001327,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
       "whenRange": {
         "low": {
           "value": 73,
@@ -141,7 +171,12 @@
       "outcome": {
         "text": "Breast Cancer"
       },
-      "probabilityDecimal": 0.001530,
+      "probabilityQuantity": {
+        "value": 0.001530,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
       "whenRange": {
         "low": {
           "value": 78,
@@ -161,7 +196,12 @@
       "outcome": {
         "text": "Breast Cancer"
       },
-      "probabilityDecimal": 0.001663,
+      "probabilityQuantity": {
+        "value": 0.001663,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
       "whenRange": {
         "low": {
           "value": 83,

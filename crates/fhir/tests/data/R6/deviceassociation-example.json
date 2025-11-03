@@ -4,11 +4,34 @@
   "device": {
     "reference": "Device/prod1"
   },
-  "status": {
+  "status": "active",
+  "identifier": [
+    {
+      "system": "http://acme.com/deviceassociations/id",
+      "value": "DA12345"
+    }
+  ],
+  "relationship": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/CodeSystem/deviceassociation-relationship",
+          "code": "patient",
+          "display": "Patient"
+        }
+      ]
+    }
+  ],
+  "period": {
+    "start": "2023-01-01T08:00:00Z",
+    "end": "2023-12-31T17:00:00Z"
+  },
+  "associationStatus": {
     "coding": [
       {
-        "system": "http://hl7.org/fhir/deviceassociation-status",
-        "code": "implanted"
+        "system": "http://hl7.org/fhir/CodeSystem/deviceassociation-association-status",
+        "code": "implanted",
+        "display": "Implanted"
       }
     ]
   },

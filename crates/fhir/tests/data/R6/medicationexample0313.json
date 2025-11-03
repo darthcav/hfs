@@ -19,12 +19,6 @@
       }
     ]
   },
-  "totalVolume": {
-    "value": 1,
-    "unit": "ml",
-    "system": "http://unitsofmeasure.org",
-    "code": "ml"
-  },
   "ingredient": [
     {
       "item": {

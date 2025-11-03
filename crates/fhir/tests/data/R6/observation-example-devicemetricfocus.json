@@ -55,16 +55,18 @@
         "id": "example-device-patient-association",
         "text": {
           "status": "generated",
-          "div": "\u003cdiv xmlns\u003d\"http://www.w3.org/1999/xhtml\"\u003e\u003cp class\u003d\"res-header-id\"\u003e\u003cb\u003eGenerated Narrative: DeviceAssociation example-device-patient-association\u003c/b\u003e\u003c/p\u003e\u003ca name\u003d\"example-device-patient-association\"\u003e \u003c/a\u003e\u003ca name\u003d\"hcexample-device-patient-association\"\u003e \u003c/a\u003e\u003cp\u003e\u003cb\u003edevice\u003c/b\u003e: \u003ca href\u003d\"broken-link.html\"\u003eDevice/example-IV-pump\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: \u003cspan title\u003d\"Codes:{http://hl7.org/fhir/deviceassociation-status attached}\"\u003eAttached\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca href\u003d\"patient-example-a.html\"\u003eDonald Duck\u003c/a\u003e\u003c/p\u003e\u003c/div\u003e"
+          "div": "\u003cdiv xmlns\u003d\"http://www.w3.org/1999/xhtml\"\u003e\u003cp class\u003d\"res-header-id\"\u003e\u003cb\u003eGenerated Narrative: DeviceAssociation example-device-patient-association\u003c/b\u003e\u003c/p\u003e\u003ca name\u003d\"example-device-patient-association\"\u003e \u003c/a\u003e\u003ca name\u003d\"hcexample-device-patient-association\"\u003e \u003c/a\u003e\u003cp\u003e\u003cb\u003edevice\u003c/b\u003e: \u003ca href\u003d\"broken-link.html\"\u003eDevice/example-IV-pump\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: Active\u003c/p\u003e\u003cp\u003e\u003cb\u003eassociationStatus\u003c/b\u003e: \u003cspan title\u003d\"Codes:{http://hl7.org/fhir/CodeSystem/deviceassociation-association-status attached}\"\u003eAttached\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003esubject\u003c/b\u003e: \u003ca href\u003d\"patient-example-a.html\"\u003eDonald Duck\u003c/a\u003e\u003c/p\u003e\u003c/div\u003e"
         },
         "device": {
           "reference": "Device/example-IV-pump"
         },
-        "status": {
+        "status": "active",
+        "associationStatus": {
           "coding": [
             {
-              "system": "http://hl7.org/fhir/deviceassociation-status",
-              "code": "attached"
+              "system": "http://hl7.org/fhir/CodeSystem/deviceassociation-association-status",
+              "code": "attached",
+              "display": "Attached"
             }
           ]
         },
@@ -81,8 +83,10 @@
         "id": "example-iv-pump-flowratemetric",
         "text": {
           "status": "generated",
-          "div": "\u003cdiv xmlns\u003d\"http://www.w3.org/1999/xhtml\"\u003e\u003cp class\u003d\"res-header-id\"\u003e\u003cb\u003eGenerated Narrative: DeviceMetric example-iv-pump-flowratemetric\u003c/b\u003e\u003c/p\u003e\u003ca name\u003d\"example-iv-pump-flowratemetric\"\u003e \u003c/a\u003e\u003ca name\u003d\"hcexample-iv-pump-flowratemetric\"\u003e \u003c/a\u003e\u003cp\u003e\u003cb\u003etype\u003c/b\u003e: \u003cspan title\u003d\"Codes:{urn:iso:std:iso:11073:10101 157784}\"\u003eMDC_FLOW_FLUID_PUMP\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eunit\u003c/b\u003e: \u003cspan title\u003d\"Codes:{http://unitsofmeasure.org mL/(8.h)}\"\u003emL/(8.h)\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003edevice\u003c/b\u003e: \u003ca href\u003d\"broken-link.html\"\u003eDevice/example-IV-pump\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003ecategory\u003c/b\u003e: \u003cspan title\u003d\"Codes:{http://hl7.org/fhir/metric-category measurement}\"\u003eMeasurement\u003c/span\u003e\u003c/p\u003e\u003c/div\u003e"
+          "div": "\u003cdiv xmlns\u003d\"http://www.w3.org/1999/xhtml\"\u003e\u003cp class\u003d\"res-header-id\"\u003e\u003cb\u003eGenerated Narrative: DeviceMetric example-iv-pump-flowratemetric\u003c/b\u003e\u003c/p\u003e\u003ca name\u003d\"example-iv-pump-flowratemetric\"\u003e \u003c/a\u003e\u003ca name\u003d\"hcexample-iv-pump-flowratemetric\"\u003e \u003c/a\u003e\u003cp\u003e\u003cb\u003estatus\u003c/b\u003e: Active\u003c/p\u003e\u003cp\u003e\u003cb\u003eoperationalStatus\u003c/b\u003e: On\u003c/p\u003e\u003cp\u003e\u003cb\u003etype\u003c/b\u003e: \u003cspan title\u003d\"Codes:{urn:iso:std:iso:11073:10101 157784}\"\u003eMDC_FLOW_FLUID_PUMP\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003eunit\u003c/b\u003e: \u003cspan title\u003d\"Codes:{http://unitsofmeasure.org mL/(8.h)}\"\u003emL/(8.h)\u003c/span\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003edevice\u003c/b\u003e: \u003ca href\u003d\"broken-link.html\"\u003eDevice/example-IV-pump\u003c/a\u003e\u003c/p\u003e\u003cp\u003e\u003cb\u003ecategory\u003c/b\u003e: \u003cspan title\u003d\"Codes:{http://hl7.org/fhir/metric-category measurement}\"\u003eMeasurement\u003c/span\u003e\u003c/p\u003e\u003c/div\u003e"
         },
+        "status": "active",
+        "operationalStatus": "on",
         "type": {
           "coding": [
             {

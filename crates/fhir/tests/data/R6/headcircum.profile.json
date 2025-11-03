@@ -182,13 +182,6 @@
             "source": "http://hl7.org/fhir/StructureDefinition/Observation"
           },
           {
-            "key": "obs-8",
-            "severity": "error",
-            "human": "bodyStructure SHALL only be present if Observation.bodySite is not present",
-            "expression": "bodySite.exists() implies bodyStructure.empty()",
-            "source": "http://hl7.org/fhir/StructureDefinition/Observation"
-          },
-          {
             "key": "obs-10",
             "severity": "error",
             "human": "Observation.component.dataAbsentReason SHALL only be present if Observation.component.value[x] is not present",
@@ -318,7 +311,7 @@
         "id": "Observation.implicitRules",
         "path": "Observation.implicitRules",
         "short": "A set of rules under which this content was created",
-        "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc.",
+        "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc. For DomainResources, if more than one implicitRules policy applies, additional policies may be conveyed using the [additionalImplicitRules](https://build.fhir.org/ig/HL7/fhir-extensions/StructureDefinition-additionalImplicitRules.html) extension.",
         "comment": "Asserting this rule set restricts the content to be only understood by a limited set of trading partners. This inherently limits the usefulness of the data in the long term. However, the existing health eco-system is highly fractured, and not yet ready to define, collect, and exchange data in a generally computable sense. Wherever possible, implementers and/or specification writers should avoid using this element. Often, when used, the URL is a reference to an implementation guide that defines these special rules as part of its narrative along with other profiles, value sets, etc.",
         "min": 0,
         "max": "1",
@@ -1068,7 +1061,7 @@
           },
           {
             "identity": "v2",
-            "map": "OBX-11"
+            "map": "OBX-11 Map FHIR Observation.status to OBX-11. If FHIR carries Observation.dataAbsentReason \u003d ‘not-asked’, set OBX-11 to the v2 as  ‘N’. If there is alternate-code extension on Observation.status with code ‘X’, set OBX-11 as ‘X’."
           },
           {
             "identity": "rim",
@@ -1141,6 +1134,10 @@
             "map": "FiveWs.class"
           },
           {
+            "identity": "v2",
+            "map": "OBX-29"
+          },
+          {
             "identity": "rim",
             "map": ".outboundRelationship[typeCode\u003d\"COMP].target[classCode\u003d\"LIST\", moodCode\u003d\"EVN\"].code"
           }
@@ -1151,7 +1148,7 @@
         "path": "Observation.category",
         "sliceName": "VSCat",
         "short": "Classification of  type of observation",
-        "definition": "A code that classifies the general type of observation being made.",
+        "definition": "A code that classifies the general type of observation being made as a vital sign related observation, whether a point-in-time or calculated vital sign observation. ",
         "comment": "In addition to the required category valueset, this element allows various categorization schemes based on the owner’s definition of the category and effectively multiple categories can be used at once.  The level of granularity is defined by the category concepts in the value set.",
         "requirements": "Used for filtering what observations are retrieved and displayed.",
         "min": 1,
@@ -1207,6 +1204,10 @@
             "map": "FiveWs.class"
           },
           {
+            "identity": "v2",
+            "map": "OBX-29"
+          },
+          {
             "identity": "rim",
             "map": ".outboundRelationship[typeCode\u003d\"COMP].target[classCode\u003d\"LIST\", moodCode\u003d\"EVN\"].code"
           }
@@ -1217,7 +1218,7 @@
         "path": "Observation.code",
         "short": "Head Circumference",
         "definition": "Head Circumference",
-        "comment": "*All* code-value and, if present, component.code-component.value pairs need to be taken into account to correctly understand the meaning of the observation.",
+        "comment": "*All* code-value and, if present, component.code-component.value pairs need to be taken into account to correctly understand the meaning of the observation. All codings in Observation.code are expected to be sufficiently precise to allow a user with the code and value to be able to understand the value - though not all codes will necessarily convey the same level of detail. Codings in Observation.category SHOULD be concepts that are too broad to be able to understand the meaning of the Observation.value without also having an Observation.code.",
         "requirements": "Knowing what kind of observation is being made is essential to understanding the observation.",
         "alias": [
           "Name"
@@ -1332,7 +1333,7 @@
           },
           {
             "identity": "w5",
-            "map": "FiveWs.subject[x]"
+            "map": "FiveWs.subject"
           },
           {
             "identity": "v2",
@@ -1381,7 +1382,7 @@
         "mapping": [
           {
             "identity": "w5",
-            "map": "FiveWs.subject[x]"
+            "map": "FiveWs.subject"
           },
           {
             "identity": "v2",
@@ -1531,7 +1532,7 @@
           },
           {
             "identity": "v2",
-            "map": "OBX-14, and/or OBX-19 after v2.4  (depends on who observation made)"
+            "map": "OBX-14 (If Observation carries the AnalysisDateTime extension, then map the extension to OBX-19)"
           },
           {
             "identity": "rim",
@@ -1636,7 +1637,7 @@
           },
           {
             "identity": "v2",
-            "map": "OBX-15 / (Practitioner)  OBX-16,  PRT-5:PRT-4\u003d\u0027RO\u0027 /  (Device)  OBX-18 , PRT-10:PRT-4\u003d\u0027EQUIP\u0027 / (Organization)  OBX-23,  PRT-8:PRT-4\u003d\u0027PO\u0027"
+            "map": "OBX-15, OBX-16, OBX-23, OBX-24, OBX-25. Person/role → OBX-16 (Responsible Observer). If conveying performing org and medical director: use OBX-25 (XCN) for the director with role code “MDIR” (system v2-0912), and OBX-23/24 for org name/address; if there is no director, OBX-23/24 carry the org. OBX-15 is available for producer id (identifier for the producer)."
           },
           {
             "identity": "rim",
@@ -1659,7 +1660,7 @@
         },
         "short": "The quantity for the vital sign being observed.",
         "definition": "The quantity for the vital sign being observed.",
-        "comment": "- An observation may have:\n  1.  a single value here\n  1.  both a value and a set of related or component values\n  1.  only a set of related or component values.\n-  If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- The usage of valueReference is restricted to the MolecularDefinition resources when used as a definitional resource, not as a patient-specific finding. .\n- For additional guidance, see the [Notes section](observation.html#notes) below.",
+        "comment": "- An observation may have:\n  1.  a single value here\n  1.  both a value and a set of related or component values\n  1.  only a set of related or component values.\n-  If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- The usage of valueReference is restricted to the MolecularDefinition resources as a definitional resource, not as a patient-specific finding. \n- For additional guidance, see the [Notes section](observation.html#notes) below.",
         "requirements": "An observation exists to have a value, though it might not if it is in error, or if it represents a group of observations.",
         "min": 0,
         "max": "1",
@@ -1727,7 +1728,7 @@
         "sliceName": "valueQuantity",
         "short": "The quantity for the vital sign being observed.",
         "definition": "The quantity for the vital sign being observed.",
-        "comment": "- An observation may have:\n  1.  a single value here\n  1.  both a value and a set of related or component values\n  1.  only a set of related or component values.\n-  If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- The usage of valueReference is restricted to the MolecularDefinition resources when used as a definitional resource, not as a patient-specific finding. .\n- For additional guidance, see the [Notes section](observation.html#notes) below.",
+        "comment": "- An observation may have:\n  1.  a single value here\n  1.  both a value and a set of related or component values\n  1.  only a set of related or component values.\n-  If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- The usage of valueReference is restricted to the MolecularDefinition resources as a definitional resource, not as a patient-specific finding. \n- For additional guidance, see the [Notes section](observation.html#notes) below.",
         "requirements": "An observation exists to have a value, though it might not if it is in error, or if it represents a group of observations.",
         "min": 0,
         "max": "1",
@@ -1845,7 +1846,7 @@
         "mapping": [
           {
             "identity": "v2",
-            "map": "N/A"
+            "map": "OBX-32, OBX-11. Map Observation.dataAbsentReason to OBX-32 (Observation Value Absent Reason). Additionally, when dataAbsentReason.code \u003d \u0027not-asked\u0027, also set OBX-11 \u003d \u0027N\u0027."
           },
           {
             "identity": "rim",
@@ -1918,6 +1919,57 @@
         ]
       },
       {
+        "id": "Observation.interpretationContext",
+        "path": "Observation.interpretationContext",
+        "short": "Context for understanding the observation",
+        "definition": "Other preceding or concurrent information that is critical to understand the context and significance of the observation.",
+        "comment": "This element provides essential contextual information that affects how the observation should be interpreted. For example, knowing that a patient is diabetic, fasting, or paraplegic may be critical to properly understanding lab results or other observations.",
+        "min": 0,
+        "max": "*",
+        "base": {
+          "path": "Observation.interpretationContext",
+          "min": 0,
+          "max": "*"
+        },
+        "type": [
+          {
+            "code": "CodeableReference",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Resource"
+            ]
+          }
+        ],
+        "constraint": [
+          {
+            "key": "ele-1",
+            "severity": "error",
+            "human": "All FHIR elements must have a @value or children",
+            "expression": "hasValue() or (children().count() \u003e id.count())",
+            "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          }
+        ],
+        "mustSupport": false,
+        "isModifier": false,
+        "isSummary": false,
+        "binding": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+              "valueString": "ObservationInterpretationContext"
+            }
+          ],
+          "strength": "example",
+          "description": "Codes identifying contextual factors that affect interpretation of observations.",
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-interpretation-context"
+        },
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": ".outboundRelationship[typeCode\u003dPERT].target"
+          }
+        ]
+      },
+      {
         "id": "Observation.note",
         "path": "Observation.note",
         "short": "Comments about the observation",
@@ -1966,9 +2018,9 @@
       {
         "id": "Observation.bodySite",
         "path": "Observation.bodySite",
-        "short": "Observed body part",
-        "definition": "Indicates the site on the subject\u0027s body where the observation was made (i.e. the target site).",
-        "comment": "Only used if not implicit in code found in Observation.code.  In many systems, this may be represented as a related observation instead of an inline component.",
+        "short": "DEPRECATED: Observed body part",
+        "definition": "DEPRECATED: This element is deprecated. Use bodyStructure instead. Indicates the site on the subject\u0027s body where the observation was made (i.e. the target site).",
+        "comment": "DEPRECATED: Use bodyStructure instead. Only used if not implicit in code found in Observation.code.  In many systems, this may be represented as a related observation instead of an inline component.",
         "min": 0,
         "max": "1",
         "base": {
@@ -1980,9 +2032,6 @@
           {
             "code": "CodeableConcept"
           }
-        ],
-        "condition": [
-          "obs-8"
         ],
         "constraint": [
           {
@@ -2031,7 +2080,7 @@
         "path": "Observation.bodyStructure",
         "short": "Observed body structure",
         "definition": "Indicates the body structure on the subject\u0027s body where the observation was made (i.e. the target site).",
-        "comment": "Only used if not implicit in code found in Observation.code or bodySite is used. In many systems, this may be represented as a related observation instead of an inline component.",
+        "comment": "Only used if not implicit in code found in Observation.code. In many systems, this may be represented as a related observation instead of an inline component. Use this element instead of the deprecated bodySite element.",
         "min": 0,
         "max": "1",
         "base": {
@@ -2041,14 +2090,11 @@
         },
         "type": [
           {
-            "code": "Reference",
+            "code": "CodeableReference",
             "targetProfile": [
               "http://hl7.org/fhir/StructureDefinition/BodyStructure"
             ]
           }
-        ],
-        "condition": [
-          "obs-8"
         ],
         "constraint": [
           {
@@ -2062,6 +2108,17 @@
         "mustSupport": false,
         "isModifier": false,
         "isSummary": false,
+        "binding": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+              "valueString": "BodyStructure"
+            }
+          ],
+          "strength": "example",
+          "description": "SNOMED CT Body Structures",
+          "valueSet": "http://hl7.org/fhir/ValueSet/body-site"
+        },
         "mapping": [
           {
             "identity": "rim",
@@ -2166,7 +2223,7 @@
         "mapping": [
           {
             "identity": "v2",
-            "map": "SPM segment"
+            "map": "SPM segment (OBX-33 for Specimen.identifier mapping)"
           },
           {
             "identity": "rim",
@@ -2219,7 +2276,7 @@
         "mapping": [
           {
             "identity": "v2",
-            "map": "OBX-17 / PRT -10"
+            "map": "OBX-18 / PRT -10"
           },
           {
             "identity": "rim",
@@ -3052,7 +3109,7 @@
           ],
           "strength": "example",
           "description": "Codes identifying names of simple observations.",
-          "valueSet": "http://hl7.org/fhir/ValueSet/observation-codes"
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-codes-observationorboth"
         },
         "mapping": [
           {
@@ -3088,7 +3145,7 @@
         },
         "short": "The value for the vital sign component being observed.",
         "definition": "The value for the vital sign component being observed.",
-        "comment": "Used when observation has a set of component observations:\n-  An observation may have both a value (e.g. an  Apgar score) and component observations (the observations from which the Apgar score was derived). \n-  If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- The usage of valueReference is restricted to the MolecularDefinition resources when used as a definitional resource, not as a patient-specific finding. .\n- For additional guidance, see the [Notes section](observation.html#notes) below.",
+        "comment": "Used when observation has a set of component observations:\n-  An observation may have both a value (e.g. an  Apgar score) and component observations (the observations from which the Apgar score was derived). \n-  If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- The usage of valueReference is restricted to the MolecularDefinition resources as a definitional resource, not as a patient-specific finding. \n- For additional guidance, see the [Notes section](observation.html#notes) below.",
         "requirements": "An observation exists to have a value, though it might not if it is in error, or if it represents a group of observations.",
         "min": 0,
         "max": "1",
@@ -3181,7 +3238,7 @@
         "sliceName": "valueQuantity",
         "short": "Vital Sign component value recorded as a component with UCUM (preferred)",
         "definition": "Vital Sign component value recorded as a component with UCUM (preferred).",
-        "comment": "Used when observation has a set of component observations:\n-  An observation may have both a value (e.g. an  Apgar score) and component observations (the observations from which the Apgar score was derived). \n-  If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- The usage of valueReference is restricted to the MolecularDefinition resources when used as a definitional resource, not as a patient-specific finding. .\n- For additional guidance, see the [Notes section](observation.html#notes) below.",
+        "comment": "Used when observation has a set of component observations:\n-  An observation may have both a value (e.g. an  Apgar score) and component observations (the observations from which the Apgar score was derived). \n-  If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- If a value is present, the datatype for this element should be determined by the `code`.\n-  *CodeableConcept* with just a text would be used instead of a string if the field was usually coded, or if the type associated with the `code` defines a coded value.\n-  *Attachment* is used if the observation result value is a binary file such as an image.  If the observation result value is derived from the binary file (for example \u0027X\u0027 detected and here is the the proof in this image), the binary file may be directly represented using *DocumentReference* and referenced by `derivedFrom`.\n- The usage of valueReference is restricted to the MolecularDefinition resources as a definitional resource, not as a patient-specific finding. \n- For additional guidance, see the [Notes section](observation.html#notes) below.",
         "requirements": "An observation exists to have a value, though it might not if it is in error, or if it represents a group of observations.",
         "min": 0,
         "max": "1",

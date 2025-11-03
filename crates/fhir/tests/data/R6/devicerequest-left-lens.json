@@ -13,15 +13,13 @@
   },
   "status": "completed",
   "intent": "original-order",
-  "product": {
-    "concept": {
-      "coding": [
-        {
-          "system": "http://terminology.hl7.org/CodeSystem/ex-visionprescriptionproduct",
-          "code": "lens"
-        }
-      ]
-    }
+  "productCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/ex-visionprescriptionproduct",
+        "code": "lens"
+      }
+    ]
   },
   "parameter": [
     {

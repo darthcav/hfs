@@ -2,7 +2,7 @@
   "resourceType": "CodeSystem",
   "id": "audit-event-action",
   "meta": {
-    "lastUpdated": "2025-10-21T00:18:33.033+00:00",
+    "lastUpdated": "2025-11-03T08:55:27.392+00:00",
     "profile": [
       "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
     ]
@@ -18,11 +18,11 @@
     },
     {
       "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-      "valueCode": "trial-use"
+      "valueCode": "normative"
     },
     {
       "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
-      "valueInteger": 3
+      "valueInteger": 6
     }
   ],
   "url": "http://hl7.org/fhir/audit-event-action",
@@ -47,7 +47,7 @@
   "title": "Audit Event Action",
   "status": "active",
   "experimental": false,
-  "date": "2021-01-05T10:01:24+11:00",
+  "date": "2025-11-01",
   "publisher": "HL7 International / Security",
   "contact": [
     {
@@ -63,7 +63,7 @@
       ]
     }
   ],
-  "description": "Indicator for type of action performed during the event that generated the event.",
+  "description": "Indicator codes for type of action performed during the event that generated the event.",
   "jurisdiction": [
     {
       "coding": [

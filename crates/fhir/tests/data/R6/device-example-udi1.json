@@ -27,8 +27,8 @@
   "udiCarrier": [
     {
       "deviceIdentifier": "00844588003288",
-      "issuer": "http://hl7.org/fhir/NamingSystem/gs1",
-      "jurisdiction": "http://hl7.org/fhir/NamingSystem/fda-udi",
+      "issuer": "http://hl7.org/fhir/NamingSystem/gs1-di",
+      "jurisdiction": "http://hl7.org/fhir/NamingSystem/us-fda-udi",
       "carrierAIDC": "XWQyMDExMDg1NzY3NDAwMjAxNzE3MTQxMTIwMTBOWUZVTDAx4oaUMjExOTI4MzfihpQ3MTNBMUIyQzNENEU1RjZH",
       "carrierHRF": "{01}00844588003288{17}141120{10}7654321D{21}10987654d321",
       "entryType": "barcode"

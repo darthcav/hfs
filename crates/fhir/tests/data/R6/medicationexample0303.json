@@ -56,7 +56,13 @@
       }
     }
   ],
-  "batch": {
+  "instance": {
+    "identifier": [
+      {
+        "system": "https://example.org/serial-number",
+        "value": "SN987654321"
+      }
+    ],
     "lotNumber": "9494788",
     "expirationDate": "2017-05-22"
   },

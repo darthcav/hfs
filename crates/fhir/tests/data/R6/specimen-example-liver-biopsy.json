@@ -20,10 +20,6 @@
       "value": "PB24-00789"
     }
   ],
-  "accessionIdentifier": {
-    "system": "http://pathology.acme.org/accession",
-    "value": "PB24-00789"
-  },
   "status": "available",
   "type": {
     "coding": [
@@ -97,7 +93,7 @@
   ],
   "container": [
     {
-      "device": {},
+      "deviceCanonical": "http://hl7.org/fhir/Device/specimen-container-formalin",
       "specimenQuantity": {
         "value": 1,
         "unit": "specimen"

@@ -21,7 +21,7 @@
   "title": "Transaction bundle",
   "status": "active",
   "experimental": false,
-  "date": "2025-10-21T00:18:33+00:00",
+  "date": "2025-11-03T08:55:27+00:00",
   "publisher": "HL7 International / FHIR Infrastructure",
   "contact": [
     {
@@ -288,7 +288,7 @@
         "id": "Bundle.implicitRules",
         "path": "Bundle.implicitRules",
         "short": "A set of rules under which this content was created",
-        "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc.",
+        "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc. For DomainResources, if more than one implicitRules policy applies, additional policies may be conveyed using the [additionalImplicitRules](https://build.fhir.org/ig/HL7/fhir-extensions/StructureDefinition-additionalImplicitRules.html) extension.",
         "comment": "Asserting this rule set restricts the content to be only understood by a limited set of trading partners. This inherently limits the usefulness of the data in the long term. However, the existing health eco-system is highly fractured, and not yet ready to define, collect, and exchange data in a generally computable sense. Wherever possible, implementers and/or specification writers should avoid using this element. Often, when used, the URL is a reference to an implementation guide that defines these special rules as part of its narrative along with other profiles, value sets, etc.",
         "min": 0,
         "max": "1",
@@ -1860,7 +1860,7 @@
         "path": "Bundle.entry.response.etag",
         "short": "The Etag for the resource (if relevant)",
         "definition": "The Etag for the resource, if the operation for the entry produced a versioned resource (see [Resource Metadata and Versioning](http.html#versioning) and [Managing Resource Contention](http.html#concurrency)).",
-        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included.",
+        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included - e.g. W/\u00271\u0027",
         "min": 0,
         "max": "1",
         "base": {
@@ -3015,7 +3015,7 @@
         "path": "Bundle.entry.response.etag",
         "short": "The Etag for the resource (if relevant)",
         "definition": "The Etag for the resource, if the operation for the entry produced a versioned resource (see [Resource Metadata and Versioning](http.html#versioning) and [Managing Resource Contention](http.html#concurrency)).",
-        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included.",
+        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included - e.g. W/\u00271\u0027",
         "min": 0,
         "max": "1",
         "base": {
@@ -4170,7 +4170,7 @@
         "path": "Bundle.entry.response.etag",
         "short": "The Etag for the resource (if relevant)",
         "definition": "The Etag for the resource, if the operation for the entry produced a versioned resource (see [Resource Metadata and Versioning](http.html#versioning) and [Managing Resource Contention](http.html#concurrency)).",
-        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included.",
+        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included - e.g. W/\u00271\u0027",
         "min": 0,
         "max": "1",
         "base": {
@@ -5325,7 +5325,7 @@
         "path": "Bundle.entry.response.etag",
         "short": "The Etag for the resource (if relevant)",
         "definition": "The Etag for the resource, if the operation for the entry produced a versioned resource (see [Resource Metadata and Versioning](http.html#versioning) and [Managing Resource Contention](http.html#concurrency)).",
-        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included.",
+        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included - e.g. W/\u00271\u0027",
         "min": 0,
         "max": "1",
         "base": {
@@ -6480,7 +6480,7 @@
         "path": "Bundle.entry.response.etag",
         "short": "The Etag for the resource (if relevant)",
         "definition": "The Etag for the resource, if the operation for the entry produced a versioned resource (see [Resource Metadata and Versioning](http.html#versioning) and [Managing Resource Contention](http.html#concurrency)).",
-        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included.",
+        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included - e.g. W/\u00271\u0027",
         "min": 0,
         "max": "1",
         "base": {
@@ -7635,7 +7635,7 @@
         "path": "Bundle.entry.response.etag",
         "short": "The Etag for the resource (if relevant)",
         "definition": "The Etag for the resource, if the operation for the entry produced a versioned resource (see [Resource Metadata and Versioning](http.html#versioning) and [Managing Resource Contention](http.html#concurrency)).",
-        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included.",
+        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included - e.g. W/\u00271\u0027",
         "min": 0,
         "max": "1",
         "base": {
@@ -8790,7 +8790,7 @@
         "path": "Bundle.entry.response.etag",
         "short": "The Etag for the resource (if relevant)",
         "definition": "The Etag for the resource, if the operation for the entry produced a versioned resource (see [Resource Metadata and Versioning](http.html#versioning) and [Managing Resource Contention](http.html#concurrency)).",
-        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included.",
+        "comment": "Etags match the Resource.meta.versionId. The ETag has to match the version id in the header if a resource is included - e.g. W/\u00271\u0027",
         "min": 0,
         "max": "1",
         "base": {

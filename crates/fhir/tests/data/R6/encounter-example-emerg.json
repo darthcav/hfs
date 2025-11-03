@@ -6,6 +6,42 @@
     "div": "\u003cdiv xmlns\u003d\"http://www.w3.org/1999/xhtml\"\u003eEmergency visit that escalated into inpatient patient @example\u003c/div\u003e"
   },
   "status": "in-progress",
+  "businessStatus": [
+    {
+      "code": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/encounter-businessstatus-emergency",
+            "code": "triaged",
+            "display": "Triaged"
+          }
+        ]
+      },
+      "type": {
+        "system": "http://hl7.org/fhir/encounter-businessstatus-type",
+        "code": "emergency",
+        "display": "Emergency"
+      },
+      "effectiveDate": "2017-02-01T08:00:00+10:00"
+    },
+    {
+      "code": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/encounter-businessstatus-inpatient",
+            "code": "admit",
+            "display": "Admitted"
+          }
+        ]
+      },
+      "type": {
+        "system": "http://hl7.org/fhir/encounter-businessstatus-type",
+        "code": "inpatient",
+        "display": "Inpatient"
+      },
+      "effectiveDate": "2017-02-01T09:27:00+10:00"
+    }
+  ],
   "class": [
     {
       "coding": [
