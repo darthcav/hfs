@@ -67,5 +67,5 @@ name = "parallel_processing_bench"
 harness = false
 
 [package.metadata.docs.rs]
-features = ["R4", "R4B", "R5", "R6"]
+features = ["R4"]
 rustdoc-args = ["--cfg", "docsrs"]

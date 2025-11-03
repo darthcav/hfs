@@ -31,5 +31,5 @@ zip = "0.6"
 serde_json = { workspace = true }
 
 [package.metadata.docs.rs]
-all-features = true
+features = ["R4"]
 rustdoc-args = ["--cfg", "docsrs"]
