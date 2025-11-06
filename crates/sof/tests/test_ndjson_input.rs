@@ -1,5 +1,5 @@
-use helios_sof::data_source::{DataSource, UniversalDataSource};
 use helios_sof::SofBundle;
+use helios_sof::data_source::{DataSource, UniversalDataSource};
 use std::io::Write;
 use tempfile::NamedTempFile;
 
@@ -15,7 +15,10 @@ async fn test_ndjson_multiple_patients() {
 
     // Create temporary .ndjson file
     let mut temp_file = NamedTempFile::new().unwrap();
-    temp_file.as_file_mut().write_all(ndjson_content.as_bytes()).unwrap();
+    temp_file
+        .as_file_mut()
+        .write_all(ndjson_content.as_bytes())
+        .unwrap();
     temp_file.flush().unwrap();
 
     // Rename to have .ndjson extension
@@ -57,7 +60,10 @@ async fn test_ndjson_mixed_resources() {
 {"resourceType": "Condition", "id": "cond1", "clinicalStatus": {"text": "active"}, "code": {"text": "Test"}}"#;
 
     let mut temp_file = NamedTempFile::new().unwrap();
-    temp_file.as_file_mut().write_all(ndjson_content.as_bytes()).unwrap();
+    temp_file
+        .as_file_mut()
+        .write_all(ndjson_content.as_bytes())
+        .unwrap();
     temp_file.flush().unwrap();
 
     let temp_path = temp_file.path().to_path_buf();
@@ -98,7 +104,10 @@ async fn test_ndjson_with_empty_lines() {
 "#;
 
     let mut temp_file = NamedTempFile::new().unwrap();
-    temp_file.as_file_mut().write_all(ndjson_content.as_bytes()).unwrap();
+    temp_file
+        .as_file_mut()
+        .write_all(ndjson_content.as_bytes())
+        .unwrap();
     temp_file.flush().unwrap();
 
     let temp_path = temp_file.path().to_path_buf();
@@ -137,7 +146,10 @@ async fn test_ndjson_content_detection() {
 {"resourceType": "Patient", "id": "p2"}"#;
 
     let mut temp_file = NamedTempFile::with_suffix(".json").unwrap();
-    temp_file.as_file_mut().write_all(ndjson_content.as_bytes()).unwrap();
+    temp_file
+        .as_file_mut()
+        .write_all(ndjson_content.as_bytes())
+        .unwrap();
     temp_file.flush().unwrap();
 
     let file_url = format!("file://{}", temp_file.path().to_string_lossy());
@@ -172,7 +184,10 @@ async fn test_ndjson_partial_invalid() {
 {"resourceType": "Patient", "id": "p3"}"#;
 
     let mut temp_file = NamedTempFile::new().unwrap();
-    temp_file.as_file_mut().write_all(ndjson_content.as_bytes()).unwrap();
+    temp_file
+        .as_file_mut()
+        .write_all(ndjson_content.as_bytes())
+        .unwrap();
     temp_file.flush().unwrap();
 
     let temp_path = temp_file.path().to_path_buf();
@@ -211,7 +226,10 @@ async fn test_ndjson_all_invalid() {
 not even json"#;
 
     let mut temp_file = NamedTempFile::new().unwrap();
-    temp_file.as_file_mut().write_all(ndjson_content.as_bytes()).unwrap();
+    temp_file
+        .as_file_mut()
+        .write_all(ndjson_content.as_bytes())
+        .unwrap();
     temp_file.flush().unwrap();
 
     let temp_path = temp_file.path().to_path_buf();
@@ -235,7 +253,10 @@ async fn test_ndjson_empty_file() {
     let ndjson_content = "";
 
     let mut temp_file = NamedTempFile::new().unwrap();
-    temp_file.as_file_mut().write_all(ndjson_content.as_bytes()).unwrap();
+    temp_file
+        .as_file_mut()
+        .write_all(ndjson_content.as_bytes())
+        .unwrap();
     temp_file.flush().unwrap();
 
     let temp_path = temp_file.path().to_path_buf();
@@ -259,7 +280,10 @@ async fn test_ndjson_only_whitespace() {
     let ndjson_content = "   \n  \n   \n";
 
     let mut temp_file = NamedTempFile::new().unwrap();
-    temp_file.as_file_mut().write_all(ndjson_content.as_bytes()).unwrap();
+    temp_file
+        .as_file_mut()
+        .write_all(ndjson_content.as_bytes())
+        .unwrap();
     temp_file.flush().unwrap();
 
     let temp_path = temp_file.path().to_path_buf();
@@ -292,7 +316,10 @@ async fn test_json_bundle_still_works() {
     }"#;
 
     let mut temp_file = NamedTempFile::with_suffix(".json").unwrap();
-    temp_file.as_file_mut().write_all(bundle_json.as_bytes()).unwrap();
+    temp_file
+        .as_file_mut()
+        .write_all(bundle_json.as_bytes())
+        .unwrap();
     temp_file.flush().unwrap();
 
     let file_url = format!("file://{}", temp_file.path().to_string_lossy());

@@ -268,7 +268,10 @@ fn is_ndjson_extension(source_name: &str) -> bool {
 
 /// Parse NDJSON content (newline-delimited JSON) and convert to SofBundle
 fn parse_ndjson_content(contents: &str, source_name: &str) -> Result<SofBundle, SofError> {
-    let lines: Vec<&str> = contents.lines().filter(|line| !line.trim().is_empty()).collect();
+    let lines: Vec<&str> = contents
+        .lines()
+        .filter(|line| !line.trim().is_empty())
+        .collect();
 
     if lines.is_empty() {
         return Err(SofError::InvalidSourceContent(format!(

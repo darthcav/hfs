@@ -2,7 +2,6 @@
 ///
 /// These tests verify that the CLI can correctly load FHIR data from local files
 /// using the file:// URL scheme with the -s/--source parameter.
-
 use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
@@ -153,12 +152,24 @@ fn test_cli_with_file_source_bundle() {
     let stdout = String::from_utf8_lossy(&output.stdout);
 
     // Verify CSV output contains headers
-    assert!(stdout.contains("id"), "Output should contain 'id' column header");
-    assert!(stdout.contains("family"), "Output should contain 'family' column header");
+    assert!(
+        stdout.contains("id"),
+        "Output should contain 'id' column header"
+    );
+    assert!(
+        stdout.contains("family"),
+        "Output should contain 'family' column header"
+    );
 
     // Verify patient data is present
-    assert!(stdout.contains("patient-1") || stdout.contains("Smith"), "Output should contain patient-1 data");
-    assert!(stdout.contains("patient-2") || stdout.contains("Jones"), "Output should contain patient-2 data");
+    assert!(
+        stdout.contains("patient-1") || stdout.contains("Smith"),
+        "Output should contain patient-1 data"
+    );
+    assert!(
+        stdout.contains("patient-2") || stdout.contains("Jones"),
+        "Output should contain patient-2 data"
+    );
 }
 
 #[test]
@@ -285,9 +296,18 @@ fn test_cli_with_file_source_and_bundle() {
     let stdout = String::from_utf8_lossy(&output.stdout);
 
     // Should contain data from both sources (3 patients total)
-    assert!(stdout.contains("single-patient") || stdout.contains("Doe"), "Should contain patient from source file");
-    assert!(stdout.contains("patient-1") || stdout.contains("Smith"), "Should contain patient-1 from bundle");
-    assert!(stdout.contains("patient-2") || stdout.contains("Jones"), "Should contain patient-2 from bundle");
+    assert!(
+        stdout.contains("single-patient") || stdout.contains("Doe"),
+        "Should contain patient from source file"
+    );
+    assert!(
+        stdout.contains("patient-1") || stdout.contains("Smith"),
+        "Should contain patient-1 from bundle"
+    );
+    assert!(
+        stdout.contains("patient-2") || stdout.contains("Jones"),
+        "Should contain patient-2 from bundle"
+    );
 }
 
 #[test]
@@ -318,11 +338,16 @@ fn test_cli_with_file_source_not_found() {
         .expect("Failed to execute CLI");
 
     // Command should fail
-    assert!(!output.status.success(), "CLI should fail with non-existent file");
+    assert!(
+        !output.status.success(),
+        "CLI should fail with non-existent file"
+    );
 
     let stderr = String::from_utf8_lossy(&output.stderr);
     assert!(
-        stderr.contains("File not found") || stderr.contains("not found") || stderr.contains("error"),
+        stderr.contains("File not found")
+            || stderr.contains("not found")
+            || stderr.contains("error"),
         "Error message should indicate file not found"
     );
 }
@@ -357,7 +382,10 @@ fn test_cli_with_file_source_invalid_json() {
         .expect("Failed to execute CLI");
 
     // Command should fail
-    assert!(!output.status.success(), "CLI should fail with invalid JSON");
+    assert!(
+        !output.status.success(),
+        "CLI should fail with invalid JSON"
+    );
 
     let stderr = String::from_utf8_lossy(&output.stderr);
     assert!(
@@ -496,7 +524,10 @@ fn test_cli_with_file_source_no_headers() {
 
     // Should not start with headers
     let first_line = stdout.lines().next().unwrap_or("");
-    assert!(!first_line.contains("id,family"), "First line should not be headers with --no-headers flag");
+    assert!(
+        !first_line.contains("id,family"),
+        "First line should not be headers with --no-headers flag"
+    );
 
     // But should still contain data
     assert!(stdout.contains("patient-1") || stdout.contains("Smith"));
@@ -546,9 +577,18 @@ fn test_cli_with_ndjson_file_via_source() {
     let stdout = String::from_utf8_lossy(&output.stdout);
 
     // Verify all three NDJSON patients are present
-    assert!(stdout.contains("ndjson-p1") || stdout.contains("NdFirst"), "Should contain first NDJSON patient");
-    assert!(stdout.contains("ndjson-p2") || stdout.contains("NdSecond"), "Should contain second NDJSON patient");
-    assert!(stdout.contains("ndjson-p3") || stdout.contains("NdThird"), "Should contain third NDJSON patient");
+    assert!(
+        stdout.contains("ndjson-p1") || stdout.contains("NdFirst"),
+        "Should contain first NDJSON patient"
+    );
+    assert!(
+        stdout.contains("ndjson-p2") || stdout.contains("NdSecond"),
+        "Should contain second NDJSON patient"
+    );
+    assert!(
+        stdout.contains("ndjson-p3") || stdout.contains("NdThird"),
+        "Should contain third NDJSON patient"
+    );
 }
 
 #[test]
@@ -674,8 +714,14 @@ fn test_cli_with_ndjson_and_bundle_mixed() {
     let stdout = String::from_utf8_lossy(&output.stdout);
 
     // Should contain data from both NDJSON (3 patients) and Bundle (2 patients) = 5 total
-    assert!(stdout.contains("ndjson-p1") || stdout.contains("NdFirst"), "Should contain NDJSON patients");
-    assert!(stdout.contains("patient-1") || stdout.contains("Smith"), "Should contain Bundle patients");
+    assert!(
+        stdout.contains("ndjson-p1") || stdout.contains("NdFirst"),
+        "Should contain NDJSON patients"
+    );
+    assert!(
+        stdout.contains("patient-1") || stdout.contains("Smith"),
+        "Should contain Bundle patients"
+    );
 }
 
 #[test]
@@ -721,5 +767,9 @@ fn test_cli_with_ndjson_json_output() {
     // Verify it contains the expected data
     let json_value = parsed.unwrap();
     assert!(json_value.is_array(), "JSON output should be an array");
-    assert_eq!(json_value.as_array().unwrap().len(), 3, "Should have 3 patients from NDJSON");
+    assert_eq!(
+        json_value.as_array().unwrap().len(),
+        3,
+        "Should have 3 patients from NDJSON"
+    );
 }
