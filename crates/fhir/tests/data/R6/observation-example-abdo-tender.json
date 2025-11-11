@@ -33,7 +33,16 @@
     "start": "2018-04-02T10:30:10+01:00"
   },
   "issued": "2018-04-03T15:30:10+01:00",
-  "valueBoolean": true,
+  "valueCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "52101004",
+        "display": "Present (qualifier value)"
+      }
+    ],
+    "text": "Present"
+  },
   "interpretation": [
     {
       "coding": [

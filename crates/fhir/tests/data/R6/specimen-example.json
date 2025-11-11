@@ -20,10 +20,6 @@
       "value": "X352356"
     }
   ],
-  "accessionIdentifier": {
-    "system": "http://lab.acme.org/specimens/2011",
-    "value": "X352356"
-  },
   "status": "available",
   "type": {
     "coding": [
@@ -75,11 +71,7 @@
   },
   "container": [
     {
-      "device": {
-        "reference": {
-          "reference": "Device/device-example-specimen-container-green-gel-vacutainer"
-        }
-      },
+      "deviceCanonical": "http://hl7.org/fhir/Device/device-example-specimen-container-green-gel-vacutainer",
       "specimenQuantity": {
         "value": 3,
         "unit": "mL"

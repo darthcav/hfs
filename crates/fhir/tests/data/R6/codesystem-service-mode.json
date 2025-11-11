@@ -2,7 +2,7 @@
   "resourceType": "CodeSystem",
   "id": "service-mode",
   "meta": {
-    "lastUpdated": "2025-10-21T00:18:33.033+00:00",
+    "lastUpdated": "2025-11-03T08:55:27.392+00:00",
     "profile": [
       "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
     ]
@@ -36,7 +36,7 @@
   "name": "ServiceMode",
   "title": "Service Mode",
   "status": "active",
-  "experimental": true,
+  "experimental": false,
   "date": "2023-02-20",
   "publisher": "HL7 (FHIR Project)",
   "contact": [

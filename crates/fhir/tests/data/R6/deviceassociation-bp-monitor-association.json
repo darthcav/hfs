@@ -27,18 +27,6 @@
       ]
     },
     {
-      "resourceType": "Practitioner",
-      "id": "nurse-2",
-      "name": [
-        {
-          "family": "Lee",
-          "given": [
-            "Samuel"
-          ]
-        }
-      ]
-    },
-    {
       "resourceType": "Device",
       "id": "bp-monitor",
       "status": "active",
@@ -91,15 +79,20 @@
   "device": {
     "reference": "#bp-monitor"
   },
-  "status": {
+  "status": "active",
+  "associationStatus": {
     "coding": [
       {
-        "system": "http://hl7.org/fhir/deviceassociation-status",
-        "code": "attached"
+        "system": "http://hl7.org/fhir/CodeSystem/deviceassociation-association-status",
+        "code": "attached",
+        "display": "Attached"
       }
     ]
   },
   "subject": {
+    "reference": "#nurse-1"
+  },
+  "focus": {
     "reference": "#example-patient"
   },
   "bodyStructure": {
@@ -109,29 +102,6 @@
     "start": "2025-06-01",
     "end": "2025-06-05"
   },
-  "operation": [
-    {
-      "status": {
-        "coding": [
-          {
-            "code": "on"
-          }
-        ]
-      },
-      "operator": [
-        {
-          "reference": "#nurse-1"
-        },
-        {
-          "reference": "#nurse-2"
-        }
-      ],
-      "period": {
-        "start": "2025-06-01",
-        "end": "2025-06-05"
-      }
-    }
-  ],
   "meta": {
     "tag": [
       {

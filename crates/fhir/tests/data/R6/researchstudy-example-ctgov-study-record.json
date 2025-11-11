@@ -430,7 +430,7 @@
   "phase": {
     "coding": [
       {
-        "system": "http://hl7.org/fhir/study-design",
+        "system": "https://fevir.net/sevco",
         "code": "SEVCO:01030",
         "display": "Phase 1 trial"
       }

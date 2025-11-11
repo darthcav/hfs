@@ -36,7 +36,7 @@
     ]
   },
   "use": "claim",
-  "patient": {
+  "subject": {
     "reference": "Patient/1"
   },
   "created": "2014-08-16",
@@ -115,7 +115,7 @@
           }
         ]
       },
-      "timingDate": "2001-04-07"
+      "timingDateTime": "2001-04-07"
     }
   ],
   "procedure": [

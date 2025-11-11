@@ -25,10 +25,6 @@
             "display": "Lyophilised powder for conventional release solution for injection"
           }
         ]
-      },
-      "batch": {
-        "lotNumber": "12345",
-        "expirationDate": "2019-10-31"
       }
     }
   ],

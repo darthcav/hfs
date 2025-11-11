@@ -9,16 +9,14 @@
   "status": "active",
   "intent": "order",
   "priority": "routine",
-  "product": {
-    "concept": {
-      "coding": [
-        {
-          "system": "http://www.cms.gov/Medicare/Coding/HCPCSReleaseCodeSets",
-          "code": "K0001"
-        }
-      ],
-      "text": "Standard wheelchair"
-    }
+  "productCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.cms.gov/Medicare/Coding/HCPCSReleaseCodeSets",
+        "code": "K0001"
+      }
+    ],
+    "text": "Standard wheelchair"
   },
   "subject": {
     "reference": "Patient/bob"

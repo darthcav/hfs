@@ -21,7 +21,7 @@
     ]
   },
   "use": "preauthorization",
-  "patient": {
+  "subject": {
     "reference": "Patient/1"
   },
   "created": "2015-03-16",

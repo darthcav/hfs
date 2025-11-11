@@ -35,7 +35,7 @@
   },
   "focus": [
     {
-      "display": "BloodDraw ServiceRequest"
+      "valueCanonical": "http://hl7.org/fhir/ServiceRequest/BloodDrawf201"
     }
   ],
   "for": {
@@ -72,12 +72,6 @@
   "owner": {
     "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
     "display": "Clinical Laboratory @ Acme Hospital"
-  },
-  "restriction": {
-    "repetitions": 1,
-    "period": {
-      "end": "2016-11-01T09:45:05+10:00"
-    }
   },
   "meta": {
     "tag": [

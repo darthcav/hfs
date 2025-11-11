@@ -69,19 +69,6 @@
       }
     }
   ],
-  "bodySite": [
-    {
-      "concept": {
-        "coding": [
-          {
-            "system": "http://snomed.info/sct",
-            "code": "67734004",
-            "display": "Upper Trunk Structure"
-          }
-        ]
-      }
-    }
-  ],
   "author": [
     {
       "display": "G.E. Medical Systems"

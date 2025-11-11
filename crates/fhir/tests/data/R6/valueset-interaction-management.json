@@ -2,7 +2,7 @@
   "resourceType": "ValueSet",
   "id": "interaction-management",
   "meta": {
-    "lastUpdated": "2025-10-21T11:18:33.033+11:00",
+    "lastUpdated": "2025-11-03T19:55:27.392+11:00",
     "profile": [
       "http://hl7.org/fhir/StructureDefinition/shareablevalueset"
     ]
@@ -53,7 +53,7 @@
       ]
     }
   ],
-  "description": "A type of management for an interaction of a medication or other substance.",
+  "description": "A type of management for an interaction, contraindication or undesirable effect of a medication or other substance.",
   "jurisdiction": [
     {
       "coding": [

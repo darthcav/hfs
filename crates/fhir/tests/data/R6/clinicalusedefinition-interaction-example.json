@@ -9,7 +9,11 @@
   ],
   "type": "interaction",
   "subject": [
-    {}
+    {
+      "reference": {
+        "reference": "MedicinalProductDefinition/example"
+      }
+    }
   ],
   "interaction": {
     "interactant": [

@@ -46,11 +46,13 @@
   "device": {
     "reference": "#wheelchair-device"
   },
-  "status": {
+  "status": "active",
+  "associationStatus": {
     "coding": [
       {
-        "system": "http://hl7.org/fhir/deviceassociation-status",
-        "code": "attached"
+        "system": "http://hl7.org/fhir/CodeSystem/deviceassociation-association-status",
+        "code": "attached",
+        "display": "Attached"
       }
     ]
   },

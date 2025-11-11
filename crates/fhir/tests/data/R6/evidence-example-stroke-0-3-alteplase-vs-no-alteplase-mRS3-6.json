@@ -99,7 +99,7 @@
     {
       "coding": [
         {
-          "system": "http://hl7.org/fhir/study-design",
+          "system": "https://fevir.net/sevco",
           "code": "SEVCO:01003",
           "display": "randomized assignment"
         }
@@ -111,9 +111,9 @@
       "statisticType": {
         "coding": [
           {
-            "system": "http://terminology.hl7.org/CodeSystem/statistic-type",
-            "code": "C16932",
-            "display": "Odds Ratio"
+            "system": "https://fevir.net/sevco",
+            "code": "STATO:0000182",
+            "display": "odds ratio"
           }
         ]
       },

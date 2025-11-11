@@ -3,10 +3,8 @@
   "id": "example",
   "status": "completed",
   "intent": "original-order",
-  "product": {
-    "reference": {
-      "reference": "Device/example"
-    }
+  "productReference": {
+    "reference": "Device/example"
   },
   "subject": {
     "reference": "Patient/example"

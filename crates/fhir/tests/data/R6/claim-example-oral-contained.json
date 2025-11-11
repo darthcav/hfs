@@ -162,7 +162,7 @@
     ]
   },
   "use": "claim",
-  "patient": {
+  "subject": {
     "reference": "#patient-1"
   },
   "created": "2014-08-16",

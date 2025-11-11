@@ -36,7 +36,11 @@
   ],
   "type": "indication",
   "subject": [
-    {}
+    {
+      "reference": {
+        "reference": "MedicinalProductDefinition/example"
+      }
+    }
   ],
   "indication": {
     "diseaseSymptomProcedure": {

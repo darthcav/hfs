@@ -119,7 +119,7 @@
     ]
   },
   "use": "claim",
-  "patient": {
+  "subject": {
     "reference": "#patient-1"
   },
   "created": "2015-10-16T00:00:00-07:00",

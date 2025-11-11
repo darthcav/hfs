@@ -24,7 +24,7 @@
   "name": "Base",
   "status": "active",
   "experimental": false,
-  "date": "2025-10-21T00:18:33+00:00",
+  "date": "2025-11-03T08:55:27+00:00",
   "publisher": "HL7 International / FHIR Infrastructure",
   "contact": [
     {
@@ -71,16 +71,6 @@
     "element": [
       {
         "id": "Base",
-        "extension": [
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-            "valueCode": "normative"
-          },
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-            "valueCode": "4.0.0"
-          }
-        ],
         "path": "Base",
         "short": "Base for all types and resources",
         "definition": "Base definition for all types defined in FHIR type system.",
@@ -105,16 +95,6 @@
     "element": [
       {
         "id": "Base",
-        "extension": [
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-            "valueCode": "normative"
-          },
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-            "valueCode": "4.0.0"
-          }
-        ],
         "path": "Base",
         "short": "Base for all types and resources",
         "definition": "Base definition for all types defined in FHIR type system.",

@@ -21,7 +21,7 @@
     ]
   },
   "use": "claim",
-  "patient": {
+  "subject": {
     "reference": "Patient/1"
   },
   "billablePeriod": {
@@ -81,7 +81,6 @@
       "provider": {
         "reference": "Practitioner/example"
       },
-      "responsible": true,
       "role": {
         "coding": [
           {

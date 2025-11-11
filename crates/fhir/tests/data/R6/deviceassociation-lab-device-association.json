@@ -38,38 +38,23 @@
   "device": {
     "reference": "#lab-analyzer"
   },
-  "status": {
+  "status": "active",
+  "associationStatus": {
     "coding": [
       {
-        "system": "http://hl7.org/fhir/deviceassociation-status",
-        "code": "attached"
+        "system": "http://hl7.org/fhir/CodeSystem/deviceassociation-association-status",
+        "code": "attached",
+        "display": "Attached"
       }
     ]
+  },
+  "subject": {
+    "reference": "#repair-tech"
   },
   "period": {
     "start": "2025-07-10T10:00:00Z",
     "end": "2025-07-10T12:00:00Z"
   },
-  "operation": [
-    {
-      "status": {
-        "coding": [
-          {
-            "code": "on"
-          }
-        ]
-      },
-      "operator": [
-        {
-          "reference": "#repair-tech"
-        }
-      ],
-      "period": {
-        "start": "2025-07-10T10:00:00Z",
-        "end": "2025-07-10T12:00:00Z"
-      }
-    }
-  ],
   "meta": {
     "tag": [
       {

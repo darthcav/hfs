@@ -24,7 +24,7 @@
   "name": "PrimitiveType",
   "status": "active",
   "experimental": false,
-  "date": "2025-10-21T00:18:33+00:00",
+  "date": "2025-11-03T08:55:27+00:00",
   "publisher": "HL7 International / FHIR Infrastructure",
   "contact": [
     {
@@ -73,16 +73,6 @@
     "element": [
       {
         "id": "PrimitiveType",
-        "extension": [
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-            "valueCode": "normative"
-          },
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-            "valueCode": "4.0.0"
-          }
-        ],
         "path": "PrimitiveType",
         "short": "Parent type for DataTypes with a simple value",
         "definition": "The base type for all re-useable types defined that have a simple property.",
@@ -130,7 +120,7 @@
             "extension": [
               {
                 "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
-                "valueUrl": "id"
+                "valueUrl": "string"
               }
             ],
             "code": "http://hl7.org/fhirpath/System.String"
@@ -204,16 +194,6 @@
     "element": [
       {
         "id": "PrimitiveType",
-        "extension": [
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-            "valueCode": "normative"
-          },
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-            "valueCode": "4.0.0"
-          }
-        ],
         "path": "PrimitiveType",
         "short": "Parent type for DataTypes with a simple value",
         "definition": "The base type for all re-useable types defined that have a simple property.",

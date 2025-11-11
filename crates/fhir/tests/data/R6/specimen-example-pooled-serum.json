@@ -29,10 +29,6 @@
       "value": "20171120-1234"
     }
   ],
-  "accessionIdentifier": {
-    "system": "https://vetmed.iastate.edu/vdl",
-    "value": "20171120-1234"
-  },
   "type": {
     "coding": [
       {
@@ -54,13 +50,7 @@
     "collectedDateTime": "2017-11-14"
   },
   "container": [
-    {
-      "device": {
-        "reference": {
-          "reference": "Device/device-example-specimen-container-red-top-vacutainer"
-        }
-      }
-    }
+    null
   ],
   "note": [
     {

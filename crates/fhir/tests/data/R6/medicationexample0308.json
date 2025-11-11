@@ -82,7 +82,7 @@
       }
     }
   ],
-  "batch": {
+  "instance": {
     "lotNumber": "658484",
     "expirationDate": "2020-07-31"
   },

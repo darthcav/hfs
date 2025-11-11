@@ -67,11 +67,13 @@
   "device": {
     "reference": "#implant-device"
   },
-  "status": {
+  "status": "active",
+  "associationStatus": {
     "coding": [
       {
-        "system": "http://hl7.org/fhir/deviceassociation-status",
-        "code": "implanted"
+        "system": "http://hl7.org/fhir/CodeSystem/deviceassociation-association-status",
+        "code": "attached",
+        "display": "Attached"
       }
     ]
   },

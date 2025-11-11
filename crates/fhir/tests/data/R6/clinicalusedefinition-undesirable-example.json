@@ -9,7 +9,11 @@
   ],
   "type": "undesirable-effect",
   "subject": [
-    {}
+    {
+      "reference": {
+        "reference": "MedicinalProductDefinition/example"
+      }
+    }
   ],
   "undesirableEffect": {
     "symptomConditionEffect": {
