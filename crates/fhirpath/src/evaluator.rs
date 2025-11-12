@@ -28,14 +28,36 @@
 //!
 //! ```rust
 //! use helios_fhirpath::{evaluate_expression, EvaluationContext};
-//! use helios_fhir::FhirVersion;
+//! use helios_fhir::{FhirResource, FhirVersion, r4};
+//! use serde_json::json;
 //!
 //! # fn main() -> Result<(), String> {
-//! // Create an evaluation context
-//! let context = EvaluationContext::new_empty(FhirVersion::R4);
+//! // Create a FHIR Patient resource from JSON
+//! let patient_json = json!({
+//!     "resourceType": "Patient",
+//!     "id": "example",
+//!     "name": [{
+//!         "given": ["John", "Q"],
+//!         "family": "Doe"
+//!     }]
+//! });
 //!
-//! // Evaluate a FHIRPath expression
+//! // Deserialize to a typed FHIR resource
+//! let patient: r4::Patient = serde_json::from_value(patient_json)
+//!     .map_err(|e| e.to_string())?;
+//!
+//! // Create an evaluation context with the resource
+//! let resources = vec![FhirResource::R4(Box::new(
+//!     r4::Resource::Patient(patient)
+//! ))];
+//! let context = EvaluationContext::new(resources);
+//!
+//! // Evaluate FHIRPath expressions
 //! let result = evaluate_expression("Patient.name.given", &context)?;
+//! // result contains ["John", "Q"]
+//!
+//! let result = evaluate_expression("Patient.name.family", &context)?;
+//! // result contains ["Doe"]
 //! # Ok(())
 //! # }
 //! ```
