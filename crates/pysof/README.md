@@ -1,13 +1,13 @@
-# pysof
+# pysof - SQL on FHIR for Python
 
 [![PyPI version](https://badge.fury.io/py/pysof.svg)](https://pypi.org/project/pysof/)
 [![Python versions](https://img.shields.io/pypi/pyversions/pysof.svg)](https://pypi.org/project/pysof/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Downloads](https://pepy.tech/badge/pysof)](https://pepy.tech/project/pysof)
 
-Python bindings for high-performance FHIR data transformation using the Helios SOF (SQL on FHIR) toolkit.
+**High-performance FHIR data transformation for Python.** Transform FHIR resources into tabular formats (CSV, JSON, Parquet) using declarative ViewDefinitions from the [SQL on FHIR specification](https://build.fhir.org/ig/FHIR/sql-on-fhir-v2/).
 
-**Transform FHIR resources into tabular data** using declarative ViewDefinitions. Built in Rust for speed, exposed to Python with a simple API.
+Built in Rust for speed, exposed to Python with a simple, Pythonic API. Part of the [Helios FHIR Server](https://github.com/HeliosSoftware/hfs) project.
 
 ## ✨ Key Features
 
@@ -17,6 +17,17 @@ Python bindings for high-performance FHIR data transformation using the Helios S
 - 🌐 **Multi-Version FHIR**: Supports R4, R4B, R5, and R6 (based on build features)
 - 🎯 **Type-Safe**: Leverages Rust's type safety with a Pythonic interface
 - ⚡ **GIL-Free**: Python GIL released during processing for true parallelism
+
+## 🎯 Why pysof?
+
+Working with FHIR data in Python just got faster. **pysof** lets you:
+
+- **Transform complex FHIR resources** into clean, analyzable tables without writing custom parsers
+- **Process large datasets efficiently** with automatic parallel processing and Rust-level performance
+- **Use standard SQL on FHIR ViewDefinitions** for portable, maintainable data transformations
+- **Export to multiple formats** (CSV, JSON, NDJSON, Parquet) for analytics, ML, or reporting workflows
+
+Perfect for healthcare data engineers, researchers, and developers building FHIR-based analytics pipelines.
 
 ## 🔗 Quick Links
 
@@ -38,7 +49,7 @@ pip install pysof
 - **Linux**: x86_64 (glibc and musl)
 - **Windows**: x86_64 (MSVC)
 - **macOS**: AArch64 (Apple Silicon)
-- **Python**: 3.11 only
+- **Python**: 3.10, 3.11, 3.12, 3.13
 
 ### From GitHub Releases
 
@@ -237,7 +248,7 @@ Use `pysof.get_supported_fhir_versions()` to check available versions in your bu
 
 ### Requirements
 
-- Python 3.11
+- Python 3.10 or later (3.10, 3.11, 3.12, 3.13 supported)
 - uv (package and environment manager)
 - Rust toolchain (for building from source)
 
@@ -268,8 +279,8 @@ For Python development, it's recommended to use `maturin` via `uv`:
 # From repo root
 cd crates/pysof
 
-# Ensure Python 3.11 is available and create a venv
-uv venv --python 3.11
+# Create a venv with your preferred Python version (3.10+)
+uv venv --python 3.11  # or 3.10, 3.12, 3.13
 
 # Install the project dev dependencies
 uv sync --group dev
@@ -504,7 +515,7 @@ default = ["R4", "R4B", "R5", "R6"]
 
 ```
 crates/pysof/
-├─ pyproject.toml          # PEP 621 metadata, Python >=3.11, uv-compatible
+├─ pyproject.toml          # PEP 621 metadata, Python >=3.8, uv-compatible
 ├─ README.md
 ├─ src/
 │  ├─ pysof/
