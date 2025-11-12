@@ -27,24 +27,15 @@
 //! ## Examples
 //!
 //! ```rust
-//! use helios_fhirpath::{parse_expression, evaluate_expression};
-//! use helios_fhirpath::evaluator::EvaluationContext;
-//! use helios_fhir::{FhirResource, FhirVersion};
-//! use serde_json::json;
+//! use helios_fhirpath::{evaluate_expression, EvaluationContext};
+//! use helios_fhir::FhirVersion;
 //!
-//! # fn main() -> Result<(), Box<dyn std::error::Error>> {
-//! // Parse a FHIRPath expression
-//! let expr = parse_expression("Patient.name.given")?;
+//! # fn main() -> Result<(), String> {
+//! // Create an evaluation context
+//! let context = EvaluationContext::new_empty(FhirVersion::R4);
 //!
-//! // Create a FHIR resource (simplified example)
-//! let patient_json = json!({
-//!     "resourceType": "Patient",
-//!     "name": [{"given": ["John", "Q"]}]
-//! });
-//!
-//! // Evaluate the expression
-//! let mut context = EvaluationContext::new_empty(FhirVersion::R4);
-//! let result = evaluate_expression(&expr, &mut context, None)?;
+//! // Evaluate a FHIRPath expression
+//! let result = evaluate_expression("Patient.name.given", &context)?;
 //! # Ok(())
 //! # }
 //! ```
