@@ -27,24 +27,37 @@
 //! ## Examples
 //!
 //! ```rust
-//! use helios_fhirpath::{parse_expression, evaluate_expression};
-//! use helios_fhirpath::evaluator::EvaluationContext;
-//! use helios_fhir::{FhirResource, FhirVersion};
+//! use helios_fhirpath::{evaluate_expression, EvaluationContext};
+//! use helios_fhir::{FhirResource, FhirVersion, r4};
 //! use serde_json::json;
 //!
-//! # fn main() -> Result<(), Box<dyn std::error::Error>> {
-//! // Parse a FHIRPath expression
-//! let expr = parse_expression("Patient.name.given")?;
-//!
-//! // Create a FHIR resource (simplified example)
+//! # fn main() -> Result<(), String> {
+//! // Create a FHIR Patient resource from JSON
 //! let patient_json = json!({
 //!     "resourceType": "Patient",
-//!     "name": [{"given": ["John", "Q"]}]
+//!     "id": "example",
+//!     "name": [{
+//!         "given": ["John", "Q"],
+//!         "family": "Doe"
+//!     }]
 //! });
 //!
-//! // Evaluate the expression
-//! let mut context = EvaluationContext::new_empty(FhirVersion::R4);
-//! let result = evaluate_expression(&expr, &mut context, None)?;
+//! // Deserialize to a typed FHIR resource
+//! let patient: r4::Patient = serde_json::from_value(patient_json)
+//!     .map_err(|e| e.to_string())?;
+//!
+//! // Create an evaluation context with the resource
+//! let resources = vec![FhirResource::R4(Box::new(
+//!     r4::Resource::Patient(patient)
+//! ))];
+//! let context = EvaluationContext::new(resources);
+//!
+//! // Evaluate FHIRPath expressions
+//! let result = evaluate_expression("Patient.name.given", &context)?;
+//! // result contains ["John", "Q"]
+//!
+//! let result = evaluate_expression("Patient.name.family", &context)?;
+//! // result contains ["Doe"]
 //! # Ok(())
 //! # }
 //! ```
