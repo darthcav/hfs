@@ -29,7 +29,7 @@
     ]
   },
   "use": "claim",
-  "patient": {
+  "subject": {
     "reference": "Patient/pat1"
   },
   "billablePeriod": {

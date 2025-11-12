@@ -1,3 +1,111 @@
+//! # FHIR Data Source Loading
+//!
+//! This module provides flexible data loading capabilities for FHIR resources from
+//! various sources including local files, HTTP endpoints, and cloud storage services.
+//! It handles automatic format detection and conversion to FHIR Bundles.
+//!
+//! ## Overview
+//!
+//! The data source system supports:
+//!
+//! - **Multiple Protocols**: file://, http(s)://, s3://, gs://, azure://
+//! - **Format Detection**: Automatic detection of JSON vs NDJSON formats
+//! - **Smart Wrapping**: Single resources and arrays automatically wrapped in Bundles
+//! - **Version Agnostic**: Works with R4, R4B, R5, and R6 FHIR versions
+//! - **Error Handling**: Comprehensive error reporting for invalid sources
+//!
+//! ## Supported Sources
+//!
+//! ### Local Files
+//! ```text
+//! file:///path/to/bundle.json
+//! file:///path/to/resource.ndjson
+//! ```
+//!
+//! ### HTTP/HTTPS
+//! ```text
+//! https://example.org/fhir/Bundle/123
+//! http://localhost:8080/Patient?_count=100
+//! ```
+//!
+//! ### Amazon S3
+//! ```text
+//! s3://my-bucket/path/to/bundle.json
+//! ```
+//! Requires: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION
+//!
+//! ### Google Cloud Storage
+//! ```text
+//! gs://my-bucket/path/to/data.ndjson
+//! ```
+//! Requires: GOOGLE_SERVICE_ACCOUNT or Application Default Credentials
+//!
+//! ### Azure Blob Storage
+//! ```text
+//! azure://container/path/to/bundle.json
+//! abfss://container@account.dfs.core.windows.net/path/to/data.json
+//! ```
+//! Requires: AZURE_STORAGE_ACCOUNT and AZURE_STORAGE_ACCESS_KEY
+//!
+//! ## Key Components
+//!
+//! - [`DataSource`]: Trait for loading FHIR data from various sources
+//! - [`UniversalDataSource`]: Universal implementation supporting all protocols
+//! - [`parse_fhir_content()`]: Parses FHIR content and wraps it in a Bundle
+//!
+//! ## Format Support
+//!
+//! ### JSON Format
+//! - Single FHIR resources (Patient, Observation, etc.)
+//! - FHIR Bundles
+//! - Arrays of FHIR resources
+//!
+//! ### NDJSON Format
+//! - Newline-delimited JSON (one resource per line)
+//! - Detected by `.ndjson` extension or content analysis
+//! - Partial failures tolerated (invalid lines logged as warnings)
+//!
+//! ## Examples
+//!
+//! ```rust
+//! use helios_sof::data_source::{DataSource, UniversalDataSource};
+//!
+//! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+//! let source = UniversalDataSource::new();
+//!
+//! // Load from local file
+//! let bundle = source.load("file:///data/patients.json").await?;
+//!
+//! // Load from HTTP endpoint
+//! let bundle = source.load("https://hapi.fhir.org/baseR4/Patient?_count=10").await?;
+//!
+//! // Load from S3
+//! let bundle = source.load("s3://fhir-data/bundles/patients.json").await?;
+//!
+//! // Load NDJSON
+//! let bundle = source.load("file:///data/observations.ndjson").await?;
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! ## Automatic Format Detection
+//!
+//! The module automatically:
+//! 1. Detects NDJSON by `.ndjson` file extension
+//! 2. Falls back to content-based detection for multi-line JSON files
+//! 3. Determines FHIR version by attempting to parse as each version
+//! 4. Wraps single resources or arrays in appropriate Bundle types
+//!
+//! ## Error Handling
+//!
+//! Provides detailed errors for:
+//! - Invalid URLs or protocols
+//! - Missing files or objects
+//! - Network failures
+//! - Malformed JSON
+//! - Invalid FHIR content
+//! - Missing credentials for cloud services
+
 use crate::{SofBundle, SofError};
 use async_trait::async_trait;
 use helios_fhir::Element;
@@ -261,15 +369,104 @@ async fn load_from_object_store(
     parse_fhir_content(&contents, source_name)
 }
 
+/// Check if a source name suggests NDJSON format based on file extension
+fn is_ndjson_extension(source_name: &str) -> bool {
+    source_name.to_lowercase().ends_with(".ndjson")
+}
+
+/// Parse NDJSON content (newline-delimited JSON) and convert to SofBundle
+fn parse_ndjson_content(contents: &str, source_name: &str) -> Result<SofBundle, SofError> {
+    let lines: Vec<&str> = contents
+        .lines()
+        .filter(|line| !line.trim().is_empty())
+        .collect();
+
+    if lines.is_empty() {
+        return Err(SofError::InvalidSourceContent(format!(
+            "Empty NDJSON content from '{}'",
+            source_name
+        )));
+    }
+
+    // Parse each line as a separate JSON resource
+    let mut resources = Vec::new();
+    let mut parse_errors = Vec::new();
+
+    for (line_num, line) in lines.iter().enumerate() {
+        match serde_json::from_str::<serde_json::Value>(line) {
+            Ok(value) => {
+                // Verify it's a FHIR resource
+                if value.get("resourceType").and_then(|v| v.as_str()).is_some() {
+                    resources.push(value);
+                } else {
+                    parse_errors.push(format!(
+                        "Line {}: Missing 'resourceType' field",
+                        line_num + 1
+                    ));
+                }
+            }
+            Err(e) => {
+                parse_errors.push(format!("Line {}: {}", line_num + 1, e));
+            }
+        }
+    }
+
+    // If we have some valid resources, proceed even if some lines failed
+    if resources.is_empty() {
+        return Err(SofError::InvalidSourceContent(format!(
+            "No valid FHIR resources found in NDJSON from '{}'. Errors: {}",
+            source_name,
+            parse_errors.join("; ")
+        )));
+    }
+
+    // Log warnings for failed lines (in production, you might want to use a proper logger)
+    if !parse_errors.is_empty() {
+        eprintln!(
+            "Warning: {} line(s) in NDJSON from '{}' could not be parsed: {}",
+            parse_errors.len(),
+            source_name,
+            parse_errors.join("; ")
+        );
+    }
+
+    // Wrap all resources in a Bundle
+    let resources_array = serde_json::Value::Array(resources);
+    wrap_resources_in_bundle(resources_array, source_name)
+}
+
 /// Parse FHIR content and convert to SofBundle
-fn parse_fhir_content(contents: &str, source_name: &str) -> Result<SofBundle, SofError> {
-    // First, try to determine what type of content we have
-    let value: serde_json::Value = serde_json::from_str(contents).map_err(|e| {
-        SofError::InvalidSourceContent(format!(
-            "Failed to parse JSON from '{}': {}",
-            source_name, e
-        ))
-    })?;
+/// Supports both JSON and NDJSON formats with automatic detection
+pub fn parse_fhir_content(contents: &str, source_name: &str) -> Result<SofBundle, SofError> {
+    // Check if the source suggests NDJSON format based on file extension
+    if is_ndjson_extension(source_name) {
+        return parse_ndjson_content(contents, source_name);
+    }
+
+    // Try to parse as regular JSON first
+    let value: serde_json::Value = match serde_json::from_str(contents) {
+        Ok(v) => v,
+        Err(json_err) => {
+            // JSON parsing failed, try NDJSON as fallback (content-based detection)
+            // This handles cases where .json files actually contain NDJSON content
+            if contents.lines().count() > 1 {
+                // Multiple lines suggest it might be NDJSON
+                return parse_ndjson_content(contents, source_name).map_err(|ndjson_err| {
+                    // If both fail, return the original JSON error with a helpful message
+                    SofError::InvalidSourceContent(format!(
+                        "Failed to parse content from '{}' as JSON: {}. Also tried NDJSON: {}",
+                        source_name, json_err, ndjson_err
+                    ))
+                });
+            }
+
+            // Single line or regular JSON error
+            return Err(SofError::InvalidSourceContent(format!(
+                "Failed to parse JSON from '{}': {}",
+                source_name, json_err
+            )));
+        }
+    };
 
     // Check if it's already a Bundle
     if let Some(resource_type) = value.get("resourceType").and_then(|v| v.as_str()) {
@@ -681,5 +878,235 @@ mod tests {
             assert!(msg.contains("Unsupported source protocol: ftp"));
             assert!(msg.contains("Supported:"));
         }
+    }
+
+    #[tokio::test]
+    async fn test_file_protocol_bundle() {
+        use std::io::Write;
+        use tempfile::NamedTempFile;
+
+        let data_source = UniversalDataSource::new();
+
+        // Create a temporary file with a FHIR Bundle
+        let bundle_json = r#"{
+            "resourceType": "Bundle",
+            "type": "collection",
+            "entry": [{
+                "resource": {
+                    "resourceType": "Patient",
+                    "id": "test-patient"
+                }
+            }]
+        }"#;
+
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(bundle_json.as_bytes()).unwrap();
+        temp_file.flush().unwrap();
+
+        // Get the file path and convert to file:// URL
+        let file_path = temp_file.path();
+        let file_url = format!("file://{}", file_path.to_string_lossy());
+
+        // Test loading from file:// URL
+        let result = data_source.load(&file_url).await;
+        assert!(result.is_ok());
+
+        #[cfg(feature = "R4")]
+        match result.unwrap() {
+            SofBundle::R4(bundle) => {
+                assert_eq!(bundle.entry.as_ref().unwrap().len(), 1);
+            }
+            #[cfg(feature = "R4B")]
+            SofBundle::R4B(_) => panic!("Expected R4 bundle"),
+            #[cfg(feature = "R5")]
+            SofBundle::R5(_) => panic!("Expected R4 bundle"),
+            #[cfg(feature = "R6")]
+            SofBundle::R6(_) => panic!("Expected R4 bundle"),
+        }
+    }
+
+    #[tokio::test]
+    async fn test_file_protocol_single_resource() {
+        use std::io::Write;
+        use tempfile::NamedTempFile;
+
+        let data_source = UniversalDataSource::new();
+
+        // Create a temporary file with a single FHIR resource
+        let patient_json = r#"{
+            "resourceType": "Patient",
+            "id": "test-patient",
+            "name": [{
+                "family": "Test",
+                "given": ["Patient"]
+            }]
+        }"#;
+
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(patient_json.as_bytes()).unwrap();
+        temp_file.flush().unwrap();
+
+        let file_path = temp_file.path();
+        let file_url = format!("file://{}", file_path.to_string_lossy());
+
+        // Test loading single resource - should be wrapped in a Bundle
+        let result = data_source.load(&file_url).await;
+        assert!(result.is_ok());
+
+        #[cfg(feature = "R4")]
+        match result.unwrap() {
+            SofBundle::R4(bundle) => {
+                assert_eq!(bundle.entry.as_ref().unwrap().len(), 1);
+            }
+            #[cfg(feature = "R4B")]
+            SofBundle::R4B(_) => panic!("Expected R4 bundle"),
+            #[cfg(feature = "R5")]
+            SofBundle::R5(_) => panic!("Expected R4 bundle"),
+            #[cfg(feature = "R6")]
+            SofBundle::R6(_) => panic!("Expected R4 bundle"),
+        }
+    }
+
+    #[tokio::test]
+    async fn test_file_protocol_resource_array() {
+        use std::io::Write;
+        use tempfile::NamedTempFile;
+
+        let data_source = UniversalDataSource::new();
+
+        // Create a temporary file with an array of FHIR resources
+        let resources_json = r#"[
+            {
+                "resourceType": "Patient",
+                "id": "patient-1"
+            },
+            {
+                "resourceType": "Patient",
+                "id": "patient-2"
+            },
+            {
+                "resourceType": "Observation",
+                "id": "obs-1",
+                "status": "final",
+                "code": {
+                    "text": "Test"
+                }
+            }
+        ]"#;
+
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(resources_json.as_bytes()).unwrap();
+        temp_file.flush().unwrap();
+
+        let file_path = temp_file.path();
+        let file_url = format!("file://{}", file_path.to_string_lossy());
+
+        // Test loading array of resources
+        let result = data_source.load(&file_url).await;
+        assert!(result.is_ok());
+
+        #[cfg(feature = "R4")]
+        match result.unwrap() {
+            SofBundle::R4(bundle) => {
+                assert_eq!(bundle.entry.as_ref().unwrap().len(), 3);
+            }
+            #[cfg(feature = "R4B")]
+            SofBundle::R4B(_) => panic!("Expected R4 bundle"),
+            #[cfg(feature = "R5")]
+            SofBundle::R5(_) => panic!("Expected R4 bundle"),
+            #[cfg(feature = "R6")]
+            SofBundle::R6(_) => panic!("Expected R4 bundle"),
+        }
+    }
+
+    #[tokio::test]
+    async fn test_file_protocol_file_not_found() {
+        use std::path::PathBuf;
+        use url::Url;
+
+        let data_source = UniversalDataSource::new();
+
+        // Test with non-existent file using platform-appropriate path
+        #[cfg(windows)]
+        let nonexistent_path = PathBuf::from("C:\\nonexistent\\path\\to\\file.json");
+        #[cfg(not(windows))]
+        let nonexistent_path = PathBuf::from("/nonexistent/path/to/file.json");
+
+        let file_url = Url::from_file_path(&nonexistent_path).unwrap().to_string();
+
+        let result = data_source.load(&file_url).await;
+        assert!(result.is_err());
+
+        if let Err(SofError::SourceNotFound(msg)) = result {
+            assert!(msg.contains("File not found"));
+        } else {
+            panic!("Expected SourceNotFound error");
+        }
+    }
+
+    #[tokio::test]
+    async fn test_file_protocol_invalid_json() {
+        use std::io::Write;
+        use tempfile::NamedTempFile;
+
+        let data_source = UniversalDataSource::new();
+
+        // Create a temporary file with invalid JSON
+        let invalid_json = "{ this is not valid json }";
+
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(invalid_json.as_bytes()).unwrap();
+        temp_file.flush().unwrap();
+
+        let file_path = temp_file.path();
+        let file_url = format!("file://{}", file_path.to_string_lossy());
+
+        // Test loading invalid JSON
+        let result = data_source.load(&file_url).await;
+        assert!(result.is_err());
+
+        if let Err(SofError::InvalidSourceContent(msg)) = result {
+            assert!(msg.contains("Failed to parse JSON"));
+        } else {
+            panic!("Expected InvalidSourceContent error");
+        }
+    }
+
+    #[tokio::test]
+    async fn test_file_protocol_invalid_fhir() {
+        use std::io::Write;
+        use tempfile::NamedTempFile;
+
+        let data_source = UniversalDataSource::new();
+
+        // Create a temporary file with valid JSON but not FHIR content
+        let not_fhir_json = r#"{"just": "some", "random": "data"}"#;
+
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(not_fhir_json.as_bytes()).unwrap();
+        temp_file.flush().unwrap();
+
+        let file_path = temp_file.path();
+        let file_url = format!("file://{}", file_path.to_string_lossy());
+
+        // Test loading non-FHIR content
+        let result = data_source.load(&file_url).await;
+        assert!(result.is_err());
+
+        if let Err(SofError::InvalidSourceContent(msg)) = result {
+            assert!(msg.contains("not a valid FHIR resource"));
+        } else {
+            panic!("Expected InvalidSourceContent error, got {:?}", result);
+        }
+    }
+
+    #[tokio::test]
+    async fn test_file_protocol_invalid_url() {
+        let data_source = UniversalDataSource::new();
+
+        // Test with malformed file URL (Windows-style path without proper file:// format)
+        let result = data_source.load("file://C:\\invalid\\windows\\path").await;
+        assert!(result.is_err());
+        // The error type will depend on URL parsing behavior
     }
 }

@@ -225,7 +225,7 @@
         "id": "BiologicallyDerivedProduct.implicitRules",
         "path": "BiologicallyDerivedProduct.implicitRules",
         "short": "A set of rules under which this content was created",
-        "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc.",
+        "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc. For DomainResources, if more than one implicitRules policy applies, additional policies may be conveyed using the [additionalImplicitRules](https://build.fhir.org/ig/HL7/fhir-extensions/StructureDefinition-additionalImplicitRules.html) extension.",
         "comment": "Asserting this rule set restricts the content to be only understood by a limited set of trading partners. This inherently limits the usefulness of the data in the long term. However, the existing health eco-system is highly fractured, and not yet ready to define, collect, and exchange data in a generally computable sense. Wherever possible, implementers and/or specification writers should avoid using this element. Often, when used, the URL is a reference to an implementation guide that defines these special rules as part of its narrative along with other profiles, value sets, etc.",
         "min": 0,
         "max": "1",
@@ -637,7 +637,7 @@
             "extension": [
               {
                 "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
-                "valueUrl": "id"
+                "valueUrl": "string"
               }
             ],
             "code": "http://hl7.org/fhirpath/System.String"
@@ -734,7 +734,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -770,7 +770,7 @@
             "extension": [
               {
                 "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
-                "valueUrl": "id"
+                "valueUrl": "string"
               }
             ],
             "code": "http://hl7.org/fhirpath/System.String"
@@ -867,7 +867,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -911,7 +911,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -958,7 +958,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -1011,7 +1011,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -1056,7 +1056,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -1107,7 +1107,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -1265,7 +1265,7 @@
             "extension": [
               {
                 "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
-                "valueUrl": "id"
+                "valueUrl": "string"
               }
             ],
             "code": "http://hl7.org/fhirpath/System.String"
@@ -1363,7 +1363,7 @@
         ],
         "isModifier": true,
         "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not mistake a temporary id for a permanent one.",
-        "isSummary": false,
+        "isSummary": true,
         "binding": {
           "extension": [
             {
@@ -1415,7 +1415,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "binding": {
           "extension": [
             {
@@ -1473,7 +1473,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -1526,7 +1526,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -1569,7 +1569,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -1616,7 +1616,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -1693,7 +1693,7 @@
             "extension": [
               {
                 "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
-                "valueUrl": "id"
+                "valueUrl": "string"
               }
             ],
             "code": "http://hl7.org/fhirpath/System.String"
@@ -1791,7 +1791,7 @@
         ],
         "isModifier": true,
         "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not mistake a temporary id for a permanent one.",
-        "isSummary": false,
+        "isSummary": true,
         "binding": {
           "extension": [
             {
@@ -1843,7 +1843,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "binding": {
           "extension": [
             {
@@ -1901,7 +1901,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -1954,7 +1954,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -1997,7 +1997,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -2044,7 +2044,7 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
+        "isSummary": true,
         "mapping": [
           {
             "identity": "v2",
@@ -2402,6 +2402,7 @@
         "path": "BiologicallyDerivedProduct.collection.sourcePatient",
         "short": "The patient who underwent the medical procedure to collect the product",
         "definition": "The patient providing the product.",
+        "comment": "The collection.source may reference an identifiable patient. Implementers shall ensure the appropriate data access controls are established.",
         "min": 0,
         "max": "1",
         "base": {
@@ -2540,7 +2541,7 @@
         "path": "BiologicallyDerivedProduct.storageTempRequirements",
         "short": "Product storage temperature requirements",
         "definition": "The temperature requirements for storage of the biologically-derived product.",
-        "comment": "May be extracted from information held in the Product Description Code.",
+        "comment": "May be extracted from information held in the productCode element.",
         "min": 0,
         "max": "1",
         "base": {
@@ -2765,7 +2766,7 @@
         "path": "BiologicallyDerivedProduct.property.value[x]",
         "short": "Property values",
         "definition": "Property values.",
-        "comment": "The value should be provided as a boolean, integer, CodeableConcept, period, quantity, range, ratio, or attachment. The description can be a string only when these others are not available. The type of value will depend on the property type and is specified in ST-027.",
+        "comment": "The value should be provided as a boolean, integer, CodeableConcept, period, quantity, range, ratio, or attachment. The description can be a string only when these others are not available.",
         "min": 1,
         "max": "1",
         "base": {

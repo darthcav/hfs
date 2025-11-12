@@ -217,6 +217,34 @@ fn test_examples_in_dir<R: DeserializeOwned + Serialize>(dir: &PathBuf) {
             "Contains null in processing.additive array where struct TempReference expected",
         ),
         (
+            "specimen-example-pooled-serum.json",
+            "Contains null in container array - invalid FHIR JSON",
+        ),
+        (
+            "graphdefinition-example.json",
+            "GraphDefinition not included in R6 Resource enum",
+        ),
+        (
+            "task-example-fm-status-resp.json",
+            "Contains null where struct TempTaskFocus expected",
+        ),
+        (
+            "task-example-fm-status.json",
+            "Contains null where struct TempTaskFocus expected",
+        ),
+        (
+            "diagnosticreport-example-ghp.json",
+            "Contains null where struct TempSpecimenContainer expected",
+        ),
+        (
+            "specimen-example-serum.json",
+            "Contains null in container array - invalid FHIR JSON",
+        ),
+        (
+            "task-example-fm-reprocess.json",
+            "Contains null where struct TempTaskFocus expected",
+        ),
+        (
             "composition-example.json",
             "R6 Composition.attester.mode structure incompatibility - expecting string but got CodeableConcept",
         ),

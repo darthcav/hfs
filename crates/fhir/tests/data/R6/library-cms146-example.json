@@ -46,6 +46,24 @@
     }
   ],
   "description": "Logic for CMS 146: Appropriate Testing for Children with Pharyngitis",
+  "useContext": [
+    {
+      "code": {
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type",
+        "code": "age"
+      },
+      "valueRange": {
+        "low": {
+          "value": 3,
+          "unit": "a"
+        },
+        "high": {
+          "value": 18,
+          "unit": "a"
+        }
+      }
+    }
+  ],
   "relatedArtifact": [
     {
       "type": "depends-on",

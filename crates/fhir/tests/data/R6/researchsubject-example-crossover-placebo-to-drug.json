@@ -16,8 +16,24 @@
   "subject": {
     "reference": "cfsb1676546565857"
   },
-  "assignedComparisonGroup": "placebo",
-  "actualComparisonGroup": "ap303",
+  "comparisonGroup": [
+    {
+      "concept": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/example-comparison-group",
+            "code": "placebo",
+            "display": "Placebo"
+          }
+        ]
+      }
+    },
+    {
+      "concept": {
+        "text": "ap303"
+      }
+    }
+  ],
   "meta": {
     "tag": [
       {

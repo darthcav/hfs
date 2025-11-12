@@ -28,7 +28,7 @@
   "name": "Extension",
   "status": "active",
   "experimental": false,
-  "date": "2025-10-21T00:18:33+00:00",
+  "date": "2025-11-03T08:55:27+00:00",
   "publisher": "HL7 International / FHIR Infrastructure",
   "contact": [
     {
@@ -78,16 +78,6 @@
     "element": [
       {
         "id": "Extension",
-        "extension": [
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-            "valueCode": "normative"
-          },
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-            "valueCode": "4.0.0"
-          }
-        ],
         "path": "Extension",
         "short": "Optional Extensions Element",
         "definition": "Optional Extension Element - found in all resources.",
@@ -142,7 +132,7 @@
             "extension": [
               {
                 "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
-                "valueUrl": "id"
+                "valueUrl": "string"
               }
             ],
             "code": "http://hl7.org/fhirpath/System.String"
@@ -416,6 +406,9 @@
             "code": "ExtendedContactDetail"
           },
           {
+            "code": "VirtualServiceDetail"
+          },
+          {
             "code": "Dosage"
           },
           {
@@ -449,16 +442,6 @@
     "element": [
       {
         "id": "Extension",
-        "extension": [
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-            "valueCode": "normative"
-          },
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-            "valueCode": "4.0.0"
-          }
-        ],
         "path": "Extension",
         "short": "Optional Extensions Element",
         "definition": "Optional Extension Element - found in all resources.",
@@ -673,6 +656,9 @@
           },
           {
             "code": "ExtendedContactDetail"
+          },
+          {
+            "code": "VirtualServiceDetail"
           },
           {
             "code": "Dosage"

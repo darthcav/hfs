@@ -54,7 +54,7 @@
       }
     }
   ],
-  "batch": {
+  "instance": {
     "lotNumber": "123455",
     "expirationDate": "2016-07-09"
   },

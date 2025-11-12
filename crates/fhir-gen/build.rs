@@ -105,6 +105,9 @@ fn main() {
     // Insert ViewDefinition into profiles-resources.json
     insert_view_definition(&resources_dir).expect("Failed to insert ViewDefinition");
 
+    // Save download metadata with timestamp
+    save_download_metadata(&resources_dir).expect("Failed to save download metadata");
+
     println!("FHIR definitions downloaded successfully");
 }
 
@@ -186,6 +189,32 @@ fn insert_view_definition(resources_dir: &Path) -> Result<(), Box<dyn std::error
     // Write the modified JSON back to the file
     let updated_content = serde_json::to_string_pretty(&profiles_json)?;
     fs::write(&profiles_resources_path, updated_content)?;
+
+    Ok(())
+}
+
+/// Saves metadata about the R6 download including the timestamp.
+///
+/// This metadata is used during code generation to populate the header with
+/// the actual download date instead of a hardcoded value.
+fn save_download_metadata(resources_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    let metadata_path = resources_dir.join("download_metadata.json");
+
+    // Get current timestamp as Unix timestamp
+    let now = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
+
+    // Format current date as a simple string (YYYY-MM-DD)
+    // We'll use a simple approach here - just store the timestamp and format it during generation
+    let metadata = serde_json::json!({
+        "download_timestamp": now,
+        "source": "https://build.fhir.org/definitions.json.zip"
+    });
+
+    fs::write(metadata_path, serde_json::to_string_pretty(&metadata)?)?;
+    println!("Saved download metadata");
 
     Ok(())
 }

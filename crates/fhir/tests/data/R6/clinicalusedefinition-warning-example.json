@@ -20,7 +20,11 @@
     }
   ],
   "subject": [
-    {}
+    {
+      "reference": {
+        "reference": "MedicinalProductDefinition/example"
+      }
+    }
   ],
   "warning": {
     "description": "May cause drowsiness. Avoid driving or operating heavy machinery."

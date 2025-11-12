@@ -22,16 +22,14 @@
   "status": "active",
   "intent": "instance-order",
   "priority": "routine",
-  "product": {
-    "concept": {
-      "coding": [
-        {
-          "system": "http://loinc.org",
-          "code": "43148-6"
-        }
-      ],
-      "text": "Insulin delivery device panel"
-    }
+  "productCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "43148-6"
+      }
+    ],
+    "text": "Insulin delivery device panel"
   },
   "subject": {
     "reference": "Patient/dicom"

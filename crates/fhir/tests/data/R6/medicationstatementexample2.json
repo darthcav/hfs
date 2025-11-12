@@ -75,11 +75,7 @@
             }
           }
         }
-      ],
-      "batch": {
-        "lotNumber": "9494788",
-        "expirationDate": "2017-05-22"
-      }
+      ]
     }
   ],
   "status": "recorded",

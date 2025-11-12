@@ -21,7 +21,7 @@
     ]
   },
   "use": "claim",
-  "patient": {
+  "subject": {
     "reference": "Patient/pat1"
   },
   "created": "2014-08-16",

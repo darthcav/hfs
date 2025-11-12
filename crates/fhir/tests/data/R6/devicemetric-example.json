@@ -28,6 +28,7 @@
   "device": {
     "reference": "Device/dev1"
   },
+  "status": "active",
   "operationalStatus": "on",
   "color": "blue",
   "category": {

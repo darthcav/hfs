@@ -21,7 +21,7 @@
     ]
   },
   "use": "claim",
-  "patient": {
+  "subject": {
     "identifier": {
       "system": "http://www.jurisdiction.com/nationalId",
       "value": "123AB345"

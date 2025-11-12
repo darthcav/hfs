@@ -12,7 +12,7 @@
     },
     {
       "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
-      "valueInteger": 3
+      "valueInteger": 6
     },
     {
       "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
@@ -20,7 +20,7 @@
     },
     {
       "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-      "valueCode": "trial-use"
+      "valueCode": "normative"
     }
   ],
   "url": "http://hl7.org/fhir/StructureDefinition/provenance-relevant-history",
@@ -33,9 +33,9 @@
   "version": "6.0.0-ballot3",
   "name": "ProvenanceRelevantHistory",
   "title": "Provenance  Relevant  History",
-  "status": "draft",
+  "status": "active",
   "experimental": false,
-  "date": "2013-12-03",
+  "date": "2025-11-01",
   "publisher": "Health Level Seven International",
   "contact": [
     {
@@ -93,8 +93,8 @@
         "id": "Provenance",
         "path": "Provenance",
         "short": "Who, What, When for a set of resources",
-        "definition": "Provenance of a resource is a record that describes entities and processes involved in producing and delivering or otherwise influencing that resource. Provenance provides a critical foundation for assessing authenticity, enabling trust, and allowing reproducibility. Provenance assertions are a form of contextual metadata and can themselves become important records with their own provenance. Provenance statement indicates clinical significance in terms of confidence in authenticity, reliability, and trustworthiness, integrity, and stage in lifecycle (e.g. Document Completion - has the artifact been legally authenticated), all of which may impact security, privacy, and trust policies.",
-        "comment": "Some parties may be duplicated between the target resource and its provenance.  For instance, the prescriber is usually (but not always) the author of the prescription resource. This resource is defined with close consideration for W3C Provenance.",
+        "definition": "Provenance of a resource is a record that describes entities and processes involved in producing and delivering or otherwise influencing that resource. Provenance provides a critical foundation for assessing authenticity, enabling trust, and allowing reproducibility. Provenance assertions are a form of contextual metadata and can themselves become important records with their own provenance. Provenance statement indicates clinical significance in terms of confidence in authenticity, reliability, and trustworthiness, integrity, and stage in lifecycle (e.g. Document Completion - has the artifact been legally authenticated), all of which MAY impact security, privacy, and trust policies.",
+        "comment": "Some parties MAY be duplicated between the target resource and its provenance.  For instance, the prescriber is usually (but not always) the author of the prescription resource. This resource is defined with close consideration for W3C Provenance.",
         "alias": [
           "History",
           "Event",
@@ -238,7 +238,7 @@
         "id": "Provenance.implicitRules",
         "path": "Provenance.implicitRules",
         "short": "A set of rules under which this content was created",
-        "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc.",
+        "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content. Often, this is a reference to an implementation guide that defines the special rules along with other profiles etc. For DomainResources, if more than one implicitRules policy applies, additional policies may be conveyed using the [additionalImplicitRules](https://build.fhir.org/ig/HL7/fhir-extensions/StructureDefinition-additionalImplicitRules.html) extension.",
         "comment": "Asserting this rule set restricts the content to be only understood by a limited set of trading partners. This inherently limits the usefulness of the data in the long term. However, the existing health eco-system is highly fractured, and not yet ready to define, collect, and exchange data in a generally computable sense. Wherever possible, implementers and/or specification writers should avoid using this element. Often, when used, the URL is a reference to an implementation guide that defines these special rules as part of its narrative along with other profiles, value sets, etc.",
         "min": 0,
         "max": "1",
@@ -487,7 +487,7 @@
         "id": "Provenance.target",
         "path": "Provenance.target",
         "short": "Resource version",
-        "definition": "This points to the version of the resource that was created as a result of this historical record action.  Typically only a single resource will be referenced, but if the same action is performed to multiple resources in the context of a transaction, some systems may link multiple resource instances.",
+        "definition": "This points to the version of the resource that was created as a result of this historical record action.  Typically only a single resource will be referenced, but if the same action is performed to multiple resources in the context of a transaction, some systems MAY link multiple resource instances.",
         "comment": "The reference SHALL be version-specific.",
         "min": 1,
         "max": "*",
@@ -633,7 +633,7 @@
         "id": "Provenance.policy",
         "path": "Provenance.policy",
         "short": "Policy or plan the activity was defined by",
-        "definition": "Policy or plan the activity was defined by. Typically, a single activity may have multiple applicable policy documents, such as patient consent, guarantor funding, etc.",
+        "definition": "Policy or plan the activity was defined by. Typically, a single activity MAY have multiple applicable policy documents, such as patient consent, guarantor funding, etc.",
         "comment": "For example: Where an OAuth token authorizes, the unique identifier from the OAuth token is placed into the policy element Where a policy engine (e.g. XACML) holds policy logic, the unique policy identifier is placed into the policy element.",
         "min": 0,
         "max": "*",
@@ -730,7 +730,7 @@
         "path": "Provenance.authorization",
         "short": "Authorization (purposeOfUse) related to the event",
         "definition": "The authorization (e.g., PurposeOfUse) that was used during the event being recorded.",
-        "comment": "Plain text reasons can be sent in the \"text\" component with no codings.  Domains may wish to define a constrained terminology.  The authorization for the resource\u0027s existence of the resource itself will be maintained on the resource, not here.",
+        "comment": "Plain text reasons can be sent in the \"text\" component with no codings.  Domains MAY wish to define a constrained terminology.  The authorization for the resource\u0027s existence of the resource itself will be maintained on the resource, not here.",
         "requirements": "Record of any relevant security context, not restricted to purposeOfUse valueSet. May include security compartments, refrain, obligation, or other security tags.",
         "alias": [
           "PurposeOfEvent"
@@ -845,7 +845,7 @@
         "path": "Provenance.activity",
         "short": "Record activity",
         "definition": "Indicates what action occurred to the referenced resource.",
-        "comment": "This should be captured at a sufficiently useful level of granularity.  For example \"suspended\" is more useful than \"updated\".  Domains will need to map the listed codes to their own state transitions and may wish to define additional domain-specific fine-grained codes.",
+        "comment": "This SHOULD be captured at a sufficiently useful level of granularity.  For example \"suspended\" is more useful than \"updated\".  Domains will need to map the listed codes to their own state transitions and MAY wish to define additional domain-specific fine-grained codes.",
         "min": 1,
         "max": "1",
         "base": {
@@ -961,7 +961,7 @@
         "path": "Provenance.patient",
         "short": "The patient is the subject of the data created/updated (.target) by the activity",
         "definition": "The patient element is available to enable deterministic tracking of activities that involve the patient as the subject of the data used in an activity.",
-        "requirements": "When the .patient is populated it shall be accurate to the subject of the target data. The .patient shall not be populated when the target data created/updated (.target) by the activity does not involve a subject. Note that when the patient is an agent, they will be recorded as an agent. When the Patient resource is Created, Updated, or Deleted it will be recorded as an entity.  May also affect access control.",
+        "requirements": "When the .patient is populated it SHALL be accurate to the subject of the target data. The .patient SHALL NOT be populated when the target data created/updated (.target) by the activity does not involve a subject. Note that when the patient is an agent, they will be recorded as an agent. When the Patient resource is Created, Updated, or Deleted it will be recorded as an entity.  May also affect access control.",
         "min": 0,
         "max": "1",
         "base": {
@@ -996,7 +996,7 @@
           },
           {
             "identity": "w5",
-            "map": "FiveWs.subject[x]"
+            "map": "FiveWs.subject"
           },
           {
             "identity": "rim",
@@ -1012,8 +1012,8 @@
         "id": "Provenance.encounter",
         "path": "Provenance.encounter",
         "short": "Encounter within which this event occurred or which the event is tightly associated",
-        "definition": "This will typically be the encounter the event occurred, but some events may be initiated prior to or after the official completion of an encounter but still be tied to the context of the encounter (e.g. pre-admission lab tests).",
-        "comment": "This will typically be the encounter the provenance was created during, but some provenances may be initiated prior to or after the official completion of an encounter but still be tied to the context of the encounter (e.g. pre-admission lab tests).",
+        "definition": "This will typically be the encounter the event occurred, but some events MAY be initiated prior to or after the official completion of an encounter but still be tied to the context of the encounter (e.g. pre-admission lab tests).",
+        "comment": "This will typically be the encounter the provenance was created during, but some provenances MAY be initiated prior to or after the official completion of an encounter but still be tied to the context of the encounter (e.g. pre-admission lab tests).",
         "requirements": "Links the provenance to the Encounter context.  May also affect access control.",
         "min": 0,
         "max": "1",
@@ -1077,7 +1077,7 @@
         "short": "Who was involved with change",
         "definition": "Who was involved with change.",
         "comment": "Generally the author will be specified.  Others are optional.",
-        "requirements": "An agent can be a person, an organization, software, device, or other entities that may be ascribed responsibility.",
+        "requirements": "An agent can be a person, an organization, software, device, or other entities that MAY be ascribed responsibility.",
         "min": 1,
         "max": "*",
         "base": {
@@ -1440,12 +1440,12 @@
             "map": "Event.performer.actor"
           },
           {
-            "identity": "w5",
-            "map": "FiveWs.author, FiveWs.source, FiveWs.actor, FiveWs.cause, FiveWs.witness, FiveWs.who,FiveWs.who"
-          },
-          {
             "identity": "rim",
             "map": ".id"
+          },
+          {
+            "identity": "w5",
+            "map": "FiveWs.who"
           }
         ]
       },
@@ -1506,8 +1506,8 @@
         "sliceName": "Author",
         "short": "Author",
         "definition": "Author.",
-        "comment": "Several agents may be associated (i.e. has some responsibility for an activity) with an activity and vice-versa.",
-        "requirements": "An agent can be a person, an organization, software, device, or other entities that may be ascribed responsibility.",
+        "comment": "Several agents MAY be associated (i.e. has some responsibility for an activity) with an activity and vice-versa.",
+        "requirements": "An agent can be a person, an organization, software, device, or other entities that MAY be ascribed responsibility.",
         "min": 0,
         "max": "1",
         "base": {
@@ -1878,12 +1878,12 @@
             "map": "Event.performer.actor"
           },
           {
-            "identity": "w5",
-            "map": "FiveWs.author, FiveWs.source, FiveWs.actor, FiveWs.cause, FiveWs.witness, FiveWs.who,FiveWs.who"
-          },
-          {
             "identity": "rim",
             "map": ".id"
+          },
+          {
+            "identity": "w5",
+            "map": "FiveWs.who"
           }
         ]
       },
@@ -2120,6 +2120,7 @@
             "code": "code"
           }
         ],
+        "meaningWhenMissing": "No role declared or available.",
         "constraint": [
           {
             "key": "ele-1",
@@ -2163,7 +2164,7 @@
         "path": "Provenance.entity.what",
         "short": "Identity of entity",
         "definition": "Identity of the  Entity used. May be a logical or physical uri and maybe absolute or relative.",
-        "comment": "The what.identifier should be used for entities that are not a Resource type.",
+        "comment": "The what.identifier SHOULD be used for entities that are not a Resource type.",
         "min": 1,
         "max": "1",
         "base": {
@@ -2247,7 +2248,7 @@
         "id": "Provenance.signature",
         "path": "Provenance.signature",
         "short": "Signature on target",
-        "definition": "A digital signature on the target Reference(s). The signer should match a Provenance.agent. The purpose of the signature is indicated.",
+        "definition": "A digital signature on the target Reference(s). The signer SHOULD match a Provenance.agent. The purpose of the signature is indicated.",
         "min": 0,
         "max": "*",
         "base": {
@@ -2293,7 +2294,7 @@
         "id": "Provenance.target",
         "path": "Provenance.target",
         "short": "Resource version",
-        "definition": "This points to the version of the resource that was created as a result of this historical record action.  Typically only a single resource will be referenced, but if the same action is performed to multiple resources in the context of a transaction, some systems may link multiple resource instances.",
+        "definition": "This points to the version of the resource that was created as a result of this historical record action.  Typically only a single resource will be referenced, but if the same action is performed to multiple resources in the context of a transaction, some systems MAY link multiple resource instances.",
         "comment": "The reference SHALL be version-specific.",
         "mustSupport": true
       },
@@ -2314,7 +2315,7 @@
       {
         "id": "Provenance.authorization",
         "path": "Provenance.authorization",
-        "comment": "Plain text reasons can be sent in the \"text\" component with no codings.  Domains may wish to define a constrained terminology.  The authorization for the resource\u0027s existence of the resource itself will be maintained on the resource, not here.",
+        "comment": "Plain text reasons can be sent in the \"text\" component with no codings.  Domains MAY wish to define a constrained terminology.  The authorization for the resource\u0027s existence of the resource itself will be maintained on the resource, not here.",
         "mustSupport": true
       },
       {
@@ -2322,7 +2323,7 @@
         "path": "Provenance.activity",
         "short": "Record activity",
         "definition": "Indicates what action occurred to the referenced resource.",
-        "comment": "This should be captured at a sufficiently useful level of granularity.  For example \"suspended\" is more useful than \"updated\".  Domains will need to map the listed codes to their own state transitions and may wish to define additional domain-specific fine-grained codes.",
+        "comment": "This SHOULD be captured at a sufficiently useful level of granularity.  For example \"suspended\" is more useful than \"updated\".  Domains will need to map the listed codes to their own state transitions and MAY wish to define additional domain-specific fine-grained codes.",
         "min": 1,
         "max": "1",
         "mustSupport": true,

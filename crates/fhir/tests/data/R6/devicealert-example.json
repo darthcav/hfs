@@ -11,6 +11,15 @@
     }
   ],
   "status": "in-progress",
+  "priority": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/devicealert-priority",
+        "code": "medium",
+        "display": "Medium Priority"
+      }
+    ]
+  },
   "code": {
     "coding": [
       {
@@ -24,13 +33,16 @@
     "reference": "Patient/pat1"
   },
   "presence": true,
+  "occurrencePeriod": {
+    "start": "2025-10-30T10:00:00Z"
+  },
   "device": {
     "reference": "Device/example"
   },
   "derivedFrom": [
     {
       "observation": {
-        "reference": "Observation/f0f9274d-8ada-402b-afa9-b9468ca50510",
+        "reference": "Observation/f001",
         "type": "Observation"
       },
       "limit": {
@@ -71,10 +83,31 @@
           }
         ]
       },
+      "indication": {
+        "start": "2025-10-30T10:00:00Z"
+      },
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "urn:iso:std:iso:11073:10101",
+              "code": "188420",
+              "display": "MDC_TEMP_RECT"
+            }
+          ],
+          "text": "Light annunciator"
+        }
+      ],
       "annunciator": {
-        "reference": {
-          "reference": "Device/example",
-          "type": "Device"
+        "concept": {
+          "coding": [
+            {
+              "system": "urn:iso:std:iso:11073:10101",
+              "code": "188420",
+              "display": "MDC_TEMP_RECT"
+            }
+          ],
+          "text": "Light annunciator"
         }
       },
       "manifestation": {

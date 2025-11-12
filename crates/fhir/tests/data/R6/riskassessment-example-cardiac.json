@@ -39,7 +39,12 @@
       "outcome": {
         "text": "Heart Attack"
       },
-      "probabilityDecimal": 0.02,
+      "probabilityQuantity": {
+        "value": 0.02,
+        "unit": "%",
+        "system": "http://unitsofmeasure.org",
+        "code": "%"
+      },
       "whenRange": {
         "low": {
           "value": 39,

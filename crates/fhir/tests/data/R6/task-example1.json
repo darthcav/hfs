@@ -84,8 +84,10 @@
   "description": "Create order for getting specimen, Set up inhouse testing,  generate order for any sendouts and submit with specimen",
   "focus": [
     {
-      "reference": "ServiceRequest/lipid",
-      "display": "Lipid Panel Request"
+      "valueReference": {
+        "reference": "ServiceRequest/lipid",
+        "display": "Lipid Panel Request"
+      }
     }
   ],
   "for": {

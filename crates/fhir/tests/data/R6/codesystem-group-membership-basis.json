@@ -2,7 +2,7 @@
   "resourceType": "CodeSystem",
   "id": "group-membership-basis",
   "meta": {
-    "lastUpdated": "2025-10-21T11:18:33.033+11:00",
+    "lastUpdated": "2025-11-03T19:55:27.392+11:00",
     "profile": [
       "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
     ]
@@ -18,7 +18,11 @@
     },
     {
       "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
-      "valueInteger": 0
+      "valueInteger": 3
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+      "valueCode": "normative"
     }
   ],
   "url": "http://hl7.org/fhir/group-membership-basis",

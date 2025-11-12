@@ -29,10 +29,6 @@
       "value": "X352356"
     }
   ],
-  "accessionIdentifier": {
-    "system": "http://lab.acme.org/specimens/2015",
-    "value": "X352356"
-  },
   "status": "available",
   "type": {
     "coding": [
@@ -72,11 +68,7 @@
   ],
   "container": [
     {
-      "device": {
-        "reference": {
-          "reference": "Device/device-example-specimen-container-polycup"
-        }
-      },
+      "deviceCanonical": "http://hl7.org/fhir/Device/device-example-specimen-container-polycup",
       "specimenQuantity": {
         "value": 10,
         "unit": "mls"

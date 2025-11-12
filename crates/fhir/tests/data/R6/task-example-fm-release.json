@@ -25,10 +25,7 @@
   },
   "focus": [
     {
-      "identifier": {
-        "system": "http://happyvalley.com/claim",
-        "value": "1501"
-      }
+      "valueCanonical": "http://happyvalley.com/claim/1501"
     }
   ],
   "authoredOn": "2018-10-04T08:25:05+10:00",

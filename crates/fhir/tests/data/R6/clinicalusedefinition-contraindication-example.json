@@ -9,7 +9,11 @@
   ],
   "type": "contraindication",
   "subject": [
-    {}
+    {
+      "reference": {
+        "reference": "MedicinalProductDefinition/example"
+      }
+    }
   ],
   "contraindication": {
     "diseaseSymptomProcedure": {
@@ -17,6 +21,15 @@
         "text": "Concomitant treatment with any other anticoagulant agent"
       }
     },
+    "indication": [
+      {
+        "diseaseSymptomProcedure": {
+          "concept": {
+            "text": "Stroke"
+          }
+        }
+      }
+    ],
     "otherTherapy": [
       {
         "relationshipType": {

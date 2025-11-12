@@ -11,10 +11,6 @@
       "valueCode": "normative"
     },
     {
-      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-      "valueCode": "4.0.0"
-    },
-    {
       "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
       "valueCode": "fhir"
     }
@@ -24,7 +20,7 @@
   "name": "Signature",
   "status": "active",
   "experimental": false,
-  "date": "2025-10-21T00:18:33+00:00",
+  "date": "2025-11-03T08:55:27+00:00",
   "publisher": "HL7 International / FHIR Infrastructure",
   "contact": [
     {
@@ -74,16 +70,6 @@
     "element": [
       {
         "id": "Signature",
-        "extension": [
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-            "valueCode": "normative"
-          },
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-            "valueCode": "4.0.0"
-          }
-        ],
         "path": "Signature",
         "short": "A Signature - XML DigSig, JWS, Graphical image of signature, etc.",
         "definition": "A signature along with supporting context. The signature may be a digital signature that is cryptographic in nature, or some other signature acceptable to the domain. This other signature may be as simple as a graphical image representing a hand-written signature, or a signature ceremony Different signature approaches have different utilities.",
@@ -132,7 +118,7 @@
             "extension": [
               {
                 "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
-                "valueUrl": "id"
+                "valueUrl": "string"
               }
             ],
             "code": "http://hl7.org/fhirpath/System.String"
@@ -485,16 +471,6 @@
     "element": [
       {
         "id": "Signature",
-        "extension": [
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-            "valueCode": "normative"
-          },
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-            "valueCode": "4.0.0"
-          }
-        ],
         "path": "Signature",
         "short": "A Signature - XML DigSig, JWS, Graphical image of signature, etc.",
         "definition": "A signature along with supporting context. The signature may be a digital signature that is cryptographic in nature, or some other signature acceptable to the domain. This other signature may be as simple as a graphical image representing a hand-written signature, or a signature ceremony Different signature approaches have different utilities.",
