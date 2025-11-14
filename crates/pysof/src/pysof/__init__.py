@@ -46,7 +46,7 @@ try:
         SourceReadError,
         UnsupportedContentTypeError,
         UnsupportedSourceProtocolError,
-        __version__,  # type: ignore[attr-defined]
+        __version__,
         py_get_supported_fhir_versions,
         py_parse_content_type,
         py_run_view_definition,
