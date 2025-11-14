@@ -614,15 +614,15 @@ jobs:
           name: test_report 
           path: crates/sof/test_report.json 
 
-      - name: Build pysof wheel
+      - name: Build pysof wheel (Linux with sdist)
         if: runner.os == 'Linux'
         working-directory: crates/pysof
-        run: uv run maturin build --release --sdist -o dist
+        run: uv run maturin build --release --sdist -o dist -i python3.10 -i python3.11 -i python3.12 -i python3.13
 
-      - name: Build pysof wheel
+      - name: Build pysof wheel (Windows/macOS)
         if: runner.os != 'Linux'
         working-directory: crates/pysof
-        run: uv run maturin build --release -o dist
+        run: uv run maturin build --release -o dist -i python3.10 -i python3.11 -i python3.12 -i python3.13
 
       - name: Upload pysof artifacts
         uses: actions/upload-artifact@v4
