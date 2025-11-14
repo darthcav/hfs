@@ -46,6 +46,7 @@ try:
         SourceReadError,
         UnsupportedContentTypeError,
         UnsupportedSourceProtocolError,
+        __version__,
         py_get_supported_fhir_versions,
         py_parse_content_type,
         py_run_view_definition,
@@ -292,6 +293,9 @@ except ImportError as e:
     def get_supported_fhir_versions() -> list[str]:
         raise NotImplementedError("Rust extension module not available")
 
+    # Set fallback version when Rust extension is not available
+    __version__ = "0.0.0-dev"
+
 
 __all__: list[str] = [
     # Core functions
@@ -316,8 +320,6 @@ __all__: list[str] = [
     "InvalidSourceContentError",
     "UnsupportedSourceProtocolError",
 ]
-
-__version__ = "0.1.0"
 
 
 def get_version() -> str:

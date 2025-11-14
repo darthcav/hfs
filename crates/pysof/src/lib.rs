@@ -448,6 +448,9 @@ fn py_get_supported_fhir_versions() -> PyResult<Vec<String>> {
 /// Python module definition
 #[pymodule]
 fn _pysof(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    // Add version from Cargo.toml
+    m.add("__version__", env!("CARGO_PKG_VERSION"))?;
+
     // Add functions
     m.add_function(wrap_pyfunction!(py_run_view_definition, m)?)?;
     m.add_function(wrap_pyfunction!(py_run_view_definition_with_options, m)?)?;
