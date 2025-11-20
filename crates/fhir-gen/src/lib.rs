@@ -735,16 +735,39 @@ fn generate_global_constructs(
 /// - Each variant contains the corresponding resource struct
 fn generate_resource_enum(resources: Vec<String>) -> String {
     let mut output = String::new();
-    // Add Clone to the derives for the Resource enum
-    output.push_str("#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, FhirPath)]\n");
+    // Remove Eq from derives to prevent MIR optimization cycle with Bundle
+    output.push_str("#[derive(Debug, Serialize, Deserialize, Clone, FhirPath)]\n");
     output.push_str("#[serde(tag = \"resourceType\")]\n");
     output.push_str("pub enum Resource {\n");
 
-    for resource in resources {
+    for resource in &resources {
         output.push_str(&format!("    {}({}),\n", resource, resource));
     }
 
     output.push_str("}\n\n");
+
+    // Manual PartialEq implementation to break MIR optimization cycle with Bundle
+    // Using #[inline(never)] prevents the compiler from inlining and creating cycles during optimization
+    output.push_str(
+        "// Manual PartialEq implementation to break MIR optimization cycle with Bundle\n",
+    );
+    output.push_str("impl PartialEq for Resource {\n");
+    output.push_str("    #[inline(never)]\n");
+    output.push_str("    fn eq(&self, other: &Self) -> bool {\n");
+    output.push_str("        match (self, other) {\n");
+
+    for resource in &resources {
+        output.push_str(&format!(
+            "            (Self::{}(a), Self::{}(b)) => a == b,\n",
+            resource, resource
+        ));
+    }
+
+    output.push_str("            _ => false,\n");
+    output.push_str("        }\n");
+    output.push_str("    }\n");
+    output.push_str("}\n\n");
+
     output
 }
 
@@ -2176,8 +2199,8 @@ fn process_elements(
                 capitalize_first_letter(&type_name)
             ));
 
-            // Generate enum derives - Add Clone, PartialEq, Eq to all enums
-            let enum_derives = ["Debug", "Clone", "PartialEq", "Eq", "FhirSerde", "FhirPath"];
+            // Generate enum derives - Remove Eq to prevent MIR optimization cycles
+            let enum_derives = ["Debug", "Clone", "PartialEq", "FhirSerde", "FhirPath"];
             output.push_str(&format!("#[derive({})]\n", enum_derives.join(", ")));
 
             // Add choice element attribute to mark this as a choice type
@@ -2239,12 +2262,11 @@ fn process_elements(
             }
         }
 
-        // Generate struct derives - Add Clone, PartialEq, Eq to all structs
+        // Generate struct derives - Remove Eq to prevent MIR optimization cycles
         let derives = [
             "Debug",
             "Clone",
             "PartialEq",
-            "Eq",
             "FhirSerde",
             "FhirPath",
             "Default",
