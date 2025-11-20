@@ -36,9 +36,9 @@ impl<'a> ser::SerializeSeq for SequenceDetector<'a> {
     type Ok = ();
     type Error = ContentFound;
 
-    fn serialize_element<T: ?Sized>(&mut self, value: &T) -> Result<(), Self::Error>
+    fn serialize_element<T>(&mut self, value: &T) -> Result<(), Self::Error>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         value.serialize(&mut *self.detector)
     }
@@ -52,9 +52,9 @@ impl<'a> ser::SerializeTuple for SequenceDetector<'a> {
     type Ok = ();
     type Error = ContentFound;
 
-    fn serialize_element<T: ?Sized>(&mut self, value: &T) -> Result<(), Self::Error>
+    fn serialize_element<T>(&mut self, value: &T) -> Result<(), Self::Error>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         value.serialize(&mut *self.detector)
     }
@@ -68,9 +68,9 @@ impl<'a> ser::SerializeTupleStruct for SequenceDetector<'a> {
     type Ok = ();
     type Error = ContentFound;
 
-    fn serialize_field<T: ?Sized>(&mut self, value: &T) -> Result<(), Self::Error>
+    fn serialize_field<T>(&mut self, value: &T) -> Result<(), Self::Error>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         value.serialize(&mut *self.detector)
     }
@@ -84,9 +84,9 @@ impl<'a> ser::SerializeTupleVariant for SequenceDetector<'a> {
     type Ok = ();
     type Error = ContentFound;
 
-    fn serialize_field<T: ?Sized>(&mut self, value: &T) -> Result<(), Self::Error>
+    fn serialize_field<T>(&mut self, value: &T) -> Result<(), Self::Error>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         value.serialize(&mut *self.detector)
     }
@@ -104,24 +104,24 @@ impl<'a> ser::SerializeMap for MapDetector<'a> {
     type Ok = ();
     type Error = ContentFound;
 
-    fn serialize_key<T: ?Sized>(&mut self, _: &T) -> Result<(), Self::Error>
+    fn serialize_key<T>(&mut self, _: &T) -> Result<(), Self::Error>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         Err(ContentFound)
     }
 
-    fn serialize_value<T: ?Sized>(&mut self, _: &T) -> Result<(), Self::Error>
+    fn serialize_value<T>(&mut self, _: &T) -> Result<(), Self::Error>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         Ok(())
     }
 
-    fn serialize_entry<K: ?Sized, V: ?Sized>(&mut self, _: &K, _: &V) -> Result<(), Self::Error>
+    fn serialize_entry<K, V>(&mut self, _: &K, _: &V) -> Result<(), Self::Error>
     where
-        K: Serialize,
-        V: Serialize,
+        K: ?Sized + Serialize,
+        V: ?Sized + Serialize,
     {
         Err(ContentFound)
     }
@@ -140,13 +140,13 @@ impl<'a> ser::SerializeStruct for StructDetector<'a> {
     type Ok = ();
     type Error = ContentFound;
 
-    fn serialize_field<T: ?Sized>(
+    fn serialize_field<T>(
         &mut self,
         _key: &'static str,
         value: &T,
     ) -> Result<(), Self::Error>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         match value.serialize(&mut *self.detector) {
             Ok(()) => Ok(()),
@@ -170,13 +170,13 @@ impl<'a> ser::SerializeStructVariant for StructDetector<'a> {
     type Ok = ();
     type Error = ContentFound;
 
-    fn serialize_field<T: ?Sized>(
+    fn serialize_field<T>(
         &mut self,
         _key: &'static str,
         value: &T,
     ) -> Result<(), Self::Error>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         match value.serialize(&mut *self.detector) {
             Ok(()) => Ok(()),
@@ -271,9 +271,9 @@ impl<'a> Serializer for &'a mut ContentDetector {
         Ok(())
     }
 
-    fn serialize_some<T: ?Sized>(self, value: &T) -> Result<(), Self::Error>
+    fn serialize_some<T>(self, value: &T) -> Result<(), Self::Error>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         value.serialize(self)
     }
@@ -295,18 +295,18 @@ impl<'a> Serializer for &'a mut ContentDetector {
         Err(ContentFound)
     }
 
-    fn serialize_newtype_struct<T: ?Sized>(
+    fn serialize_newtype_struct<T>(
         self,
         _name: &'static str,
         value: &T,
     ) -> Result<(), Self::Error>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         value.serialize(self)
     }
 
-    fn serialize_newtype_variant<T: ?Sized>(
+    fn serialize_newtype_variant<T>(
         self,
         _name: &'static str,
         _variant_index: u32,
@@ -314,7 +314,7 @@ impl<'a> Serializer for &'a mut ContentDetector {
         _value: &T,
     ) -> Result<(), Self::Error>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         Err(ContentFound)
     }
