@@ -554,7 +554,9 @@ mod tests {
         )));
 
         // Struct variant has content
-        assert!(has_non_empty_content(&TestEnum::StructVariant { field: 42 }));
+        assert!(has_non_empty_content(&TestEnum::StructVariant {
+            field: 42
+        }));
     }
 
     #[derive(Serialize)]
