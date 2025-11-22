@@ -1334,7 +1334,7 @@ struct FlattenTestStruct {
 #[derive(Debug, PartialEq, FhirSerde, Default)]
 struct NestedStruct {
     field1: String,
-    field2: i32,
+    field2: Integer,
 }
 
 #[test]
@@ -1344,7 +1344,7 @@ fn test_flatten_serialization() {
         name: "Test".to_string().into(),
         nested: NestedStruct {
             field1: "Nested".to_string().into(),
-            field2: 42,
+            field2: 42.into(),
         },
     };
 
