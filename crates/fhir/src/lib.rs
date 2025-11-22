@@ -41,11 +41,6 @@
 //! let precise = PreciseDecimal::from(Decimal::new(12340, 3)); // 12.340
 //! ```
 
-// Allow the crate to reference itself via ::helios_fhir
-// This enables the FhirSerde macro to use ::helios_fhir::serde_helpers
-// from both inside and outside the crate
-extern crate self as helios_fhir;
-
 use chrono::{DateTime as ChronoDateTime, NaiveDate, NaiveTime, Utc};
 use helios_fhirpath_support::{EvaluationResult, IntoEvaluationResult, TypeInfoResult};
 use rust_decimal::Decimal;
@@ -1437,11 +1432,6 @@ pub mod parameters;
 // Re-export commonly used types from parameters module
 pub use parameters::{ParameterValueAccessor, VersionIndependentParameters};
 
-// Make serde_helpers public for use by the FhirSerde derive macro
-// This is an internal module and should not be used directly by external code
-#[doc(hidden)]
-pub mod serde_helpers;
-
 /// Multi-version FHIR resource container supporting version-agnostic operations.
 ///
 /// This enum provides a unified interface for working with FHIR resources across
@@ -1937,6 +1927,14 @@ pub struct Element<V, E> {
     pub value: Option<V>,
 }
 
+impl<V, E> Element<V, E> {
+    /// Returns `true` if no value, id, or extensions are present.
+    #[inline]
+    pub fn is_empty(&self) -> bool {
+        self.value.is_none() && self.id.is_none() && self.extension.is_none()
+    }
+}
+
 // Custom Deserialize for Element<V, E>
 // Remove PartialEq/Eq bounds for V and E as they are not needed for deserialization itself
 impl<'de, V, E> Deserialize<'de> for Element<V, E>
@@ -2423,6 +2421,12 @@ impl<E> DecimalElement<E> {
             extension: None,
             value: Some(precise_value),
         }
+    }
+
+    /// Returns `true` if the element has no value, id, or extensions.
+    #[inline]
+    pub fn is_empty(&self) -> bool {
+        self.value.is_none() && self.id.is_none() && self.extension.is_none()
     }
 }
 
