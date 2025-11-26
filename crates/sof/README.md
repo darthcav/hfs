@@ -61,7 +61,9 @@ cat view-definition.json | sof-cli --bundle patient-data.json --format csv
 # Read Bundle from stdin, ViewDefinition from file
 cat patient-bundle.json | sof-cli --view view-definition.json --format json
 
-# Load data using --source parameter (supports multiple protocols)
+# Load data using --source parameter (supports local paths and URLs)
+sof-cli -v view-definition.json -s ./data/bundle.json -f csv
+sof-cli -v view-definition.json -s /absolute/path/to/bundle.json -f csv
 sof-cli -v view-definition.json -s file:///path/to/bundle.json -f csv
 sof-cli -v view-definition.json -s https://example.com/fhir/bundle.json -f json
 sof-cli -v view-definition.json -s s3://my-bucket/fhir-data/bundle.json -f csv
@@ -91,7 +93,7 @@ sof-cli -v view-definition.json -b patient-data.txt -f csv  # Auto-detects NDJSO
 - **Flexible Input**:
   - Read ViewDefinitions from file (`-v`) or stdin
   - Read Bundles from file (`-b`), stdin, or external sources (`-s`)
-  - Use `-s/--source` to load from URLs: `file://`, `http(s)://`, `s3://`, `gs://`, `azure://`
+  - Use `-s/--source` to load from local paths (relative or absolute) or URLs: `file://`, `http(s)://`, `s3://`, `gs://`, `azure://`
   - Cannot read both ViewDefinition and Bundle from stdin simultaneously
 - **Output Formats**: CSV (with/without headers), JSON (pretty-printed array), NDJSON (newline-delimited), Parquet (columnar binary format)
 - **Output Options**: Write to stdout (default) or specified file with `-o`
@@ -106,7 +108,7 @@ sof-cli -v view-definition.json -b patient-data.txt -f csv  # Auto-detects NDJSO
 ```
 -v, --view <VIEW>              Path to ViewDefinition JSON file (or use stdin if not provided)
 -b, --bundle <BUNDLE>          Path to FHIR Bundle JSON file (or use stdin if not provided)
--s, --source <SOURCE>          URL or path to FHIR data source (see Data Sources below)
+-s, --source <SOURCE>          Path or URL to FHIR data source (see Data Sources below)
 -f, --format <FORMAT>          Output format (csv, json, ndjson, parquet) [default: csv]
     --no-headers               Exclude CSV headers (only for CSV format)
 -o, --output <OUTPUT>          Output file path (defaults to stdout)
@@ -136,6 +138,12 @@ The `--source` parameter supports loading FHIR data from various sources:
 ```bash
 # Using --bundle (simpler for local files)
 sof-cli -v view.json -b /path/to/bundle.json
+
+# Using --source with relative path
+sof-cli -v view.json -s ./data/bundle.json
+
+# Using --source with absolute path
+sof-cli -v view.json -s /path/to/bundle.json
 
 # Using --source with file:// protocol
 sof-cli -v view.json -s file:///path/to/bundle.json

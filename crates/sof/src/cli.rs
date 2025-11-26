@@ -16,7 +16,7 @@
 //! ```text
 //! -v, --view <VIEW>              Path to ViewDefinition JSON file (or use stdin if not provided)
 //! -b, --bundle <BUNDLE>          Path to FHIR Bundle JSON file (or use stdin if not provided)
-//! -s, --source <SOURCE>          URL or path to FHIR data source (file://, http://, https://)
+//! -s, --source <SOURCE>          Path or URL to FHIR data source (local paths or URLs)
 //! -f, --format <FORMAT>          Output format (csv, json, ndjson, parquet) [default: csv]
 //!     --no-headers               Exclude CSV headers (only for CSV format)
 //! -o, --output <OUTPUT>          Output file path (defaults to stdout)
@@ -83,14 +83,20 @@
 //!
 //! ### Using source parameter for external data
 //! ```bash
-//! # Load data from a local file
+//! # Load data from a local file (relative path)
+//! sof-cli -v view_definition.json -s ./output/fhir/Observation.ndjson
+//!
+//! # Load data from a local file (absolute path)
+//! sof-cli -v view_definition.json -s /path/to/fhir-data.json
+//!
+//! # Load data from a local file (file:// URL)
 //! sof-cli -v view_definition.json -s file:///path/to/fhir-data.json
 //!
 //! # Load data from HTTP URL
 //! sof-cli -v view_definition.json -s https://example.com/fhir/Bundle/123
 //!
 //! # Combine source with bundle (merges both data sources)
-//! sof-cli -v view_definition.json -s file:///external-data.json -b local-bundle.json
+//! sof-cli -v view_definition.json -s ./external-data.json -b local-bundle.json
 //! ```
 //!
 //! ## Input Requirements
@@ -147,11 +153,11 @@ struct Args {
     )]
     bundle: Option<PathBuf>,
 
-    /// URL or path to FHIR data source (file://, http://, https://, s3://, gs://, azure://)
+    /// Path or URL to FHIR data source (local paths, file://, http://, https://, s3://, gs://, azure://)
     #[arg(
         long,
         short = 's',
-        help = "URL or path to FHIR data source. Supports:\n  - file:// for local files\n  - http(s):// for web resources\n  - s3:// for AWS S3 (e.g., s3://bucket/path/to/bundle.json)\n  - gs:// for Google Cloud Storage (e.g., gs://bucket/path/to/bundle.json)\n  - azure:// for Azure Blob Storage (e.g., azure://container/path/to/bundle.json)\n\nCan be a Bundle, single resource, array of resources, or NDJSON file.\nNDJSON files (.ndjson) are auto-detected; multi-line content falls back to NDJSON if JSON parsing fails.\n\nCloud storage authentication:\n  - AWS S3: Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION\n  - GCS: Set GOOGLE_SERVICE_ACCOUNT or use Application Default Credentials\n  - Azure: Set AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY or use managed identity"
+        help = "Path or URL to FHIR data source. Supports:\n  - Local file paths (relative or absolute, e.g., ./data/bundle.json)\n  - file:// for local files\n  - http(s):// for web resources\n  - s3:// for AWS S3 (e.g., s3://bucket/path/to/bundle.json)\n  - gs:// for Google Cloud Storage (e.g., gs://bucket/path/to/bundle.json)\n  - azure:// for Azure Blob Storage (e.g., azure://container/path/to/bundle.json)\n\nCan be a Bundle, single resource, array of resources, or NDJSON file.\nNDJSON files (.ndjson) are auto-detected; multi-line content falls back to NDJSON if JSON parsing fails.\n\nCloud storage authentication:\n  - AWS S3: Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION\n  - GCS: Set GOOGLE_SERVICE_ACCOUNT or use Application Default Credentials\n  - Azure: Set AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY or use managed identity"
     )]
     source: Option<String>,
 
@@ -224,6 +230,39 @@ struct Args {
     max_file_size: Option<u32>,
 }
 
+/// Normalize a source path to a URL.
+///
+/// This function converts local file paths (relative or absolute) to file:// URLs,
+/// while leaving existing URLs (http://, https://, s3://, etc.) unchanged.
+///
+/// # Examples
+/// - `./data/bundle.json` -> `file:///absolute/path/to/data/bundle.json`
+/// - `/absolute/path/bundle.json` -> `file:///absolute/path/bundle.json`
+/// - `file:///path/bundle.json` -> `file:///path/bundle.json` (unchanged)
+/// - `https://example.com/bundle.json` -> `https://example.com/bundle.json` (unchanged)
+fn normalize_source_path(source: &str) -> Result<String, Box<dyn std::error::Error>> {
+    // Check if this is already a URL with a scheme
+    if source.contains("://") {
+        return Ok(source.to_string());
+    }
+
+    // Treat as a file path - convert to absolute and create file:// URL
+    let path = PathBuf::from(source);
+    let absolute_path = if path.is_absolute() {
+        path
+    } else {
+        std::env::current_dir()?.join(path)
+    };
+
+    // Canonicalize to resolve . and .. components (but don't fail if file doesn't exist yet)
+    let canonical_path = absolute_path
+        .canonicalize()
+        .unwrap_or_else(|_| absolute_path.clone());
+
+    // Convert to file:// URL
+    Ok(format!("file://{}", canonical_path.display()))
+}
+
 /// Main entry point for the SQL-on-FHIR CLI application.
 ///
 /// This function orchestrates the entire CLI workflow:
@@ -283,7 +322,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Load data from source if provided
     let source_bundle = if let Some(source) = &args.source {
         let data_source = UniversalDataSource::new();
-        Some(data_source.load(source).await?)
+        // Convert relative/absolute file paths to file:// URLs
+        let source_url = normalize_source_path(source)?;
+        Some(data_source.load(&source_url).await?)
     } else {
         None
     };
@@ -628,4 +669,50 @@ fn write_parquet_with_splitting(
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_normalize_source_path_url_unchanged() {
+        // URLs should remain unchanged
+        assert_eq!(
+            normalize_source_path("file:///path/to/file.json").unwrap(),
+            "file:///path/to/file.json"
+        );
+        assert_eq!(
+            normalize_source_path("http://example.com/bundle.json").unwrap(),
+            "http://example.com/bundle.json"
+        );
+        assert_eq!(
+            normalize_source_path("https://example.com/bundle.json").unwrap(),
+            "https://example.com/bundle.json"
+        );
+        assert_eq!(
+            normalize_source_path("s3://bucket/path/bundle.json").unwrap(),
+            "s3://bucket/path/bundle.json"
+        );
+    }
+
+    #[test]
+    fn test_normalize_source_path_absolute_path() {
+        // Absolute paths should be converted to file:// URLs
+        let result = normalize_source_path("/tmp/test.json").unwrap();
+        assert!(result.starts_with("file:///"));
+        assert!(result.contains("/tmp/test.json") || result.contains("private/tmp/test.json"));
+    }
+
+    #[test]
+    fn test_normalize_source_path_relative_path() {
+        // Relative paths should be converted to absolute file:// URLs
+        let result = normalize_source_path("./test.json").unwrap();
+        assert!(result.starts_with("file:///"));
+        // Should contain the current working directory
+        let cwd = std::env::current_dir().unwrap();
+        assert!(
+            result.contains(&cwd.to_string_lossy().to_string()) || result.starts_with("file:///")
+        );
+    }
 }
