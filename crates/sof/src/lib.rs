@@ -1708,7 +1708,7 @@ pub fn process_ndjson_chunked<R: BufRead, W: Write>(
         output.write_all(b"[\n")?;
     }
 
-    while let Some(result) = iterator.next() {
+    for result in iterator.by_ref() {
         let chunk_result = result?;
 
         stats.resources_processed += chunk_result.resources_in_chunk;
