@@ -244,13 +244,25 @@ except pysof.SofError as e:
 
 pysof automatically processes FHIR resources in parallel using rayon:
 
-- **5-7x speedup** on typical workloads with multi-core CPUs
+- **5-7x speedup** on typical batch workloads with multi-core CPUs
+- **Streaming benefits**: `ChunkedProcessor` and `process_ndjson_to_file` also use parallel processing
 - **Zero configuration** - parallelization is always enabled
 - **Python GIL released** during processing for true parallel execution
 
-### Controlling Thread Count
+### Performance Benchmarks
 
-Set the `RAYON_NUM_THREADS` environment variable before importing pysof:
+| Mode | Dataset | Time | Memory | Notes |
+|------|---------|------|--------|-------|
+| **Batch** | 10k Patients | ~2.7s | 1.6 GB | All resources in memory |
+| **Streaming** | 10k Patients | ~0.9s | 45 MB | 35x less memory, 2.9x faster |
+| **Batch** | 93k Encounters | ~4s | 3.9 GB | All resources in memory |
+| **Streaming** | 93k Encounters | ~2.8s | 25 MB | 155x less memory, 1.4x faster |
+
+Streaming mode (`ChunkedProcessor`, `process_ndjson_to_file`) is recommended for large NDJSON files.
+
+### Controlling Thread Count (RAYON_NUM_THREADS)
+
+Set the `RAYON_NUM_THREADS` environment variable to control parallel processing:
 
 ```python
 import os
@@ -271,10 +283,15 @@ $env:RAYON_NUM_THREADS=4
 python my_script.py
 ```
 
+**When to adjust thread count:**
+- **Reduce threads** (`RAYON_NUM_THREADS=2-4`): On shared systems, containers with CPU limits, or when running multiple instances
+- **Increase threads**: Rarely needed; rayon auto-detects available cores
+- **Single thread** (`RAYON_NUM_THREADS=1`): For debugging or deterministic output ordering
+
 **Performance Tips:**
 - Use all available cores for large datasets (default behavior)
 - Limit threads on shared systems to avoid resource contention
-- Reduce thread count if memory-constrained
+- Prefer streaming mode (`ChunkedProcessor`) for NDJSON files > 100MB
 
 ## 📋 Supported Features
 

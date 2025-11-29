@@ -951,25 +951,40 @@ curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=application/parq
 
 The SQL-on-FHIR implementation leverages multi-core processors for optimal performance through parallel resource processing:
 
-- **Automatic Parallelization**: FHIR resources in bundles are processed in parallel using `rayon`
-- **5-7x Performance Improvement**: Benchmarks show 5-7x speedup for typical workloads on multi-core systems
+- **Automatic Parallelization**: FHIR resources are processed in parallel using `rayon` for both batch and streaming modes
+- **Streaming Mode Benefits**: Streaming NDJSON processing uses parallel chunk processing, achieving throughput comparable to or better than batch mode while using 35-150x less memory
 - **Zero Configuration**: Parallel processing is always enabled with intelligent work distribution
 - **Thread Pool Control**: Optionally control thread count via `RAYON_NUM_THREADS` environment variable
 
+#### RAYON_NUM_THREADS Environment Variable
+
+The `RAYON_NUM_THREADS` environment variable controls the number of threads used for parallel processing:
+
 ```bash
-# Use all available CPU cores (default)
+# Use all available CPU cores (default behavior)
 sof-cli --view view.json --bundle large-bundle.json
 
 # Limit to 4 threads for resource-constrained environments
 RAYON_NUM_THREADS=4 sof-cli --view view.json --bundle large-bundle.json
 
+# Use single thread (disables parallelization)
+RAYON_NUM_THREADS=1 sof-cli --view view.json --bundle data.ndjson
+
 # Server with custom thread pool
 RAYON_NUM_THREADS=8 sof-server
+
+# Python (pysof) also respects this variable
+RAYON_NUM_THREADS=4 python my_script.py
 ```
+
+**When to adjust thread count:**
+- **Reduce threads** (`RAYON_NUM_THREADS=2-4`): On shared systems, containers with CPU limits, or when running multiple instances
+- **Increase threads**: Rarely needed; rayon auto-detects available cores
+- **Single thread** (`RAYON_NUM_THREADS=1`): For debugging, profiling, or deterministic output ordering
 
 #### Performance Benchmarks
 
-Typical performance improvements with multi-threading:
+**Batch Mode (Bundle processing):**
 
 | Bundle Size | Sequential Time | Parallel Time | Speedup |
 |-------------|----------------|---------------|---------|
@@ -978,11 +993,19 @@ Typical performance improvements with multi-threading:
 | 100 patients | 229.4ms | 35.7ms | 6.4x |
 | 500 patients | 1109ms | 152ms | 7.3x |
 
+**Streaming Mode (NDJSON processing):**
+
+| Dataset | Batch Mode | Streaming Mode | Memory Reduction |
+|---------|-----------|----------------|------------------|
+| 10k Patients (32MB) | 2.66s, 1.6GB | 0.93s, 45MB | **35x less memory, 2.9x faster** |
+| 93k Encounters (136MB) | 3.97s, 3.9GB | 2.75s, 25MB | **155x less memory, 1.4x faster** |
+
 The parallel processing ensures:
 - Each FHIR resource is processed independently on available threads
 - Column ordering is maintained consistently across parallel operations
 - Thread-safe evaluation contexts for FHIRPath expressions
 - Efficient load balancing through work-stealing algorithms
+- Both batch and streaming modes benefit from parallelization
 
 ## Architecture
 

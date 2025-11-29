@@ -1355,24 +1355,30 @@ impl PreparedViewDefinition {
     /// Process a chunk of resources through this ViewDefinition.
     ///
     /// Returns a `ChunkedResult` containing the rows generated from the chunk.
+    /// Uses parallel processing via rayon for improved throughput.
     pub fn process_chunk(&self, chunk: ResourceChunk) -> Result<ChunkedResult, SofError> {
-        let mut all_rows = Vec::new();
+        // Process resources in parallel using rayon
+        let results: Result<Vec<Vec<ProcessedRow>>, SofError> = chunk
+            .resources
+            .par_iter()
+            .filter_map(|resource_json| {
+                // Check resource type matches
+                let resource_type = resource_json
+                    .get("resourceType")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("");
 
-        for resource_json in &chunk.resources {
-            // Check resource type matches
-            let resource_type = resource_json
-                .get("resourceType")
-                .and_then(|v| v.as_str())
-                .unwrap_or("");
+                if resource_type != self.target_resource_type {
+                    None
+                } else {
+                    // Process single resource based on version
+                    Some(self.process_single_resource(resource_json))
+                }
+            })
+            .collect();
 
-            if resource_type != self.target_resource_type {
-                continue;
-            }
-
-            // Process single resource based on version
-            let rows = self.process_single_resource(resource_json)?;
-            all_rows.extend(rows);
-        }
+        // Flatten results from all resources
+        let all_rows: Vec<ProcessedRow> = results?.into_iter().flatten().collect();
 
         Ok(ChunkedResult {
             columns: self.column_names.clone(),
