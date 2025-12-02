@@ -43,7 +43,11 @@ async fn test_capability_statement() {
 
     // Verify $viewdefinition-run operation is supported
     let operations = view_def_resource["operation"].as_array().unwrap();
-    assert!(operations.iter().any(|op| op["name"] == "viewdefinition-run"));
+    assert!(
+        operations
+            .iter()
+            .any(|op| op["name"] == "viewdefinition-run")
+    );
 }
 
 #[tokio::test]

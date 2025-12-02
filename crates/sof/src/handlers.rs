@@ -105,8 +105,6 @@ pub async fn run_view_definition_handler(
         ));
     }
 
-    // Source parameter is now handled below
-
     // For backward compatibility, extract the legacy tuple format
     let view_def_json = extracted_params.view_definition;
     let resources_json = if extracted_params.resources.is_empty() {
@@ -154,9 +152,6 @@ pub async fn run_view_definition_handler(
         let content_type = parse_content_type(None, Some(format_str), Some(header_bool))?;
         validated_params.format = content_type;
     }
-
-    // Create ViewDefinition
-    let view_definition = parse_view_definition(view_def_json)?;
 
     // Apply patient and group filters from body parameters to resources if provided
     let mut filtered_resources = resources_json.unwrap_or_default();
@@ -220,14 +215,23 @@ pub async fn run_view_definition_handler(
     }
 
     // Handle source parameter - load data from external source if provided
+    // IMPORTANT: We load the source bundle FIRST so we can determine its FHIR version
+    // and parse the ViewDefinition using the same version
     let mut source_bundle = None;
+    let mut source_fhir_version = None;
     if let Some(source) = &source_param {
         info!("Loading data from source: {}", source);
         let data_source = UniversalDataSource::new();
-        let mut loaded_bundle = data_source.load(source).await?;
+        let loaded_bundle = data_source.load(source).await?;
+
+        // Capture the FHIR version from the loaded source bundle
+        source_fhir_version = Some(loaded_bundle.version());
 
         // Apply filters to source bundle if needed
-        if patient_filter.is_some() || group_filter.is_some() || validated_params.since.is_some() {
+        let loaded_bundle = if patient_filter.is_some()
+            || group_filter.is_some()
+            || validated_params.since.is_some()
+        {
             // Extract resources from source bundle for filtering
             let mut source_resources = extract_resources_from_bundle(&loaded_bundle)?;
 
@@ -244,12 +248,29 @@ pub async fn run_view_definition_handler(
                 source_resources = filter_resources_by_since(source_resources, since)?;
             }
 
-            // Recreate bundle with filtered resources
-            loaded_bundle = create_bundle_from_resources(source_resources)?;
-        }
+            // Recreate bundle with filtered resources using the same FHIR version
+            create_bundle_from_resources_for_version(
+                source_resources,
+                source_fhir_version.unwrap(),
+            )?
+        } else {
+            loaded_bundle
+        };
 
         source_bundle = Some(loaded_bundle);
     }
+
+    // Create ViewDefinition - use the source bundle's version if available,
+    // otherwise use the default (newest enabled) version
+    let view_definition = if let Some(version) = source_fhir_version {
+        info!(
+            "Parsing ViewDefinition as {:?} (matching source bundle)",
+            version
+        );
+        parse_view_definition_for_version(view_def_json, version)?
+    } else {
+        parse_view_definition(view_def_json)?
+    };
 
     // Apply filters to provided resources
     if patient_filter.is_some() || group_filter.is_some() {
@@ -454,11 +475,17 @@ fn resolve_view_reference(reference: &str) -> ServerResult<SofViewDefinition> {
     )))
 }
 
-/// Parse a ViewDefinition from JSON
+/// Parse a ViewDefinition from JSON using the newest enabled FHIR version
 fn parse_view_definition(json: serde_json::Value) -> ServerResult<SofViewDefinition> {
-    let newest_version = get_newest_enabled_fhir_version();
+    parse_view_definition_for_version(json, get_newest_enabled_fhir_version())
+}
 
-    match newest_version {
+/// Parse a ViewDefinition from JSON using a specific FHIR version
+fn parse_view_definition_for_version(
+    json: serde_json::Value,
+    version: helios_fhir::FhirVersion,
+) -> ServerResult<SofViewDefinition> {
+    match version {
         #[cfg(feature = "R4")]
         helios_fhir::FhirVersion::R4 => {
             let view_def: helios_fhir::r4::ViewDefinition =
@@ -539,10 +566,16 @@ fn parse_parameters(json: serde_json::Value) -> ServerResult<RunParameters> {
     }
 }
 
-/// Create a Bundle from a list of resources
+/// Create a Bundle from a list of resources using the newest enabled FHIR version
 fn create_bundle_from_resources(resources: Vec<serde_json::Value>) -> ServerResult<SofBundle> {
-    let newest_version = get_newest_enabled_fhir_version();
+    create_bundle_from_resources_for_version(resources, get_newest_enabled_fhir_version())
+}
 
+/// Create a Bundle from a list of resources using a specific FHIR version
+fn create_bundle_from_resources_for_version(
+    resources: Vec<serde_json::Value>,
+    version: helios_fhir::FhirVersion,
+) -> ServerResult<SofBundle> {
     let bundle_json = serde_json::json!({
         "resourceType": "Bundle",
         "type": "collection",
@@ -553,7 +586,7 @@ fn create_bundle_from_resources(resources: Vec<serde_json::Value>) -> ServerResu
         }).collect::<Vec<_>>()
     });
 
-    match newest_version {
+    match version {
         #[cfg(feature = "R4")]
         helios_fhir::FhirVersion::R4 => {
             let bundle: helios_fhir::r4::Bundle =
