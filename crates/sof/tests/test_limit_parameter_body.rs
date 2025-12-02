@@ -111,7 +111,7 @@ async fn test_limit_parameter_in_body_value_integer() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .content_type("application/json")
         .add_header("Accept", "application/json")
         .json(&parameters)
@@ -158,7 +158,7 @@ async fn test_limit_parameter_in_body_value_positive_int() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .content_type("application/json")
         .add_header("Accept", "application/json")
         .json(&parameters)
@@ -203,7 +203,7 @@ async fn test_limit_parameter_negative_value() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .content_type("application/json")
         .json(&parameters)
         .await;
@@ -235,7 +235,7 @@ async fn test_limit_parameter_exceeds_maximum() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .content_type("application/json")
         .json(&parameters)
         .await;
@@ -271,7 +271,7 @@ async fn test_limit_parameter_with_csv_format() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .content_type("application/json")
         .json(&parameters)
         .await;
@@ -318,7 +318,7 @@ async fn test_limit_parameter_body_overrides_query() {
 
     // Query parameter says 5, but body says 2
     let response = server
-        .post("/ViewDefinition/$run?_count=5")
+        .post("/ViewDefinition/$viewdefinition-run?_count=5")
         .content_type("application/json")
         .add_header("Accept", "application/json")
         .json(&parameters)

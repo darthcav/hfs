@@ -81,7 +81,7 @@ async fn test_patient_parameter_with_full_reference() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .content_type("application/json")
         .json(&parameters)
         .await;
@@ -121,7 +121,7 @@ async fn test_patient_parameter_with_bare_id() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .content_type("application/json")
         .json(&parameters)
         .await;
@@ -163,7 +163,7 @@ async fn test_patient_parameter_with_value_reference() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .content_type("application/json")
         .json(&parameters)
         .await;
@@ -258,7 +258,7 @@ async fn test_observation_filtering_with_bare_patient_id() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .content_type("application/json")
         .json(&parameters)
         .await;

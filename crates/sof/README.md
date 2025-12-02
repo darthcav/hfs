@@ -263,7 +263,7 @@ sof-cli -v view.json -s s3://bucket/patients.ndjson -f json
 sof-cli -v view.json -s file:///data.ndjson -b additional-data.json -f csv
 
 # Server API with NDJSON
-curl -X POST "http://localhost:8080/ViewDefinition/$run?source=s3://bucket/data.ndjson" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?source=s3://bucket/data.ndjson" \
   -H "Content-Type: application/json" \
   -d '{"resourceType": "Parameters", "parameter": [{"name": "viewResource", "resource": {...}}]}'
 ```
@@ -472,12 +472,12 @@ Returns the server's CapabilityStatement describing supported operations:
 curl http://localhost:8080/metadata
 ```
 
-##### POST /ViewDefinition/$run
+##### POST /ViewDefinition/$viewdefinition-run
 Execute a ViewDefinition transformation:
 
 ```bash
 # JSON output (default)
-curl -X POST http://localhost:8080/ViewDefinition/$run \
+curl -X POST http://localhost:8080/ViewDefinition/$viewdefinition-run \
   -H "Content-Type: application/json" \
   -d '{
     "resourceType": "Parameters",
@@ -508,17 +508,17 @@ curl -X POST http://localhost:8080/ViewDefinition/$run \
   }'
 
 # CSV output (includes headers by default)
-curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=text/csv" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?_format=text/csv" \
   -H "Content-Type: application/json" \
   -d '{...}'
 
 # CSV output without headers
-curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=text/csv&header=false" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?_format=text/csv&header=false" \
   -H "Content-Type: application/json" \
   -d '{...}'
 
 # NDJSON output
-curl -X POST http://localhost:8080/ViewDefinition/$run \
+curl -X POST http://localhost:8080/ViewDefinition/$viewdefinition-run \
   -H "Content-Type: application/json" \
   -H "Accept: application/ndjson" \
   -d '{...}'
@@ -526,7 +526,7 @@ curl -X POST http://localhost:8080/ViewDefinition/$run \
 
 #### Parameters
 
-The `$run` POST operation accepts parameters either as query parameters or in a FHIR Parameters resource.
+The `$viewdefinition-run` POST operation accepts parameters either as query parameters or in a FHIR Parameters resource.
 
 Parameter table:
 
@@ -617,17 +617,17 @@ The server automatically sets appropriate response headers based on the output f
 
 ```bash
 # Limit results - first 50 records as CSV
-curl -X POST "http://localhost:8080/ViewDefinition/$run?_limit=50&_format=text/csv" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?_limit=50&_format=text/csv" \
   -H "Content-Type: application/json" \
   -d '{...}'
 
 # CSV without headers, limited to 20 results
-curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=text/csv&header=false&_limit=20" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?_format=text/csv&header=false&_limit=20" \
   -H "Content-Type: application/json" \
   -d '{...}'
 
 # Using header parameter in request body (overrides query params)
-curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=text/csv" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?_format=text/csv" \
   -H "Content-Type: application/json" \
   -d '{
     "resourceType": "Parameters",
@@ -641,12 +641,12 @@ curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=text/csv" \
   }'
 
 # Filter by modification time (requires resources with lastUpdated metadata)
-curl -X POST "http://localhost:8080/ViewDefinition/$run?_since=2024-01-01T00:00:00Z" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?_since=2024-01-01T00:00:00Z" \
   -H "Content-Type: application/json" \
   -d '{...}'
 
 # Load data from S3 bucket
-curl -X POST "http://localhost:8080/ViewDefinition/$run?source=s3://my-bucket/bundle.json" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?source=s3://my-bucket/bundle.json" \
   -H "Content-Type: application/json" \
   -d '{
     "resourceType": "Parameters",
@@ -657,24 +657,24 @@ curl -X POST "http://localhost:8080/ViewDefinition/$run?source=s3://my-bucket/bu
   }'
 
 # Load data from Azure with filtering
-curl -X POST "http://localhost:8080/ViewDefinition/$run?source=azure://container/data.json&_limit=100" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?source=azure://container/data.json&_limit=100" \
   -H "Content-Type: application/json" \
   -d '{...}'
 
 # Generate Parquet with custom compression and row group size
-curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=application/parquet&compression=zstd&rowGroupSize=512" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?_format=application/parquet&compression=zstd&rowGroupSize=512" \
   -H "Content-Type: application/json" \
   -d '{...}' \
   --output result.parquet
 
 # Generate large Parquet with file splitting (returns ZIP if multiple files)
-curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=application/parquet&maxFileSize=100" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?_format=application/parquet&maxFileSize=100" \
   -H "Content-Type: application/json" \
   -d '{...}' \
   --output result.zip
 
 # Using Parquet parameters in request body
-curl -X POST "http://localhost:8080/ViewDefinition/$run" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run" \
   -H "Content-Type: application/json" \
   -d '{
     "resourceType": "Parameters",
@@ -901,19 +901,19 @@ sof-cli --view view.json --bundle large-data.json --format parquet \
 #          output_003.parquet (remaining data)
 
 # Server API - single Parquet file
-curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=application/parquet" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?_format=application/parquet" \
   -H "Content-Type: application/json" \
   -d '{"resourceType": "Parameters", ...}' \
   --output result.parquet
 
 # Server API - with file splitting (returns ZIP archive if multiple files)
-curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=application/parquet&maxFileSize=100" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?_format=application/parquet&maxFileSize=100" \
   -H "Content-Type: application/json" \
   -d '{"resourceType": "Parameters", ...}' \
   --output result.zip
 
 # Server API - optimized settings for large datasets
-curl -X POST "http://localhost:8080/ViewDefinition/$run?_format=application/parquet&compression=zstd&rowGroupSize=512&maxFileSize=500" \
+curl -X POST "http://localhost:8080/ViewDefinition/$viewdefinition-run?_format=application/parquet&compression=zstd&rowGroupSize=512&maxFileSize=500" \
   -H "Content-Type: application/json" \
   -d '{"resourceType": "Parameters", ...}' \
   --output result.zip

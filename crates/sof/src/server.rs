@@ -26,7 +26,7 @@
 //! GET /metadata
 //!   Returns: CapabilityStatement
 //!
-//! POST /ViewDefinition/$run
+//! POST /ViewDefinition/$viewdefinition-run
 //!   Body: Parameters resource containing ViewDefinition and data
 //!   Query Parameters (except viewReference, viewResource, patient, group, resource):
 //!     _format: Output format - application/json, application/ndjson, text/csv, application/parquet
@@ -290,7 +290,7 @@ fn create_app_with_config(config: &ServerConfig) -> Router {
         // FHIR endpoints
         .route("/metadata", get(handlers::capability_statement))
         .route(
-            "/ViewDefinition/$run",
+            "/ViewDefinition/$viewdefinition-run",
             post(handlers::run_view_definition_handler),
         )
         // Health check endpoint

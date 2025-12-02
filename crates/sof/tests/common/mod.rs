@@ -30,11 +30,11 @@ fn create_test_app() -> Router {
     Router::new()
         .route("/metadata", get(capability_statement_handler))
         .route(
-            "/ViewDefinition/$run",
+            "/ViewDefinition/$viewdefinition-run",
             post(run_view_definition_handler).get(run_view_definition_get_handler),
         )
         .route(
-            "/ViewDefinition/{id}/$run",
+            "/ViewDefinition/{id}/$viewdefinition-run",
             get(run_view_definition_by_id_handler),
         )
         .route("/health", get(health_check))
@@ -70,14 +70,14 @@ async fn capability_statement_handler() -> axum::response::Response {
             "resource": [{
                 "type": "ViewDefinition",
                 "operation": [{
-                    "name": "run",
-                    "definition": "http://sql-on-fhir.org/OperationDefinition/ViewDefinition-run",
+                    "name": "viewdefinition-run",
+                    "definition": "http://sql-on-fhir.org/OperationDefinition/$viewdefinition-run",
                     "documentation": "Execute a ViewDefinition to transform FHIR resources into tabular format"
                 }]
             }],
             "operation": [{
-                "name": "run",
-                "definition": "http://sql-on-fhir.org/OperationDefinition/ViewDefinition-run",
+                "name": "viewdefinition-run",
+                "definition": "http://sql-on-fhir.org/OperationDefinition/$viewdefinition-run",
                 "documentation": "Execute a ViewDefinition to transform FHIR resources into tabular format. Supports CSV, JSON, and NDJSON output formats."
             }]
         }]
@@ -546,7 +546,7 @@ async fn run_view_definition_get_handler(
     // For GET requests without a ViewDefinition, we cannot proceed
     error_response(
         axum::http::StatusCode::BAD_REQUEST,
-        "GET /ViewDefinition/$run requires a ViewDefinition to be provided. Since complex parameters cannot be used in GET requests, please use POST with viewResource or viewReference parameter.",
+        "GET /ViewDefinition/$viewdefinition-run requires a ViewDefinition to be provided. Since complex parameters cannot be used in GET requests, please use POST with viewResource or viewReference parameter.",
     )
 }
 
@@ -558,7 +558,7 @@ async fn run_view_definition_by_id_handler(
     error_response(
         axum::http::StatusCode::NOT_IMPLEMENTED,
         &format!(
-            "ViewDefinition lookup by ID '{}' is not implemented. Use POST /ViewDefinition/$run with the ViewDefinition in the request body.",
+            "ViewDefinition lookup by ID '{}' is not implemented. Use POST /ViewDefinition/$viewdefinition-run with the ViewDefinition in the request body.",
             id
         ),
     )

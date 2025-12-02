@@ -46,7 +46,7 @@ async fn test_header_parameter_boolean_true() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .json(&request_body)
         .await;
 
@@ -106,7 +106,7 @@ async fn test_header_parameter_boolean_false() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .json(&request_body)
         .await;
 
@@ -165,7 +165,7 @@ async fn test_header_parameter_overrides_query() {
 
     // Query parameter says true, but body should override
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("header", "true")
         .json(&request_body)
         .await;
@@ -217,7 +217,7 @@ async fn test_header_parameter_without_format() {
 
     // No format specified, should default to JSON
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .json(&request_body)
         .await;
 
@@ -270,7 +270,7 @@ async fn test_header_parameter_with_csv_accept() {
 
     // Accept header requests CSV
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Accept", "text/csv")
         .json(&request_body)
         .await;
@@ -329,7 +329,7 @@ async fn test_invalid_header_parameter_type() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .json(&request_body)
         .await;
 
@@ -397,7 +397,7 @@ async fn test_both_format_and_header_in_body() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .json(&request_body)
         .await;
 

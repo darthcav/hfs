@@ -67,7 +67,7 @@ async fn test_pagination_parameters_combined() {
 
     // Test count 2 - should only return first 2 records
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_limit", "2")
         .add_query_param("_format", "application/json")
         .json(&request_body)
@@ -82,7 +82,7 @@ async fn test_pagination_parameters_combined() {
 
     // Test count 3 - should return first 3 records
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_limit", "3")
         .add_query_param("_format", "application/json")
         .json(&request_body)
@@ -98,7 +98,7 @@ async fn test_pagination_parameters_combined() {
 
     // Test count 5 - should return all 5 records
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_limit", "5")
         .add_query_param("_format", "application/json")
         .json(&request_body)
@@ -131,7 +131,7 @@ async fn test_limit_parameter_boundaries() {
 
     // Test _limit = 1 (minimum valid)
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_limit", "1")
         .json(&request_body)
         .await;
@@ -140,7 +140,7 @@ async fn test_limit_parameter_boundaries() {
 
     // Test _limit = 10000 (maximum valid)
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_limit", "10000")
         .json(&request_body)
         .await;
@@ -149,7 +149,7 @@ async fn test_limit_parameter_boundaries() {
 
     // Test _limit = 0 (invalid)
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_limit", "0")
         .json(&request_body)
         .await;
@@ -166,7 +166,7 @@ async fn test_limit_parameter_boundaries() {
 
     // Test _limit = 10001 (too large)
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_limit", "10001")
         .json(&request_body)
         .await;
@@ -206,7 +206,7 @@ async fn test_format_and_accept_header_precedence() {
 
     // Test that _format parameter takes precedence over Accept header
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Accept", "application/json")
         .add_query_param("_format", "text/csv")
         .json(&request_body)
@@ -236,7 +236,7 @@ async fn test_csv_header_parameter_with_non_csv_format() {
 
     // header parameter should be ignored for non-CSV formats
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_format", "application/json")
         .add_query_param("header", "absent")
         .json(&request_body)
@@ -266,7 +266,7 @@ async fn test_invalid_since_parameter() {
 
     // Test with invalid RFC3339 timestamp
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_since", "not-a-date")
         .json(&request_body)
         .await;
@@ -323,7 +323,7 @@ async fn test_since_parameter_query_filtering() {
 
     // Test with _since as query parameter
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_since", "2023-06-01T00:00:00Z")
         .json(&request_body)
         .await;
@@ -364,7 +364,7 @@ async fn test_valid_since_parameter_formats() {
 
     for timestamp in valid_formats {
         let response = server
-            .post("/ViewDefinition/$run")
+            .post("/ViewDefinition/$viewdefinition-run")
             .add_query_param("_since", timestamp)
             .json(&request_body)
             .await;
@@ -397,7 +397,7 @@ async fn test_combined_filtering_parameters() {
 
     // Test all filtering parameters together
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_format", "application/json")
         .add_query_param("_limit", "50")
         .add_query_param("_since", "2024-01-01T00:00:00Z")

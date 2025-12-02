@@ -8,7 +8,7 @@ use helios_sof::{ContentType, SofParameters};
 use serde::Deserialize;
 use tracing::debug;
 
-/// Query parameters for ViewDefinition/$run endpoint
+/// Query parameters for ViewDefinition/$viewdefinition-run endpoint
 #[derive(Debug, Deserialize)]
 pub struct RunQueryParams {
     /// Output format override (alternative to Accept header)
@@ -89,7 +89,7 @@ pub struct ValidatedRunParams {
     pub parquet_options: Option<helios_sof::ParquetOptions>,
 }
 
-/// Parameters for ViewDefinition/$run operation - now using proper FHIR Parameters
+/// Parameters for ViewDefinition/$viewdefinition-run operation - now using proper FHIR Parameters
 pub type RunParameters = SofParameters;
 
 /// Validate and parse query parameters into structured format

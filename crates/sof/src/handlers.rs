@@ -1,7 +1,7 @@
 //! Request handlers for the SQL-on-FHIR server
 //!
 //! This module implements the HTTP request handlers for all server endpoints,
-//! including the CapabilityStatement and ViewDefinition/$run operations.
+//! including the CapabilityStatement and ViewDefinition/$viewdefinition-run operations.
 
 use axum::{
     Json,
@@ -39,9 +39,9 @@ pub async fn capability_statement() -> ServerResult<impl IntoResponse> {
     ))
 }
 
-/// Handler for POST /ViewDefinition/$run - executes a ViewDefinition
+/// Handler for POST /ViewDefinition/$viewdefinition-run - executes a ViewDefinition
 ///
-/// The `$run` operation on a ViewDefinition resource applies the view definition to
+/// The `$viewdefinition-run` operation on a ViewDefinition resource applies the view definition to
 /// transform FHIR resources into a tabular format and returns the results synchronously.
 ///
 /// # Arguments
@@ -78,7 +78,7 @@ pub async fn run_view_definition_handler(
     headers: HeaderMap,
     Json(body): Json<serde_json::Value>,
 ) -> ServerResult<Response> {
-    info!("Handling ViewDefinition/$run request");
+    info!("Handling ViewDefinition/$viewdefinition-run request");
     debug!("Query params: {:?}", params);
 
     // Validate and parse query parameters
@@ -400,9 +400,9 @@ fn create_capability_statement() -> serde_json::Value {
         "rest": [{
             "mode": "server",
             "operation": [{
-                "name": "run",
-                "definition": "http://sql-on-fhir.org/OperationDefinition/ViewDefinition-run",
-                "documentation": "Execute a ViewDefinition to transform FHIR resources into tabular format. Supports CSV, JSON, and NDJSON output formats. This is a type-level operation invoked at /ViewDefinition/$run"
+                "name": "viewdefinition-run",
+                "definition": "http://sql-on-fhir.org/OperationDefinition/$viewdefinition-run",
+                "documentation": "Execute a ViewDefinition to transform FHIR resources into tabular format. Supports CSV, JSON, and NDJSON output formats. This is a type-level operation invoked at /ViewDefinition/$viewdefinition-run"
             }]
         }]
     })
@@ -700,7 +700,7 @@ fn merge_bundles(
 /// Filter resources by patient and/or group reference
 ///
 /// This function implements the patient and group filtering as specified in the
-/// SQL-on-FHIR $run operation:
+/// SQL-on-FHIR $viewdefinition-run operation:
 ///
 /// - **Patient filter**: Returns only resources in the patient compartment of specified patients
 /// - **Group filter**: Returns only resources that are members of the specified group
@@ -868,7 +868,7 @@ mod tests {
         // Check that operation is listed at rest level (type-level operation)
         let operations = &cap_stmt["rest"][0]["operation"];
         assert!(operations.as_array().is_some());
-        assert_eq!(operations[0]["name"], "run");
+        assert_eq!(operations[0]["name"], "viewdefinition-run");
     }
 
     #[test]

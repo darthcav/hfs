@@ -41,9 +41,9 @@ async fn test_capability_statement() {
         .find(|r| r["type"] == "ViewDefinition")
         .expect("ViewDefinition resource should be listed");
 
-    // Verify $run operation is supported
+    // Verify $viewdefinition-run operation is supported
     let operations = view_def_resource["operation"].as_array().unwrap();
-    assert!(operations.iter().any(|op| op["name"] == "run"));
+    assert!(operations.iter().any(|op| op["name"] == "viewdefinition-run"));
 }
 
 #[tokio::test]
@@ -82,7 +82,7 @@ async fn test_run_view_definition_basic() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Accept", "application/json")
         .json(&request_body)
         .await;
@@ -139,7 +139,7 @@ async fn test_run_view_definition_csv_output() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_format", "text/csv")
         .add_query_param("header", "present")
         .json(&request_body)
@@ -202,7 +202,7 @@ async fn test_run_view_definition_ndjson_output() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Accept", "application/ndjson")
         .json(&request_body)
         .await;
@@ -235,7 +235,7 @@ async fn test_run_view_definition_error_invalid_parameters() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .json(&request_body)
         .await;
 
@@ -256,7 +256,7 @@ async fn test_run_view_definition_error_no_view() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .json(&request_body)
         .await;
 
@@ -284,7 +284,7 @@ async fn test_run_view_definition_unsupported_format() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_query_param("_format", "text/plain") // Unsupported format
         .json(&request_body)
         .await;
@@ -317,7 +317,7 @@ async fn test_run_view_definition_post_with_source_parameter() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .json(&request_body)
         .await;
 
@@ -356,7 +356,7 @@ async fn test_post_viewreference_not_implemented() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .json(&request_body)
         .await;
 
@@ -398,7 +398,7 @@ async fn test_post_group_not_implemented() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Content-Type", "application/json")
         .json(&body)
         .await;
@@ -438,7 +438,7 @@ async fn test_post_source_not_implemented() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Content-Type", "application/json")
         .json(&body)
         .await;
@@ -500,7 +500,7 @@ async fn test_patient_filtering_incorrect_format() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Content-Type", "application/json")
         .json(&body)
         .await;
@@ -565,7 +565,7 @@ async fn test_patient_filtering_correct_format() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Content-Type", "application/json")
         .json(&body)
         .await;
@@ -616,7 +616,7 @@ async fn test_since_parameter_in_post_body_valid() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Content-Type", "application/json")
         .json(&body)
         .await;
@@ -655,7 +655,7 @@ async fn test_since_parameter_in_post_body_invalid() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Content-Type", "application/json")
         .json(&body)
         .await;
@@ -720,7 +720,7 @@ async fn test_since_parameter_filtering() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Content-Type", "application/json")
         .json(&body)
         .await;
@@ -782,7 +782,7 @@ async fn test_since_parameter_no_meta() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Content-Type", "application/json")
         .json(&body)
         .await;
@@ -825,7 +825,7 @@ async fn test_since_parameter_wrong_value_type() {
     });
 
     let response = server
-        .post("/ViewDefinition/$run")
+        .post("/ViewDefinition/$viewdefinition-run")
         .add_header("Content-Type", "application/json")
         .json(&body)
         .await;
