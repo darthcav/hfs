@@ -276,7 +276,19 @@ fn normalize_source_path(source: &str) -> Result<String, Box<dyn std::error::Err
         .unwrap_or_else(|_| absolute_path.clone());
 
     // Convert to file:// URL
-    Ok(format!("file://{}", canonical_path.display()))
+    // On Windows, paths like C:\foo need to become file:///C:/foo
+    // On Unix, paths like /foo become file:///foo
+    #[cfg(windows)]
+    let url = {
+        let path_str = canonical_path.to_string_lossy();
+        // Replace backslashes with forward slashes for URL format
+        let normalized = path_str.replace('\\', "/");
+        format!("file:///{}", normalized)
+    };
+    #[cfg(not(windows))]
+    let url = format!("file://{}", canonical_path.display());
+
+    Ok(url)
 }
 
 /// Main entry point for the SQL-on-FHIR CLI application.
@@ -774,20 +786,40 @@ mod tests {
     #[test]
     fn test_normalize_source_path_absolute_path() {
         // Absolute paths should be converted to file:// URLs
-        let result = normalize_source_path("/tmp/test.json").unwrap();
-        assert!(result.starts_with("file:///"));
-        assert!(result.contains("/tmp/test.json") || result.contains("private/tmp/test.json"));
+        // Use a platform-appropriate absolute path
+        #[cfg(windows)]
+        let test_path = "C:\\tmp\\test.json";
+        #[cfg(not(windows))]
+        let test_path = "/tmp/test.json";
+
+        let result = normalize_source_path(test_path).unwrap();
+        assert!(
+            result.starts_with("file:///"),
+            "Expected file:/// prefix, got: {}",
+            result
+        );
+        // On macOS, /tmp may be symlinked to /private/tmp
+        assert!(
+            result.contains("tmp") && result.contains("test.json"),
+            "Expected path to contain tmp and test.json, got: {}",
+            result
+        );
     }
 
     #[test]
     fn test_normalize_source_path_relative_path() {
         // Relative paths should be converted to absolute file:// URLs
         let result = normalize_source_path("./test.json").unwrap();
-        assert!(result.starts_with("file:///"));
-        // Should contain the current working directory
-        let cwd = std::env::current_dir().unwrap();
         assert!(
-            result.contains(&cwd.to_string_lossy().to_string()) || result.starts_with("file:///")
+            result.starts_with("file:///"),
+            "Expected file:/// prefix, got: {}",
+            result
+        );
+        // Should contain test.json somewhere in the path
+        assert!(
+            result.contains("test.json"),
+            "Expected path to contain test.json, got: {}",
+            result
         );
     }
 }
