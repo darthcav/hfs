@@ -473,7 +473,7 @@ These functions extend the base FHIRPath specification with FHIR-specific capabi
     *   %factory.withExtension(): ❌ Not Implemented
     *   %factory.withProperty(): ❌ Not Implemented
 
-*   [Server API (%server)](https://build.fhir.org/fhirpath.html#srv-api)
+*   [Server API (%server)](https://build.fhir.org/fhirpath.html#srvr-api)
     *   %server.at(): ❌ Not Implemented
     *   %server.read(): ❌ Not Implemented
     *   %server.create(): ❌ Not Implemented
