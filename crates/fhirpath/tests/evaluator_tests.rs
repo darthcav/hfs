@@ -5353,3 +5353,175 @@ fn test_type_operations_with_precedence() {
         EvaluationResult::boolean(true)
     );
 }
+
+// FHIRPath spec: Integer/Decimal implicitly convert to Quantity with unit '1' for arithmetic and comparisons
+#[test]
+fn test_quantity_implicit_conversion_operations() {
+    let context = EvaluationContext::new_empty_with_default_version();
+
+    // --- Addition ---
+    // Quantity '1' + Integer
+    assert_eq!(
+        eval("5 '1' + 3", &context).unwrap(),
+        EvaluationResult::quantity(dec!(8), "1".to_string())
+    );
+    // Integer + Quantity '1'
+    assert_eq!(
+        eval("3 + 5 '1'", &context).unwrap(),
+        EvaluationResult::quantity(dec!(8), "1".to_string())
+    );
+    // Quantity '1' + Decimal
+    assert_eq!(
+        eval("5 '1' + 3.5", &context).unwrap(),
+        EvaluationResult::quantity(dec!(8.5), "1".to_string())
+    );
+    // Decimal + Quantity '1'
+    assert_eq!(
+        eval("3.5 + 5 '1'", &context).unwrap(),
+        EvaluationResult::quantity(dec!(8.5), "1".to_string())
+    );
+    // Incompatible units should return Empty
+    assert_eq!(
+        eval("5 'mg' + 3", &context).unwrap(),
+        EvaluationResult::Empty
+    );
+    assert_eq!(
+        eval("3 + 5 'mg'", &context).unwrap(),
+        EvaluationResult::Empty
+    );
+
+    // --- Subtraction ---
+    // Quantity '1' - Integer
+    assert_eq!(
+        eval("5 '1' - 3", &context).unwrap(),
+        EvaluationResult::quantity(dec!(2), "1".to_string())
+    );
+    // Integer - Quantity '1'
+    assert_eq!(
+        eval("3 - 5 '1'", &context).unwrap(),
+        EvaluationResult::quantity(dec!(-2), "1".to_string())
+    );
+    // Quantity '1' - Decimal
+    assert_eq!(
+        eval("5 '1' - 2.5", &context).unwrap(),
+        EvaluationResult::quantity(dec!(2.5), "1".to_string())
+    );
+    // Decimal - Quantity '1'
+    assert_eq!(
+        eval("2.5 - 5 '1'", &context).unwrap(),
+        EvaluationResult::quantity(dec!(-2.5), "1".to_string())
+    );
+    // Incompatible units should return Empty
+    assert_eq!(
+        eval("5 'mg' - 3", &context).unwrap(),
+        EvaluationResult::Empty
+    );
+
+    // --- Comparisons ---
+    // Quantity '1' > Integer
+    assert_eq!(
+        eval("5 '1' > 3", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
+    assert_eq!(
+        eval("5 '1' > 5", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+    assert_eq!(
+        eval("5 '1' > 7", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+    // Integer > Quantity '1'
+    assert_eq!(
+        eval("7 > 5 '1'", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
+    assert_eq!(
+        eval("3 > 5 '1'", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+    // Quantity '1' < Decimal
+    assert_eq!(
+        eval("5 '1' < 5.5", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
+    assert_eq!(
+        eval("5 '1' < 4.5", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+    // Quantity '1' >= Integer
+    assert_eq!(
+        eval("5 '1' >= 5", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
+    assert_eq!(
+        eval("5 '1' >= 6", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+    // Quantity '1' <= Decimal
+    assert_eq!(
+        eval("5 '1' <= 5.0", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
+    assert_eq!(
+        eval("5 '1' <= 4.9", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+    // Incompatible units should return Empty
+    assert_eq!(
+        eval("5 'mg' > 3", &context).unwrap(),
+        EvaluationResult::Empty
+    );
+    assert_eq!(
+        eval("3 < 5 'mg'", &context).unwrap(),
+        EvaluationResult::Empty
+    );
+
+    // --- Equality ---
+    // Quantity '1' = Integer
+    assert_eq!(
+        eval("5 '1' = 5", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
+    assert_eq!(
+        eval("5 '1' = 3", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+    // Integer = Quantity '1'
+    assert_eq!(
+        eval("5 = 5 '1'", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
+    assert_eq!(
+        eval("3 = 5 '1'", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+    // Quantity '1' = Decimal
+    assert_eq!(
+        eval("5 '1' = 5.0", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
+    assert_eq!(
+        eval("5 '1' = 5.5", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+    // Incompatible units should return false (not equal)
+    assert_eq!(
+        eval("5 'mg' = 5", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+    assert_eq!(
+        eval("5 = 5 'mg'", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+
+    // --- Not Equals ---
+    assert_eq!(
+        eval("5 '1' != 5", &context).unwrap(),
+        EvaluationResult::boolean(false)
+    );
+    assert_eq!(
+        eval("5 '1' != 3", &context).unwrap(),
+        EvaluationResult::boolean(true)
+    );
+}
